@@ -16,3 +16,15 @@ Thumbs.db
 *.log
 tmp/
 temp/
+node_modules/
+dist/
+src-tauri/target/
+src-tauri/gen/schemas/
+tests/output/
+tests/fixtures/public-sample.heic
+tests/fixtures/public-sample-*.heic
+tests/fixtures/*.pdf
+tests/private-fixtures/
+*.msi
+*.exe
+*.dmg

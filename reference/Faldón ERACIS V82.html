@@ -1,0 +1,3058 @@
+<!-- 
+ ********* LICENCIA DE USO **********
+
+  Autor: Asociación para la mediación social "EQUA" - Javier González Martí
+  Licencia: Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)
+  Más info: https://creativecommons.org/licenses/by-nc/4.0/
+
+Este proyecto está licenciado bajo la licencia Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0).
+
+Puedes copiar, modificar y compartir este código con fines no comerciales, siempre que me acredites como autor: Javier González Martí.
+
+Prohibido el uso comercial sin autorización previa.
+
+Texto completo de la licencia: https://creativecommons.org/licenses/by-nc/4.0/legalcode
+
+Resumen de la licencia: https://creativecommons.org/licenses/by-nc/4.0/
+
+-->
+
+
+<!--
+  Proyecto: Capacitados+
+  Expediente: (ERACIS)2024-250-CA
+
+  Programa de fomento de la inclusión activa en zona ERACIS+ Cádiz
+
+  Este código forma parte del desarrollo de estrategias locales de intervención
+  en zonas desfavorecidas en el marco de la Estrategia Regional Andaluza para 
+  la Cohesión y la Inclusión Social (ERACIS), cofinanciadas por el 
+  Fondo Social Europeo Plus.
+-->
+
+
+<!-- *************************************************** -->
+<!-- *************    ASOCIACIÓN EQUA    *************** -->
+<!-- *************************************************** -->
+
+
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Herramienta para la inclusión de logotipos ERACIS Plus </title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+    /* ===== Variables globales ===== */
+    /* Configura la paleta de colores, sombras y tamaños reutilizados en toda la app. */
+    :root {
+      --color-primario: #4568b9;
+      --color-hover: #7d5fff;
+      --color-fondo: #fafafa;
+      --color-fondo-secundario: #f2f1f7;
+      --color-fondo-drop: #f6f7fb;
+      --color-fondo-drop-hover: #ece8fc;
+      --color-texto-blanco: #ffffff;
+      --color-texto-secundario: #4d5b86;
+      --color-borde-suave: #e7e7ed;
+      --color-boton-disabled: #f3f3f3;
+      --color-boton-disabled-texto: #b0b0b0;
+      --color-accion: #e61313;
+      --color-accion-hover: #b30000;
+
+      --sombra-seccion: 0 2px 18px rgba(51, 54, 101, 0.10);
+      --sombra-boton: 0 1px 5px rgba(69, 104, 185, 0.07);
+      --sombra-boton-fuerte: 0 2px 14px rgba(69, 104, 185, 0.14);
+      --sombra-dropzone: 0 1px 12px rgba(51, 54, 101, 0.07);
+      --sombra-descarga: 0 2px 18px rgba(125, 95, 255, 0.16);
+      --sombra-canvas: 0 3px 20px rgba(125, 95, 255, 0.13);
+
+      --espacio-horizontal-bloques: 1.5rem;
+      --radio-seccion: 20px;
+      --radio-bloque-ajustable: 12px;
+      --radio-control: 10px;
+
+      --tamano-fuente-bloques: 14px;
+      --tamano-fuente-titulo-bloques: 0.8rem;
+      --tamano-fuente-boton: 14px;
+
+      --padding-vertical-bloques: 8px;
+      --padding-horizontal-bloques: 12px;
+      --padding-boton-vertical: 6px;
+      --padding-boton-horizontal: 12px;
+      --padding-boton-descarga-vertical: 12px;
+      --padding-boton-descarga-horizontal: 24px;
+      --margen-boton-descarga-vertical: 16px;
+
+      --altura-icono-dropzone: 24px;
+      --ancho-icono-dropzone: 24px;
+    }
+
+    /* ===== Reset y tipografía ===== */
+    /* Normaliza el modelo de caja para evitar inconsistencias entre navegadores. */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    /* Elimina márgenes por defecto y garantiza que el layout ocupe toda la altura. */
+    html,
+    /* Define la tipografía base y el degradado de fondo principal. */
+    body {
+      min-height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', Arial, sans-serif;
+      background: linear-gradient(135deg, var(--color-fondo) 0%, var(--color-fondo-secundario) 100%);
+      min-height: 100vh;
+      color: var(--color-primario);
+    }
+
+    /* Estiliza el título principal que describe la utilidad de la herramienta. */
+    h1 {
+      text-align: center;
+      margin: 16px 0;
+      font-size: 1.5rem;
+      color: var(--color-primario);
+    }
+
+    /* Ajusta la imagen decorativa superior para que se adapte al ancho disponible. */
+    #page-header-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto 20px;
+      object-fit: contain;
+    }
+
+    /* ===== Cabecera ===== */
+    /* Coloca el título y el botón de reinicio centrados en la cabecera. */
+    .cabecera-app {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      position: relative;
+    }
+
+    /* Diseña el botón flotante que restablece la aplicación. */
+    #boton-reiniciar {
+      background-color: #e0e0e0;
+      border: none;
+      border-radius: 5px;
+      padding: 0.5rem 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      z-index: 1000;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      transition: background-color 0.2s ease;
+      position: absolute;
+      right: 2rem;
+    }
+
+    #boton-reiniciar:hover {
+      background-color: #d5d5d5;
+    }
+
+    /* ===== Layout principal ===== */
+    /* Define el contenedor principal responsivo del flujo de trabajo. */
+    .main-content {
+      max-width: 2000px;
+      width: min(96vw, 2000px);
+      margin: 0 auto;
+      padding: 32px 16px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    /* Distribuye las secciones en una cuadrícula de tres columnas. */
+    .grid-layout {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--espacio-horizontal-bloques) 28px;
+    }
+
+    /* Proporciona apariencia de tarjeta a cada bloque funcional. */
+    section {
+      background: #ffffff;
+      border-radius: var(--radio-seccion);
+      box-shadow: var(--sombra-seccion);
+      padding: 28px 22px 26px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      align-self: stretch;
+    }
+
+    /* Establece el estilo común de los encabezados dentro de las secciones. */
+    .section-title {
+      font-size: 1.22rem;
+      font-weight: 700;
+      color: var(--color-primario);
+      margin-bottom: 6px;
+      letter-spacing: 0.01em;
+    }
+
+    /* Ajusta los íconos que acompañan a los títulos de cada bloque. */
+    .section-icon,
+    .batch-icon {
+      margin-right: 6px;
+      font-size: 1.3rem;
+      vertical-align: middle;
+      color: var(--color-primario);
+    }
+
+    /* ===== Listados y botones de recursos ===== */
+    /* Presenta las recomendaciones de tamaño ocupando todo el ancho disponible. */
+    .recommended-sizes-section {
+      grid-column: 1 / -1;
+      padding: 32px 28px;
+      text-align: center;
+    }
+
+    /* Muestra los diferentes formatos sugeridos utilizando distribución flexible. */
+    .sizes-list {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-evenly;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      margin-top: 12px;
+    }
+
+    /* Diseña cada ficha individual dentro de la lista de tamaños sugeridos. */
+    .size-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      background: #f0f7ff;
+      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.04);
+    }
+
+    .size-icon {
+      font-size: 1.5rem;
+      color: var(--color-primario);
+    }
+
+    .size-label {
+      font-size: 1rem;
+      color: var(--color-primario);
+    }
+
+    /* Agrupa los botones de enlaces externos relacionados con la herramienta. */
+    .resources-buttons {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 14px;
+      margin: 8px auto 0;
+      flex-wrap: nowrap;
+      width: min(90%, 680px);
+    }
+
+    /* Aplica estilo interactivo a cada botón de recursos adicionales. */
+    .resource-button {
+      background: #ffffff;
+      border: 1.5px solid var(--color-primario);
+      color: var(--color-primario);
+      border-radius: var(--radio-control);
+      padding: var(--padding-boton-vertical) var(--padding-boton-horizontal);
+      font-size: var(--tamano-fuente-boton);
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s, color 0.3s, box-shadow 0.2s;
+      min-width: 150px;
+    }
+
+    .resource-button:hover,
+    .resource-button:focus {
+      background: var(--color-primario);
+      color: var(--color-texto-blanco);
+      box-shadow: 0 2px 14px rgba(69, 104, 185, 0.18);
+      outline: none;
+    }
+
+    /* ===== Dropzones ===== */
+    /* Configura el área de arrastre y su aspecto interactivo. */
+    .drop-zone {
+      box-sizing: border-box;
+      width: 100%;
+      border: 2.5px dashed var(--color-primario);
+      padding: 40px 20px;
+      text-align: center;
+      min-height: 200px;
+      color: var(--color-primario);
+      background: var(--color-fondo-drop);
+      border-radius: 16px;
+      transition: background-color 0.3s, border-color 0.3s, box-shadow 0.2s;
+      cursor: pointer;
+      user-select: none;
+      margin: 0;
+      box-shadow: var(--sombra-dropzone);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.7em;
+      font-size: 1.13rem;
+    }
+
+    .drop-zone .remove-logo-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(69, 104, 185, 0.85);
+      color: var(--color-texto-blanco);
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.2s ease;
+      z-index: 5;
+      line-height: 1;
+    }
+
+    .drop-zone.preview-active .remove-logo-btn {
+      display: flex;
+    }
+
+    .drop-zone .remove-logo-btn:hover {
+      background: rgba(69, 104, 185, 1);
+      transform: scale(1.05);
+    }
+
+    .drop-zone .remove-logo-btn:focus-visible {
+      outline: 2px solid var(--color-primario);
+      outline-offset: 2px;
+    }
+
+    /* Resalta la zona de carga cuando el usuario arrastra un archivo encima. */
+    .drop-zone.dragover {
+      background: var(--color-fondo-drop-hover);
+      border-color: var(--color-hover);
+      box-shadow: 0 2px 18px rgba(125, 95, 255, 0.10);
+    }
+
+    /* Ajusta el espaciado del icono ilustrativo dentro de la dropzone. */
+    .drop-zone svg {
+      margin-bottom: 10px;
+    }
+
+    /* Define la tipografía de los mensajes dentro de la dropzone. */
+    .drop-zone p {
+      margin: 0;
+      font-size: 1.02rem;
+      color: var(--color-primario);
+    }
+
+    /* Marca en cursiva el texto intermedio que sugiere alternativas. */
+    .drop-zone p.span-italic {
+      margin: 10px 0;
+      font-style: italic;
+    }
+
+    /* Estiliza los botones internos usados para abrir el selector de archivos. */
+    .drop-zone button,
+    .load-btn {
+      margin-top: 6px;
+      background: #ffffff;
+      border: 1.5px solid var(--color-primario);
+      color: var(--color-primario);
+      font-weight: 600;
+      border-radius: 7px;
+      padding: 8px 20px;
+      font-size: 1.02rem;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+      box-shadow: 0 1px 6px rgba(125, 95, 255, 0.07);
+    }
+
+    /* Oculta el input real de archivos manteniéndolo accesible. */
+    .hidden-input {
+      position: absolute;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      cursor: pointer;
+    }
+
+    /* Posiciona el botón personalizado encima del input de archivos. */
+    .file-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+
+    /* ===== Formularios ===== */
+    /* Alinea los controles de carga y ajustes dentro de las secciones de formulario. */
+    .batch-input-group,
+    .logo-position-group,
+    .logo-size-group {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    /* Uniforma el estilo de las etiquetas que explican cada control. */
+    .batch-input-group label,
+    .logo-position-group label,
+    .logo-size-group label {
+      font-size: 1.01rem;
+      font-weight: 600;
+      color: var(--color-primario);
+      text-align: center;
+      margin-bottom: 2px;
+    }
+
+    /* Mejora la apariencia por defecto del selector de archivos nativo. */
+    input[type="file"] {
+      font-size: 1.01rem;
+      border-radius: 5px;
+      margin: 2px 0 0;
+      background: #f4f5fa;
+      padding: 4px 0;
+      width: 100%;
+    }
+
+    /* Define la apariencia de los desplegables utilizados en la app. */
+    select {
+      padding: 8px 14px;
+      font-size: 1.01rem;
+      border-radius: 7px;
+      border: 1.5px solid var(--color-borde-suave);
+      background: #fbfbfd;
+      color: var(--color-primario);
+      outline: none;
+      margin-top: 2px;
+      font-family: inherit;
+      font-weight: 500;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+
+    /* Cambia el borde al enfocar para mejorar la accesibilidad visual. */
+    select:focus {
+      border-color: var(--color-hover);
+    }
+
+    /* Refuerza el estilo de todas las etiquetas formales del formulario. */
+    label {
+      font-weight: 600;
+      font-size: 1.01rem;
+      color: var(--color-primario);
+    }
+
+    /* Añade una breve explicación centrada sobre el modo de carga masiva. */
+    .batch-info {
+      font-size: 1rem;
+      color: var(--color-primario);
+      line-height: 1.6;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    /* Destaca el contador de imágenes cargadas en lote. */
+    .batch-count-text {
+      display: inline-block;
+      padding: 6px 12px;
+      background: #f0f7ff;
+      border-radius: 8px;
+      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.04);
+      font-size: 1rem;
+      color: var(--color-primario);
+      margin: 0;
+    }
+
+    /* Formatea los mensajes de error mostrados al usuario. */
+    .error-message {
+      font-size: 0.95rem;
+      color: red;
+      display: none;
+      margin-top: 8px;
+    }
+
+    /* Ajusta el texto auxiliar que orienta al usuario en cada paso. */
+    .helper-text {
+      font-size: 0.92rem;
+      color: var(--color-texto-secundario);
+      text-align: center;
+      margin: 6px 0 0;
+    }
+
+    /* Garantiza que las miniaturas cargadas se adapten sin deformarse. */
+    .thumbnail {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      margin: 0;
+      border-radius: 4px;
+    }
+
+    /* ===== Grupos de botones ===== */
+    /* Organiza los grupos de botones que permiten cambiar opciones rápidamente. */
+    .format-buttons-group,
+    .fit-buttons-group,
+    .position-buttons-group,
+    .output-format-buttons-group,
+    .timestamp-buttons-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+
+    /* Estiliza los botones de opciones para mantener consistencia visual. */
+    .format-buttons-group button,
+    .fit-buttons-group button,
+    .position-buttons-group button,
+    .output-format-buttons-group button,
+    .timestamp-buttons-group button {
+      background: #ffffff;
+      color: var(--color-primario);
+      border: 1.5px solid var(--color-primario);
+      border-radius: 8px;
+      font-size: var(--tamano-fuente-boton);
+      font-weight: 600;
+      padding: var(--padding-boton-vertical) var(--padding-boton-horizontal);
+      cursor: pointer;
+      transition: background 0.3s, color 0.3s, box-shadow 0.3s;
+      box-shadow: var(--sombra-boton);
+      min-width: 110px;
+    }
+
+    /* Define un contorno claro al navegar con teclado por los controles principales. */
+    .format-buttons-group button:focus-visible,
+    .fit-buttons-group button:focus-visible,
+    .position-buttons-group button:focus-visible,
+    .output-format-buttons-group button:focus-visible,
+    .timestamp-buttons-group button:focus-visible,
+    .drop-zone button:focus-visible,
+    #download-btn:focus-visible,
+    #boton-reiniciar:focus-visible {
+      outline: 2px solid var(--color-primario);
+      outline-offset: 2px;
+    }
+
+    /* Resalta el botón seleccionado dentro de cada grupo de opciones. */
+    .format-buttons-group button.active-button,
+    .fit-buttons-group button.active-button,
+    .position-buttons-group button.active-button,
+    .output-format-buttons-group button.active-button,
+    .timestamp-buttons-group button.active-button {
+      background: var(--color-primario);
+      color: var(--color-texto-blanco);
+      box-shadow: var(--sombra-boton-fuerte);
+    }
+
+    /* Aplica un efecto hover cuando el botón aún no es el seleccionado. */
+    .format-buttons-group button:not(.active-button):hover,
+    .fit-buttons-group button:not(.active-button):hover,
+    .position-buttons-group button:not(.active-button):hover,
+    .output-format-buttons-group button:not(.active-button):hover,
+    .timestamp-buttons-group button:not(.active-button):hover {
+      background: var(--color-primario);
+      color: var(--color-texto-blanco);
+      border-color: var(--color-primario);
+    }
+
+    /* Indica visualmente los botones de marca de tiempo que no están disponibles. */
+    .timestamp-buttons-group button[disabled] {
+      opacity: 0.5;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    /* Atenúa las opciones de encaje cuando el formato original las hace innecesarias. */
+    .fit-buttons-group button[disabled] {
+      opacity: 0.5;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    /* Evita cambios de estado al pasar el ratón por controles deshabilitados. */
+    .timestamp-buttons-group button[disabled]:hover {
+      background: #ffffff;
+      color: var(--color-primario);
+      border-color: var(--color-primario);
+    }
+
+    /* Mantiene alineados los botones que determinan la esquina de la marca de tiempo. */
+    #timestamp-position-group {
+      display: flex;
+      gap: 8px;
+      flex-wrap: nowrap;
+      justify-content: center;
+    }
+
+    /* Permite que cada botón de posición conserve su tamaño natural. */
+    #timestamp-position-group button {
+      flex: 0 1 auto;
+      max-width: none;
+    }
+
+    /* Contiene todas las preferencias relacionadas con la marca de tiempo. */
+    .timestamp-section {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    /* Centra los títulos internos dentro del bloque de marca de tiempo. */
+    .timestamp-section .section-title {
+      text-align: center;
+      width: 100%;
+      display: block;
+      margin: 0 auto 6px;
+    }
+
+    /* Ajusta la fila de botones para que ocupe el ancho completo. */
+    .timestamp-section .timestamp-buttons-group {
+      justify-content: center;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* Distribuye el espacio de los botones para que sean fáciles de pulsar. */
+    .timestamp-section .timestamp-buttons-group button {
+      flex: 1 1 50%;
+      max-width: 50%;
+    }
+
+    .timestamp-section .timestamp-buttons-group.background-section button {
+      flex: 1 1 33%;
+      max-width: 33%;
+    }
+
+    /* Organiza la configuración de marca de tiempo en columnas flexibles. */
+    .timestamp-row {
+      display: flex;
+      gap: 24px;
+      align-items: flex-start;
+      justify-content: center;
+      width: 100%;
+      flex-wrap: wrap;
+    }
+
+    /* Alinea verticalmente cada columna del bloque de marca de tiempo. */
+    .timestamp-row .ts-col {
+      flex: 1;
+      min-width: 240px;
+      max-width: 520px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    /* ===== Vista previa ===== */
+    /* Centra el lienzo de previsualización dentro de la interfaz. */
+    .preview-section {
+      align-items: center;
+      max-width: calc(500px * (16 / 9));
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* Define la apariencia del lienzo donde se compone el resultado final. */
+    canvas {
+      border: none;
+      border-radius: 16px;
+      box-shadow: var(--sombra-canvas);
+      max-width: 100%;
+      background: #f4f4fa;
+      margin: 8px 0;
+      width: auto;
+      min-height: 120px;
+      aspect-ratio: var(--canvas-ar, 4 / 3);
+      height: auto;
+      max-height: 300px;
+    }
+
+    /* Cambia el cursor cuando el usuario está reposicionando la imagen. */
+    #canvas.crop-mode {
+      cursor: grab;
+    }
+
+    /* Indica que el lienzo se encuentra en un arrastre activo. */
+    #canvas.crop-mode.dragging {
+      cursor: grabbing;
+    }
+
+    /* Coloca los botones relacionados con el reencuadre bajo el lienzo. */
+    .crop-controls {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    /* Estiliza el botón que activa el modo de reencuadre manual. */
+    #btn-crop-toggle {
+      font-size: var(--tamano-fuente-boton);
+      padding: var(--padding-boton-vertical) var(--padding-boton-horizontal);
+    }
+
+    /* Atenúa el botón de reencuadre cuando la acción no está disponible. */
+    #btn-crop-toggle:disabled {
+      background: var(--color-boton-disabled);
+      color: var(--color-boton-disabled-texto);
+      border: 1.5px solid #d0d0d0;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    /* Resalta el botón de confirmación usado al terminar el recorte. */
+    #btn-crop-ok {
+      background: var(--color-accion);
+      color: #ffffff;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s, box-shadow 0.2s, color 0.3s;
+      padding: 10px 24px;
+      font-size: 1rem;
+      font-weight: 700;
+      box-shadow: 0 2px 12px rgba(179, 0, 0, 0.3);
+    }
+
+    /* Ajusta el estado hover del botón de confirmación del recorte. */
+    #btn-crop-ok:hover {
+      background: var(--color-accion-hover);
+      color: #ffffff;
+      border: none;
+    }
+
+    /* Unifica el tamaño de los botones reutilizados en distintas secciones. */
+    #btn-crop-toggle,
+    #batch-load-btn,
+    .background-section .drop-zone button,
+    .batch-section .drop-zone button,
+    .logo-section .drop-zone button {
+      font-size: var(--tamano-fuente-boton);
+      padding: var(--padding-boton-vertical) var(--padding-boton-horizontal);
+    }
+
+    /* ===== Bloques ajustables ===== */
+    /* Permite que los bloques secundarios sean flexibles en layouts responsivos. */
+    .bloque-ajustable {
+      font-size: var(--tamano-fuente-bloques);
+      padding: var(--padding-vertical-bloques) var(--padding-horizontal-bloques);
+      border-radius: var(--radio-bloque-ajustable);
+      flex: 1 1 0;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+
+    /* Reduce el tamaño del título dentro de los bloques compactos. */
+    .bloque-ajustable .section-title {
+      font-size: var(--tamano-fuente-titulo-bloques);
+    }
+
+    /* Adapta las dropzones internas cuando están dentro de tarjetas pequeñas. */
+    .bloque-ajustable .drop-zone {
+      padding: 20px 10px 14px;
+      min-height: 140px;
+      font-size: 0.85rem;
+    }
+
+    /* Ajusta las dimensiones del icono dentro de las dropzones reducidas. */
+    .bloque-ajustable .drop-zone svg {
+      width: var(--ancho-icono-dropzone);
+      height: var(--altura-icono-dropzone);
+    }
+
+    /* Centra el contenido y oculta los desbordes de las áreas de previsualización. */
+    #base-drop,
+    #logo-drop {
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Reduce el relleno una vez que se muestra la miniatura en la dropzone. */
+    #base-drop.preview-active,
+    #logo-drop.preview-active {
+      padding-top: 16px;
+      padding-bottom: 16px;
+      gap: 0;
+    }
+
+    /* Limita el ancho de la miniatura de fondo para evitar solapamientos. */
+    #base-drop .thumbnail,
+    #logo-drop .thumbnail {
+      width: calc(100% - 20px);
+      max-width: calc(100% - 20px);
+    }
+
+    /* Mantiene la relación 4:3 y redondea suavemente la imagen de fondo. */
+    #base-drop .thumbnail {
+      max-height: calc(100% - 20px);
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    /* Presenta el faldón de logos con borde suave y sombra ligera. */
+    #logo-drop .thumbnail {
+      max-height: calc(100% - 20px);
+      object-fit: contain;
+      border-radius: 8px;
+      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
+      background: #ffffff;
+    }
+
+    /* ===== Estado de descarga ===== */
+    /* Establece el aspecto general del botón de descarga principal. */
+    #download-btn {
+      background: #ffffff;
+      border: 1.5px solid var(--color-primario);
+      color: var(--color-primario);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s, box-shadow 0.2s, color 0.3s;
+      font-size: 1.15rem;
+      padding: var(--padding-boton-descarga-vertical) var(--padding-boton-descarga-horizontal);
+      font-weight: 700;
+      margin-top: var(--margen-boton-descarga-vertical);
+      margin-bottom: var(--margen-boton-descarga-vertical);
+      box-shadow: var(--sombra-descarga);
+      letter-spacing: 0.01em;
+      width: 100%;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Cambia el estilo cuando la descarga está disponible. */
+    #download-btn:not([disabled]) {
+      background: var(--color-accion);
+      color: #ffffff;
+      border: none;
+    }
+
+    /* Refuerza la acción cuando el cursor se sitúa sobre el botón activo. */
+    #download-btn:hover:not([disabled]) {
+      background: var(--color-accion-hover);
+      color: #ffffff;
+      border: none;
+    }
+
+    /* Muestra un estado deshabilitado claro para evitar clics innecesarios. */
+    #download-btn:disabled {
+      background: var(--color-boton-disabled);
+      color: var(--color-boton-disabled-texto);
+      border: 1.5px solid #d0d0d0;
+      cursor: not-allowed;
+      box-shadow: none;
+      opacity: 0.5;
+    }
+
+    /* Destaca los avisos cuando se supera el número permitido de imágenes. */
+    .alerta-exceso {
+      background-color: #d32f2f;
+      color: #ffffff;
+      padding: 0.5em 1em;
+      border-radius: 6px;
+      font-weight: 700;
+    }
+
+    /* Reutiliza el estilo de alerta para informar sobre excesos dentro del lote. */
+    .imagenes-cargadas.alerta-exceso {
+      background-color: #e53935;
+      color: #ffffff;
+      padding: 0.5rem 1rem;
+      border-radius: 10px;
+      font-weight: 700;
+      display: inline-block;
+      margin-top: 1rem;
+    }
+
+    /* Controla la opción de añadir el faldón como cabecera en los PDF. */
+    .pdf-header-option {
+      display: none;
+      width: 100%;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    /* Alinea el texto y el checkbox dentro de la opción de cabecera. */
+    .pdf-header-option label {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+      color: var(--color-primario);
+      font-size: 1rem;
+    }
+
+    /* Asegura que el checkbox utilice el color corporativo. */
+    .pdf-header-option input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--color-primario);
+      cursor: pointer;
+    }
+
+    /* Añade un subtítulo centrado para separar grupos relacionados. */
+    .titulo-bloque {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      width: 100%;
+      text-align: center;
+    }
+
+    /* ===== Responsive ===== */
+    /* Ajustes específicos para pantallas medianas y pequeñas. */
+    @media (max-width: 1320px) {
+      .grid-layout {
+        grid-template-columns: 1fr;
+        gap: 28px;
+      }
+
+      .main-content {
+        max-width: 98vw;
+        padding: 8vw 0 6vw;
+        gap: 22px;
+      }
+
+      section {
+        padding: 16px 6vw 18px;
+        border-radius: 13px;
+      }
+
+      .drop-zone {
+        max-width: 97vw;
+        min-height: 140px;
+        padding: 20px 5vw;
+        border-radius: 11px;
+      }
+
+      canvas {
+        border-radius: 11px;
+      }
+
+      .format-buttons-group button,
+      .fit-buttons-group button {
+        padding: 9px 10vw;
+      }
+
+      input[type="file"],
+      select {
+        width: 100%;
+      }
+
+      .sizes-list {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        row-gap: 10px;
+        column-gap: 0;
+      }
+
+      .resources-buttons {
+        flex-direction: column;
+        gap: 12px;
+        width: 100%;
+        margin-top: 3px;
+      }
+
+      .resource-button {
+        width: 100%;
+        max-width: 360px;
+      }
+
+      .size-item {
+        width: auto;
+        margin: 0 auto;
+      }
+
+      .section-title {
+        text-align: center;
+      }
+
+      .download-section .section-title {
+        margin-top: 10px;
+      }
+
+      .timestamp-row .ts-col .section-title {
+        text-align: center;
+        width: 100%;
+      }
+
+      #boton-reiniciar {
+        position: static;
+        margin: 1rem auto 0;
+        display: block;
+      }
+
+      .cabecera-app {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
+
+</head>
+
+<body>
+  <!-- Imagen de cabecera que contextualiza la herramienta. -->
+  <img id="page-header-img" src="https://aefam.org/wp-content/uploads/2025/09/equa-baner-digital.png"
+    alt="Cabecera ERACIS" />
+  <!-- Cabecera principal con título y botón de reinicio. -->
+  <div class="cabecera-app">
+    <h1>Herramienta para la inclusión de logotipos ERACIS Plus</h1>
+    <button id="boton-reiniciar" type="button" title="Reiniciar todo">🔄 Reiniciar</button>
+  </div>
+
+  <!-- Contenido principal que agrupa todas las secciones funcionales. -->
+  <main class="main-content">
+    <div class="grid-layout">
+
+      <!-- Bloque para cargar la imagen o el PDF de fondo principal. -->
+      <section class="background-section bloque-ajustable">
+        <h2 class="section-title"><span class="section-icon">🖼️</span>Imagen o PDF de Fondo</h2>
+        <div class="drop-zone background-drop-zone" id="base-drop" role="button" tabindex="0"
+          aria-label="Zona de arrastrar y soltar imagen o PDF de fondo">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="var(--color-primario)"
+            viewBox="0 0 24 24" style="margin-bottom: 8px;">
+            <path
+              d="M21 19V5c0-1.1-.9-2-2-2H5C3.9 3 3 3.9 3 5v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zm-2 0H5V5h14v14zm-4-7l-2.5 3.01L11 12l-4 5h14l-4-5z" />
+          </svg>
+          <p>Arrastra aquí una imagen o un PDF de fondo</p>
+          <p class="span-italic">o</p>
+          <div class="file-wrapper">
+            <button id="base-load-btn" type="button" aria-label="Cargar imagen o PDF de fondo">Cargar archivo</button>
+            <input type="file" id="base-input" accept="image/*,application/pdf,.pdf" class="hidden-input"
+              aria-hidden="true">
+          </div>
+          <p class="error-message" aria-live="polite"></p>
+        </div>
+      </section>
+
+      <!-- Bloque orientado a gestionar cargas en lote de imágenes y PDF. -->
+      <section class="batch-section bloque-ajustable">
+        <h2 class="section-title"><span class="batch-icon">📂</span>Procesamiento en Lote</h2>
+        <p class="batch-info">¿Quieres cargar varias imágenes o PDF a la vez?</p>
+        <div class="batch-input-group">
+          <label for="batch-input">Selecciona imágenes o PDF (máximo 50 páginas/elementos)</label>
+          <div class="file-wrapper">
+            <button id="batch-load-btn" class="load-btn" type="button"
+              aria-label="Seleccionar archivos para lote">Seleccionar
+              archivos</button>
+            <input type="file" id="batch-input" accept="image/*,application/pdf,.pdf" multiple class="hidden-input"
+              aria-hidden="true">
+          </div>
+          <span id="imagenes-cargadas" class="imagenes-cargadas"></span>
+          <p id="mensaje-cantidad"></p>
+          <p class="error-message" aria-live="polite"></p>
+        </div>
+      </section>
+
+      <!-- Bloque para subir el faldón de logos que se superpone a las fotos. -->
+      <section class="logo-section bloque-ajustable">
+        <h2 class="section-title"><span class="section-icon">🏷️</span>Faldón de logos</h2>
+        <div class="drop-zone logo-drop-zone" id="logo-drop" role="button" tabindex="0"
+          aria-label="Zona de arrastrar y soltar faldón de logos">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="var(--color-primario)"
+            viewBox="0 0 24 24" style="margin-bottom: 8px;">
+            <path
+              d="M21 19V5c0-1.1-.9-2-2-2H5C3.9 3 3 3.9 3 5v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zm-2 0H5V5h14v14zm-4-7l-2.5 3.01L11 12l-4 5h14l-4-5z" />
+          </svg>
+          <p>Arrastra aquí la imagen del faldón de logos</p>
+          <p class="span-italic">o</p>
+          <div class="file-wrapper">
+            <button id="logo-load-btn" type="button" aria-label="Cargar imagen de faldón">Cargar imagen</button>
+            <input type="file" id="logo-input" accept="image/*" class="hidden-input" aria-hidden="true">
+          </div>
+          <p class="error-message" aria-live="polite"></p>
+        </div>
+      </section>
+
+      <!-- Bloque para ajustar formatos, modo de encaje y posición del faldón. -->
+      <section class="format-section bloque-ajustable">
+        <h2 class="section-title"><span class="section-icon">⚙️</span>Configuración de Formato</h2>
+        <div class="format-buttons-group" style="margin-bottom: 10px;">
+          <button id="format-horizontal" type="button" data-width="1920" data-height="1080"
+            class="format-button btn-hover" aria-label="Formato horizontal">Horizontal</button>
+          <button id="format-square" type="button" data-width="1080" data-height="1080" class="format-button btn-hover"
+            aria-label="Formato cuadrado">Cuadrado</button>
+          <button id="format-vertical" type="button" data-width="1080" data-height="1920"
+            class="format-button btn-hover" aria-label="Formato vertical">Vertical</button>
+          <button id="format-4by3" type="button" data-width="1440" data-height="1080"
+            class="format-button active-button btn-hover" aria-label="Formato 4:3">4:3</button>
+          <button id="format-original" type="button" data-format-mode="original"
+            class="format-button btn-hover" aria-label="Conservar el formato original de la imagen">Formato Original</button>
+        </div>
+        <h3 class="section-title" style="margin-top: 6px;"><span class="section-icon">🧩</span>Encaje de la foto</h3>
+        <div class="fit-buttons-group" style="margin-bottom: 10px;">
+          <button id="fit-stretch" type="button" class="fit-button btn-hover" data-mode="stretch"
+            aria-label="Ajustar estirando">Estirar hasta encajar</button>
+          <button id="fit-crop" type="button" class="fit-button active-button btn-hover" data-mode="crop"
+            aria-label="Ajustar recortando">Recortar</button>
+        </div>
+        <div class="titulo-bloque">📍 Posición del logo</div>
+        <div class="position-buttons-group" style="margin: 0; padding: 0;">
+          <button id="pos-bottom" type="button" class="btn-principal position-button active-button btn-hover"
+            data-pos="bottom" aria-label="Logo en inferior">Inferior</button>
+          <button id="pos-top" type="button" class="btn-principal position-button btn-hover" data-pos="top"
+            aria-label="Logo en superior">Superior</button>
+        </div>
+      </section>
+
+      <!-- Bloque con el lienzo que muestra la previsualización en tiempo real. -->
+      <section class="preview-section bloque-ajustable">
+        <h2 class="section-title"><span class="section-icon">👁️</span>Vista Previa</h2>
+        <canvas id="canvas"></canvas>
+
+        <div class="crop-controls" aria-label="Controles de reencuadre">
+          <button id="btn-crop-toggle" class="load-btn" type="button" aria-pressed="false"
+            aria-controls="canvas">Reencuadrar la imagen</button>
+          <button id="btn-crop-ok" class="load-btn" type="button" style="display:none;" aria-pressed="false"
+            aria-controls="canvas">OK</button>
+        </div>
+      </section>
+
+      <!-- Bloque con opciones de exportación y descarga del resultado. -->
+      <section class="download-section bloque-ajustable">
+        <h3 class="section-title" style="margin-top: 6px;"><span class="section-icon">🧾</span>Formato de salida</h3>
+        <div class="output-format-buttons-group" style="margin-bottom: 10px;">
+          <button id="out-png" type="button" class="output-format-button active-button btn-hover" data-format="png"
+            aria-label="Exportar como PNG">PNG</button>
+          <button id="out-jpg" type="button" class="output-format-button btn-hover" data-format="jpg"
+            aria-label="Exportar como JPG">JPG</button>
+          <button id="out-pdf" type="button" class="output-format-button btn-hover" data-format="pdf"
+            aria-label="Exportar como PDF">PDF</button>
+        </div>
+        <div id="pdf-header-option" class="pdf-header-option" aria-live="polite" aria-hidden="true">
+          <label for="pdf-header-checkbox">
+            <input type="checkbox" id="pdf-header-checkbox" name="pdf-header-checkbox">
+            Incluir el faldón como encabezado en el PDF
+          </label>
+        </div>
+        <div class="timestamp-section bloque-ajustable">
+          <div class="timestamp-row">
+            <div class="ts-col">
+              <h3 class="section-title"><span class="section-icon">🕒</span>Marca de tiempo</h3>
+              <div class="timestamp-buttons-group bloque-ajustable" style="margin-bottom: 10px;">
+                <button id="ts-yes" type="button" class="timestamp-button active-button btn-hover"
+                  data-enabled="true">Sí</button>
+                <button id="ts-no" type="button" class="timestamp-button btn-hover" data-enabled="false">No</button>
+              </div>
+            </div>
+            <div class="ts-col">
+              <h3 class="section-title"><span class="section-icon">🎨</span>Color</h3>
+              <div class="timestamp-buttons-group color-section bloque-ajustable" id="timestamp-color-group"
+                style="margin-bottom: 10px;">
+                <button id="ts-white" type="button" class="timestamp-button active-button btn-hover"
+                  data-color="white">Blanco</button>
+                <button id="ts-black" type="button" class="timestamp-button btn-hover" data-color="black">Negro</button>
+              </div>
+            </div>
+            <div class="ts-col">
+              <h3 class="section-title"><span class="section-icon">🖼️</span>Fondo para la fecha</h3>
+              <div class="timestamp-buttons-group background-section bloque-ajustable" id="timestamp-background-group"
+                style="margin-bottom: 10px;" aria-label="Fondo de la marca de tiempo">
+                <button id="ts-bg-none" type="button" class="timestamp-button active-button btn-hover" data-bg="none"
+                  aria-label="Sin fondo">No</button>
+                <button id="ts-bg-white" type="button" class="timestamp-button btn-hover" data-bg="white"
+                  aria-label="Fondo blanco">Blanco</button>
+                <button id="ts-bg-black" type="button" class="timestamp-button btn-hover" data-bg="black"
+                  aria-label="Fondo negro">Negro</button>
+              </div>
+            </div>
+          </div>
+          <h3 class="section-title"><span class="section-icon">🧭</span>Posición</h3>
+          <div class="timestamp-buttons-group position-section bloque-ajustable" id="timestamp-position-group"
+            role="radiogroup" aria-label="Posición de marca de tiempo">
+            <button id="ts-pos-tl" type="button" class="timestamp-button active-button btn-hover" data-pos="tl"
+              role="radio" aria-checked="true" title="Arriba izquierda" aria-label="Arriba izquierda">↖︎</button>
+            <button id="ts-pos-tr" type="button" class="timestamp-button btn-hover" data-pos="tr" role="radio"
+              aria-checked="false" title="Arriba derecha" aria-label="Arriba derecha">↗︎</button>
+            <button id="ts-pos-bl" type="button" class="timestamp-button btn-hover" data-pos="bl" role="radio"
+              aria-checked="false" title="Abajo izquierda" aria-label="Abajo izquierda">↙︎</button>
+            <button id="ts-pos-br" type="button" class="timestamp-button btn-hover" data-pos="br" role="radio"
+              aria-checked="false" title="Abajo derecha" aria-label="Abajo derecha">↘︎</button>
+          </div>
+        </div>
+        <h2 class="section-title" style="margin-bottom: 0;"><span class="section-icon">⬇️</span>Descargar</h2>
+        <button id="download-btn" type="button" aria-live="polite" aria-busy="false" disabled>Descargar imagen
+          resultante</button>
+      </section>
+
+    </div>
+    <!-- Sección informativa con los tamaños recomendados de salida. -->
+    <section class="recommended-sizes-section section">
+      <h2 class="section-title"><span class="section-icon">📐</span>Tamaños Recomendados</h2>
+      <div class="sizes-list">
+        <div class="size-item"><span class="size-icon">🖥️</span><span class="size-label">Horizontal: <strong>1920 ×
+              1080 px</strong></span></div>
+        <div class="size-item"><span class="size-icon">▢</span><span class="size-label">Cuadrado: <strong>1080 × 1080
+              px</strong></span></div>
+        <div class="size-item"><span class="size-icon">📱</span><span class="size-label">Vertical: <strong>1080 × 1920
+              px</strong></span></div>
+        <div class="size-item"><span class="size-icon">📸</span><span class="size-label">4:3: <strong>1440 × 1080
+              px</strong></span></div>
+        <div class="size-item"><span class="size-icon">🖼️</span><span class="size-label">Formato Original:
+            <strong>dimensiones y proporción de cada foto</strong></span></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Grupo de accesos directos a documentación y contacto. -->
+  <div class="resources-buttons" role="group" aria-label="Recursos relacionados">
+    <button id="btn-como-usar" type="button" class="resource-button">Cómo usar</button>
+    <button id="btn-ultima-version" type="button" class="resource-button">Última versión</button>
+    <button id="btn-codigo-fuente" type="button" class="resource-button">Código fuente</button>
+    <button id="btn-contacto" type="button" class="resource-button">Contacto</button>
+  </div>
+
+  <!-- Dependencias externas necesarias para importar PDF, exportar ZIP/PDF y leer metadatos. -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.0/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="https://unpkg.com/exifr/dist/lite.umd.js"></script>
+
+  <!-- Lógica principal de la herramienta: carga, edición y exportación de imágenes. -->
+  <script>
+
+
+    // Calcula variables CSS basadas en la altura de la ventana para layouts responsivos.
+    function setVH() {
+      const vh = window.innerHeight;
+      const headerImg = document.getElementById('page-header-img');
+      const h1 = document.querySelector('h1');
+      const headerH = (headerImg ? headerImg.getBoundingClientRect().height : 0)
+        + (h1 ? h1.getBoundingClientRect().height : 0)
+        + 20; // margen inferior aproximado
+      document.documentElement.style.setProperty('--vh', vh + 'px');
+      document.documentElement.style.setProperty('--vhMinusHeader', Math.max(300, vh - headerH) + 'px');
+    }
+
+
+    window.addEventListener('load', setVH);
+    window.addEventListener('resize', setVH);
+
+
+    // URLs externas que complementan la experiencia de la herramienta.
+    const urlComoUsar = 'https://asociacionequa.org/como-usar-herramienta-logos-eracis/';
+    const urlUltimaVersion = 'https://asociacionequa.org/historial-de-versiones-herramiento-logos-eracis/';
+    const urlCodigoFuente = 'https://asociacionequa.org/codigo-fuente-de-la-herramienta-de-colocacion-de-logos-para-eracis/';
+    const urlContacto = 'https://forms.gle/y6APWJGBTukBFrxK7';
+    const versionApp = '0.82';
+    const STORAGE_KEYS = {
+      logoData: 'eracis-logo-data'
+    };
+
+    // Referencias rápidas a los elementos del DOM que se reutilizan en la lógica. 
+    const dom = {
+      baseDrop: document.getElementById('base-drop'),
+      logoDrop: document.getElementById('logo-drop'),
+      canvas: document.getElementById('canvas'),
+      downloadBtn: document.getElementById('download-btn'),
+      pdfHeaderOption: document.getElementById('pdf-header-option'),
+      pdfHeaderCheckbox: document.getElementById('pdf-header-checkbox'),
+      baseInput: document.getElementById('base-input'),
+      baseLoadBtn: document.getElementById('base-load-btn'),
+      batchInput: document.getElementById('batch-input'),
+      batchLoadBtn: document.getElementById('batch-load-btn'),
+      batchInputGroup: document.querySelector('.batch-section .batch-input-group'),
+      imagenesCargadas: document.getElementById('imagenes-cargadas'),
+      logoInput: document.getElementById('logo-input'),
+      logoLoadBtn: document.getElementById('logo-load-btn'),
+      resetBtn: document.getElementById('boton-reiniciar')
+    };
+    // Desestructura elementos muy usados para accederlos de forma directa. 
+    const { baseDrop, logoDrop, canvas, downloadBtn, pdfHeaderOption, pdfHeaderCheckbox } = dom;
+    const defaultLogoDropLabel = logoDrop ? logoDrop.getAttribute('aria-label') : '';
+    const ctx = canvas.getContext('2d');
+    // Estado inicial relacionado con el lienzo y posición del faldón. 
+    let currentLogoPos = 'bottom';
+
+    // Botones que abren documentación, versiones y formulario de contacto.
+    const btnComoUsar = document.getElementById('btn-como-usar');
+    const btnUltimaVersion = document.getElementById('btn-ultima-version');
+    const btnCodigoFuente = document.getElementById('btn-codigo-fuente');
+    const btnContacto = document.getElementById('btn-contacto');
+
+    // Abre en una nueva pestaña la URL proporcionada si es válida.
+    function openResource(url) {
+      if (!url || url === '#') return;
+      window.open(url, '_blank', 'noopener');
+    }
+
+    // Guarda en localStorage la imagen del faldón para reutilizarla en futuras sesiones.
+    function saveLogoToCache(dataUrl) {
+      if (!dataUrl) return;
+      try {
+        localStorage.setItem(STORAGE_KEYS.logoData, dataUrl);
+      } catch (error) {
+        console.warn('No se pudo guardar el faldón de logos en caché.', error);
+      }
+    }
+
+    // Elimina el faldón guardado cuando deja de ser válido o falla la carga.
+    function clearCachedLogo() {
+      try {
+        localStorage.removeItem(STORAGE_KEYS.logoData);
+      } catch (error) {
+        console.warn('No se pudo limpiar la caché del faldón de logos.', error);
+      }
+    }
+
+    // Restaura la dropzone del faldón a su estado inicial y actualiza el lienzo.
+    function clearLogoSelection({ skipCacheClear = false } = {}) {
+      logoImg = null;
+      if (!skipCacheClear) clearCachedLogo();
+      if (dom.logoInput) dom.logoInput.value = '';
+      if (logoDrop) {
+        logoDrop.querySelectorAll('.thumbnail').forEach(el => el.remove());
+        if (logoRemoveBtn && logoDrop.contains(logoRemoveBtn)) {
+          logoRemoveBtn.remove();
+        }
+        logoRemoveBtn = null;
+        logoDrop.querySelectorAll('svg, p:not(.error-message), .file-wrapper, button#logo-load-btn').forEach(el => {
+          el.style.display = '';
+        });
+        logoDrop.classList.remove('preview-active');
+        logoDrop.setAttribute('aria-label', defaultLogoDropLabel || 'Zona de arrastrar y soltar faldón de logos');
+        const errorElem = logoDrop.querySelector('.error-message');
+        if (errorElem) {
+          errorElem.style.display = 'none';
+        }
+      }
+      updatePdfHeaderOptionVisibility();
+      renderCanvas();
+      refreshDownloadAvailability();
+    }
+
+    // Garantiza que exista el botón para eliminar el faldón cargado.
+    function ensureLogoRemoveButton() {
+      if (!logoDrop) return null;
+      if (logoRemoveBtn && logoDrop.contains(logoRemoveBtn)) {
+        return logoRemoveBtn;
+      }
+      logoRemoveBtn = document.createElement('button');
+      logoRemoveBtn.type = 'button';
+      logoRemoveBtn.className = 'remove-logo-btn';
+      logoRemoveBtn.setAttribute('aria-label', 'Eliminar faldón de logos');
+      logoRemoveBtn.textContent = 'X';
+      logoRemoveBtn.addEventListener('click', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        clearLogoSelection();
+      });
+      logoDrop.appendChild(logoRemoveBtn);
+      return logoRemoveBtn;
+    }
+
+    // Inserta la miniatura del faldón en la interfaz y actualiza la caché si procede.
+    function updateLogoPreviewFromImage(img, dataUrl, { persist = true } = {}) {
+      if (!img || !dataUrl) return;
+      logoImg = img;
+      if (logoDrop) {
+        logoDrop.querySelectorAll('.thumbnail').forEach(el => el.remove());
+        const thumb = document.createElement('img');
+        thumb.src = dataUrl;
+        thumb.className = 'thumbnail';
+        logoDrop.appendChild(thumb);
+        Array.from(logoDrop.childNodes).forEach(node => {
+          if (node.nodeType === 1 && node.className === 'error-message') {
+            node.style.display = 'none';
+          }
+          if (node.nodeType === 3) {
+            logoDrop.removeChild(node);
+          }
+        });
+        logoDrop.querySelectorAll('svg, p:not(.error-message), .file-wrapper, button#logo-load-btn').forEach(el => {
+          el.style.display = 'none';
+        });
+        logoDrop.classList.add('preview-active');
+        ensureLogoRemoveButton();
+        logoDrop.setAttribute('aria-label', 'Faldón de logos cargado');
+      }
+      updatePdfHeaderOptionVisibility();
+      renderCanvas();
+      refreshDownloadAvailability();
+      if (persist) saveLogoToCache(dataUrl);
+    }
+
+    // Restaura el faldón almacenado para acelerar la configuración inicial.
+    function loadLogoFromCache() {
+      let cachedData = null;
+      try {
+        cachedData = localStorage.getItem(STORAGE_KEYS.logoData);
+      } catch (error) {
+        console.warn('No se pudo acceder a la caché del faldón de logos.', error);
+      }
+      if (!cachedData) return;
+      const img = new Image();
+      img.onload = () => updateLogoPreviewFromImage(img, cachedData, { persist: false });
+      img.onerror = () => clearCachedLogo();
+      img.src = cachedData;
+    }
+
+    // Conecta cada botón de recursos con la página correspondiente.
+    if (btnComoUsar) btnComoUsar.addEventListener('click', () => openResource(urlComoUsar));
+    if (btnUltimaVersion) btnUltimaVersion.addEventListener('click', () => openResource(urlUltimaVersion));
+    if (btnCodigoFuente) btnCodigoFuente.addEventListener('click', () => openResource(urlCodigoFuente));
+    if (btnContacto) btnContacto.addEventListener('click', () => openResource(urlContacto));
+    if (dom.resetBtn) dom.resetBtn.addEventListener('click', () => location.reload());
+
+    // Al cargar la página, sincroniza la versión visible y restaura el faldón guardado.
+    window.addEventListener('load', () => {
+      const versionAppElem = document.getElementById('version-app-line');
+      if (versionAppElem) {
+        const versionText = String(versionApp ?? '').trim();
+        const displayText = versionText ? `Versión ${versionText}` : 'Versión';
+        versionAppElem.textContent = displayText;
+        versionAppElem.setAttribute('aria-label', displayText);
+      }
+      loadLogoFromCache();
+    });
+
+    // Variables que representan la imagen base, el faldón y el tamaño de salida. 
+    let baseImg = null;
+    let logoImg = null;
+    let logoRemoveBtn = null;
+    let targetWidth = 1440;
+    let targetHeight = 1080;
+    let preserveOriginalFormat = false;
+    document.documentElement.style.setProperty('--canvas-ar', `${targetWidth} / ${targetHeight}`);
+    // Preferencias actuales sobre ajuste, lote y recuento de archivos. 
+    let fitMode = 'crop';
+    let batchFiles = [];
+    let batchSelectionCount = 0;
+    const MAX_BATCH_ITEMS = 50;
+    const PDF_RENDER_SCALE = 2;
+    const PDF_MAX_RENDER_SIDE = 3000;
+
+    // Configura PDF.js para convertir cada página del PDF en una imagen rasterizada.
+    if (window.pdfjsLib) {
+      window.pdfjsLib.GlobalWorkerOptions.workerSrc =
+        'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    }
+
+    // Programa los repintados para evitar renders redundantes durante el arrastre.
+    let rafPending = false;
+    function scheduleRender() {
+      if (rafPending) return;
+      rafPending = true;
+      requestAnimationFrame(() => { rafPending = false; renderCanvas(); });
+    }
+
+    // Utilidades de interfaz para mostrar estados y mensajes al usuario.
+    // Actualiza el estado visual del botón de descarga mientras se procesan archivos.
+    function setDownloadBusy(isBusy, text) {
+      if (downloadBtn) {
+        if (typeof text === 'string') downloadBtn.textContent = text;
+        downloadBtn.setAttribute('aria-busy', String(!!isBusy));
+        if (isBusy) downloadBtn.disabled = true;
+        else refreshDownloadAvailability();
+      }
+    }
+
+    // Muestra al usuario cuántas imágenes o páginas de PDF se procesarán en el lote.
+    function updateBatchStatus(selectedCount) {
+      if (!dom.imagenesCargadas) return;
+      const quantityMessage = document.getElementById('mensaje-cantidad');
+      if (selectedCount > 0) {
+        const noun = selectedCount === 1 ? 'elemento' : 'elementos';
+        dom.imagenesCargadas.textContent = `Se han cargado ${selectedCount} ${noun}.`;
+      } else {
+        dom.imagenesCargadas.textContent = '';
+      }
+      dom.imagenesCargadas.classList.toggle('alerta-exceso', selectedCount > MAX_BATCH_ITEMS);
+      if (quantityMessage) {
+        quantityMessage.textContent = selectedCount > MAX_BATCH_ITEMS
+          ? `El límite es de ${MAX_BATCH_ITEMS} páginas o imágenes. Reduce la selección para continuar.`
+          : '';
+      }
+    }
+
+    // Ajusta el texto del botón según si se descargará una imagen o un lote.
+    function updateDownloadButtonLabel() {
+      if (!downloadBtn) return;
+      if (batchSelectionCount > MAX_BATCH_ITEMS) {
+        downloadBtn.textContent = 'Descargar imagen resultante';
+      } else if (batchSelectionCount > 1) {
+        downloadBtn.textContent = 'Descargar el lote en formato ZIP';
+      } else {
+        downloadBtn.textContent = 'Descargar imagen resultante';
+      }
+    }
+
+    // Activa o desactiva el botón de descarga en función del estado actual.
+    function refreshDownloadAvailability() {
+      if (!downloadBtn) return;
+      const isBusy = downloadBtn.getAttribute('aria-busy') === 'true';
+      if (!isBusy) updateDownloadButtonLabel();
+      if (isBusy) return;
+      const overBatchLimit = batchSelectionCount > MAX_BATCH_ITEMS;
+      const hasBase = !!baseImg;
+      const hasBatch = batchFiles.length > 0;
+      const enabled = !cropMode && !overBatchLimit && (hasBase || hasBatch);
+      downloadBtn.disabled = !enabled;
+    }
+
+    // Habilita o bloquea la carga en lote según el contexto de uso.
+    function setBatchControlsEnabled(enabled) {
+      if (dom.batchLoadBtn) {
+        dom.batchLoadBtn.disabled = !enabled;
+        dom.batchLoadBtn.classList.toggle('desactivado', !enabled);
+        dom.batchLoadBtn.style.pointerEvents = enabled ? '' : 'none';
+        dom.batchLoadBtn.style.opacity = enabled ? '' : '0.5';
+      }
+      if (dom.batchInput) dom.batchInput.disabled = !enabled;
+      if (dom.batchInputGroup) dom.batchInputGroup.style.opacity = enabled ? '' : '0.5';
+    }
+
+    // Controla la disponibilidad de los botones ligados a la imagen base.
+    function setBaseControlsEnabled(enabled) {
+      if (dom.baseLoadBtn) {
+        dom.baseLoadBtn.disabled = !enabled;
+        dom.baseLoadBtn.classList.toggle('desactivado', !enabled);
+        dom.baseLoadBtn.style.pointerEvents = enabled ? '' : 'none';
+        dom.baseLoadBtn.style.opacity = enabled ? '' : '0.5';
+      }
+      if (dom.baseInput) dom.baseInput.disabled = !enabled;
+    }
+
+    // Ajusta si la zona de drop principal puede recibir nuevos archivos.
+    function setBaseDropEnabled(enabled) {
+      if (!baseDrop) return;
+      baseDrop.classList.toggle('disabled', !enabled);
+      baseDrop.style.pointerEvents = enabled ? '' : 'none';
+      baseDrop.style.opacity = enabled ? '' : '0.5';
+      const thumb = baseDrop.querySelector('.thumbnail');
+      if (thumb) thumb.style.display = enabled ? '' : 'none';
+    }
+
+    // Limpia por completo la selección actual del modo batch.
+    function clearBatchSelection() {
+      batchFiles = [];
+      batchSelectionCount = 0;
+      if (dom.batchInput) dom.batchInput.value = '';
+      updateBatchStatus(0);
+      refreshDownloadAvailability();
+    }
+
+    // Restablece la interfaz de lote tras cargar una imagen base individual.
+    function resetBatchUI() {
+      clearBatchSelection();
+      setBatchControlsEnabled(false);
+    }
+
+    // === Reencuadre (crop/pan sin zoom) ===
+    let cropMode = false;           // modo edición activo
+    let panPX = 0.5, panPY = 0.5;   // posición normalizada (0..1), 0.5 = centrado
+    let isDragging = false;
+    let dragStartX = 0, dragStartY = 0;
+    let startSX = 0, startSY = 0;   // sx/sy (px en la imagen) al iniciar arrastre
+
+
+
+
+    // Marca de tiempo (activada por defecto) y fecha actual de la imagen base
+    let timestampEnabled = true;
+    let currentBaseDateStr = null;
+    let currentBaseDateFileName = null;
+    // NUEVO: color por defecto de la marca de tiempo
+    let timestampColor = 'white';
+    // NUEVO: fondo por defecto de la marca de tiempo
+    let timestampBackground = 'none';
+    // NUEVO: posición por defecto de la marca de tiempo
+    let timestampPosition = 'tl';
+
+    // Nombre base del archivo de fondo y sufijo de salida
+    let baseFileNameCore = null; // sin extensión
+
+    // Formato de salida (por defecto PNG)
+    let outputFormat = 'png';
+    let includePdfHeader = false;
+
+    // Muestra u oculta la opción de encabezado según el formato elegido. 
+    function updatePdfHeaderOptionVisibility() {
+      if (!pdfHeaderOption) return;
+      const shouldShow = (outputFormat === 'pdf') && !!logoImg;
+      pdfHeaderOption.style.display = shouldShow ? 'flex' : 'none';
+      pdfHeaderOption.setAttribute('aria-hidden', shouldShow ? 'false' : 'true');
+      if (!shouldShow) {
+        includePdfHeader = false;
+        if (pdfHeaderCheckbox) {
+          pdfHeaderCheckbox.checked = false;
+        }
+      }
+    }
+
+    if (pdfHeaderCheckbox) {
+      pdfHeaderCheckbox.addEventListener('change', (e) => {
+        includePdfHeader = e.target.checked;
+      });
+    }
+
+    updatePdfHeaderOptionVisibility();
+
+    // ===== Utilidades para formatear fechas y leer metadatos EXIF =====
+    function pad2(n) { return n.toString().padStart(2, '0'); }
+    function formatDateDDMMYYYY(date) {
+      const d = date.getDate();
+      const m = date.getMonth() + 1;
+      const y = date.getFullYear();
+      return `${pad2(d)}/${pad2(m)}/${y}`;
+    }
+    function formatDateDDMMYY(date) {
+      const d = date.getDate();
+      const m = date.getMonth() + 1;
+      const y = date.getFullYear().toString().slice(-2);
+      return `${pad2(d)}/${pad2(m)}/${y}`;
+    }
+    function formatDateForFilename(date) {
+      // Sustituimos separadores no válidos para asegurar un nombre de archivo seguro
+      return formatDateDDMMYY(date).replace(/[\\/]/g, '-');
+    }
+    async function getPhotoDateFromFile(file) {
+      try {
+        const exif = await exifr.parse(file, ['DateTimeOriginal', 'CreateDate']);
+        const dt = exif?.DateTimeOriginal || exif?.CreateDate;
+        if (dt instanceof Date) return dt;
+      } catch (e) {
+        // sin EXIF o error: seguimos al fallback
+      }
+      return new Date(file.lastModified || Date.now());
+    }
+
+    // Reconoce PDF también cuando el navegador no informa correctamente de su MIME.
+    function isPdfFile(file) {
+      return !!file && (file.type === 'application/pdf' || /\.pdf$/i.test(file.name || ''));
+    }
+
+    function isImageFile(file) {
+      return !!file && (
+        (typeof file.type === 'string' && file.type.startsWith('image/')) ||
+        /\.(avif|bmp|gif|heic|heif|jpe?g|png|webp)$/i.test(file.name || '')
+      );
+    }
+
+    function isSupportedBackgroundFile(file) {
+      return isImageFile(file) || isPdfFile(file);
+    }
+
+    function fileToDataUrl(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = () => reject(reader.error || new Error('No se pudo leer el archivo.'));
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function imageFromUrl(url) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = () => reject(new Error('No se pudo convertir el archivo en imagen.'));
+        img.src = url;
+      });
+    }
+
+    async function openPdfFile(file) {
+      if (!window.pdfjsLib) {
+        throw new Error('No se ha podido cargar el lector de PDF. Comprueba la conexión a Internet.');
+      }
+      const bytes = new Uint8Array(await file.arrayBuffer());
+      return window.pdfjsLib.getDocument({ data: bytes }).promise;
+    }
+
+    // Convierte los archivos elegidos en elementos de fondo. Cada página PDF cuenta como un elemento.
+    async function expandBackgroundFiles(files, maxItems = MAX_BATCH_ITEMS) {
+      const assets = [];
+      const errors = [];
+      let totalCount = 0;
+
+      for (const file of files) {
+        if (isImageFile(file)) {
+          totalCount += 1;
+          if (assets.length < maxItems) {
+            assets.push({
+              kind: 'image',
+              file,
+              name: file.name,
+              displayName: file.name
+            });
+          }
+          continue;
+        }
+
+        if (isPdfFile(file)) {
+          try {
+            const pdfDocument = await openPdfFile(file);
+            totalCount += pdfDocument.numPages;
+            const remaining = Math.max(0, maxItems - assets.length);
+            const pagesToKeep = Math.min(pdfDocument.numPages, remaining);
+            for (let pageNumber = 1; pageNumber <= pagesToKeep; pageNumber += 1) {
+              assets.push({
+                kind: 'pdf',
+                file,
+                pdfDocument,
+                pageNumber,
+                pageCount: pdfDocument.numPages,
+                name: `${getBaseNameSafe(file.name)}-pagina-${pageNumber}.pdf`,
+                displayName: `${file.name} · página ${pageNumber}`
+              });
+            }
+          } catch (error) {
+            console.error('No se pudo abrir el PDF.', error);
+            errors.push(`${file.name}: no se pudo abrir el PDF.`);
+          }
+          continue;
+        }
+
+        errors.push(`${file.name}: formato no compatible.`);
+      }
+
+      return { assets, totalCount, errors };
+    }
+
+    async function getFirstBackgroundAsset(file) {
+      if (isImageFile(file)) {
+        return { kind: 'image', file, name: file.name, displayName: file.name };
+      }
+      if (isPdfFile(file)) {
+        const pdfDocument = await openPdfFile(file);
+        return {
+          kind: 'pdf',
+          file,
+          pdfDocument,
+          pageNumber: 1,
+          pageCount: pdfDocument.numPages,
+          name: `${getBaseNameSafe(file.name)}-pagina-1.pdf`,
+          displayName: pdfDocument.numPages > 1
+            ? `${file.name} · página 1 de ${pdfDocument.numPages}`
+            : file.name
+        };
+      }
+      throw new Error('Selecciona una imagen o un PDF válido.');
+    }
+
+    // Rasteriza una página PDF con calidad suficiente y un límite prudente de memoria.
+    async function renderPdfAssetToImage(asset) {
+      const page = await asset.pdfDocument.getPage(asset.pageNumber);
+      const unitViewport = page.getViewport({ scale: 1 });
+      const largestSide = Math.max(unitViewport.width, unitViewport.height);
+      const scale = Math.min(PDF_RENDER_SCALE, PDF_MAX_RENDER_SIDE / Math.max(1, largestSide));
+      const viewport = page.getViewport({ scale });
+      const pdfCanvas = document.createElement('canvas');
+      pdfCanvas.width = Math.max(1, Math.ceil(viewport.width));
+      pdfCanvas.height = Math.max(1, Math.ceil(viewport.height));
+      const pdfContext = pdfCanvas.getContext('2d', { alpha: false });
+      pdfContext.fillStyle = '#ffffff';
+      pdfContext.fillRect(0, 0, pdfCanvas.width, pdfCanvas.height);
+      await page.render({ canvasContext: pdfContext, viewport }).promise;
+
+      const blob = await new Promise((resolve, reject) => {
+        pdfCanvas.toBlob(result => {
+          if (result) resolve(result);
+          else reject(new Error('No se pudo rasterizar la página del PDF.'));
+        }, 'image/png');
+      });
+      const objectUrl = URL.createObjectURL(blob);
+      try {
+        return await imageFromUrl(objectUrl);
+      } finally {
+        URL.revokeObjectURL(objectUrl);
+        if (typeof page.cleanup === 'function') page.cleanup();
+      }
+    }
+
+    async function loadBackgroundAssetImage(asset) {
+      if (asset.kind === 'pdf') {
+        return renderPdfAssetToImage(asset);
+      }
+      return imageFromUrl(await fileToDataUrl(asset.file));
+    }
+
+    // Crea una miniatura ligera tanto para fotografías como para páginas PDF.
+    function createThumbnailDataUrl(img) {
+      const maxSide = 420;
+      const ratio = Math.min(1, maxSide / Math.max(img.width, img.height));
+      const thumbCanvas = document.createElement('canvas');
+      thumbCanvas.width = Math.max(1, Math.round(img.width * ratio));
+      thumbCanvas.height = Math.max(1, Math.round(img.height * ratio));
+      const thumbContext = thumbCanvas.getContext('2d');
+      thumbContext.fillStyle = '#ffffff';
+      thumbContext.fillRect(0, 0, thumbCanvas.width, thumbCanvas.height);
+      thumbContext.drawImage(img, 0, 0, thumbCanvas.width, thumbCanvas.height);
+      return thumbCanvas.toDataURL('image/jpeg', 0.86);
+    }
+
+    function showZoneMessage(zone, message, duration = 4000) {
+      const errorElem = zone ? zone.querySelector('.error-message') : null;
+      if (!errorElem) return;
+      errorElem.textContent = message;
+      errorElem.style.display = 'block';
+      if (duration > 0) {
+        setTimeout(() => { errorElem.style.display = 'none'; }, duration);
+      }
+    }
+
+    // Evita que un PDF largo rasterice demasiadas páginas a la vez y agote la memoria.
+    async function mapWithConcurrency(items, concurrency, worker) {
+      const results = new Array(items.length);
+      let nextIndex = 0;
+      const runners = Array.from(
+        { length: Math.min(concurrency, items.length) },
+        async () => {
+          while (nextIndex < items.length) {
+            const index = nextIndex;
+            nextIndex += 1;
+            results[index] = await worker(items[index], index);
+          }
+        }
+      );
+      await Promise.all(runners);
+      return results;
+    }
+
+    // Obtiene las dimensiones de trabajo, conservando las de la foto cuando se elige Formato Original.
+    function getCanvasDimensions(img = null) {
+      if (preserveOriginalFormat && img) {
+        return {
+          width: img.naturalWidth || img.width,
+          height: img.naturalHeight || img.height
+        };
+      }
+      return {
+        width: targetWidth || (img ? (img.naturalWidth || img.width) : 1440),
+        height: targetHeight || (img ? (img.naturalHeight || img.height) : 1080)
+      };
+    }
+
+    // Sincroniza la proporción de la vista previa con el formato seleccionado.
+    function syncCanvasAspectRatio(img = baseImg) {
+      const { width, height } = getCanvasDimensions(img);
+      document.documentElement.style.setProperty('--canvas-ar', `${width} / ${height}`);
+    }
+
+    // En Formato Original no hay recorte ni estirado, por lo que esos controles no son aplicables.
+    function updateOriginalFormatControls() {
+      document.querySelectorAll('.fit-button').forEach(button => {
+        button.disabled = preserveOriginalFormat;
+        button.setAttribute('aria-disabled', String(preserveOriginalFormat));
+      });
+      const cropButton = document.getElementById('btn-crop-toggle');
+      if (cropButton) {
+        cropButton.disabled = preserveOriginalFormat;
+        cropButton.setAttribute('aria-disabled', String(preserveOriginalFormat));
+      }
+      if (preserveOriginalFormat && cropMode) {
+        cropMode = false;
+        isDragging = false;
+        canvas.classList.remove('crop-mode', 'dragging');
+        const cropOkButton = document.getElementById('btn-crop-ok');
+        if (cropOkButton) cropOkButton.style.display = 'none';
+      }
+      refreshDownloadAvailability();
+    }
+
+    // ===== Botones de formato (aspect ratios) =====
+    // Permite cambiar entre formatos predefinidos ajustando el lienzo. 
+    document.querySelectorAll('.format-button').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        document.querySelectorAll('.format-button').forEach(b => b.classList.remove('active-button'));
+        e.currentTarget.classList.add('active-button');
+        preserveOriginalFormat = e.currentTarget.dataset.formatMode === 'original';
+        // Obtiene el tamaño fijo asociado al botón o deja que lo determine cada fotografía.
+        if (preserveOriginalFormat) {
+          targetWidth = null;
+          targetHeight = null;
+        } else {
+          targetWidth = parseInt(e.currentTarget.dataset.width, 10);
+          targetHeight = parseInt(e.currentTarget.dataset.height, 10);
+        }
+        // Reinicia el desplazamiento para evitar encuadres descentrados.
+        panPX = 0.5;
+        panPY = 0.5;
+        updateOriginalFormatControls();
+        // Actualiza la variable CSS que controla la relación de aspecto del lienzo.
+        // Si el botón es el formato vertical, forzar 9/16, no 1080/1920
+        if (e.currentTarget.id === "format-vertical") {
+          document.documentElement.style.setProperty('--canvas-ar', '9 / 16');
+        } else {
+          syncCanvasAspectRatio();
+        }
+        // Fuerza un repintado para reflejar el nuevo formato de trabajo.
+        renderCanvas();
+      });
+    });
+
+    // Ajuste (estirar / recortar)
+    // Cambia el modo de ajuste entre recorte y estirado.
+    document.querySelectorAll('.fit-button').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        document.querySelectorAll('.fit-button').forEach(b => b.classList.remove('active-button'));
+        e.currentTarget.classList.add('active-button');
+        fitMode = e.currentTarget.dataset.mode;
+        // Recupera el encuadre centrado al cambiar de modo de ajuste.
+        panPX = 0.5;
+        panPY = 0.5;
+        renderCanvas();
+      });
+    });
+
+    // Posición del logo (superior / inferior)
+    // Define si el faldón se sitúa arriba o abajo en la composición.
+    document.querySelectorAll('.position-button').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        document.querySelectorAll('.position-button').forEach(b => b.classList.remove('active-button'));
+        e.currentTarget.classList.add('active-button');
+        currentLogoPos = e.currentTarget.dataset.pos || 'bottom';
+        if (baseImg || logoImg) renderCanvas();
+      });
+    });
+
+    // Formato de salida (PNG / JPG / PDF)
+    // Selecciona el formato de exportación deseado (PNG, JPG o PDF).
+    document.querySelectorAll('.output-format-button').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        document.querySelectorAll('.output-format-button').forEach(b => b.classList.remove('active-button'));
+        e.currentTarget.classList.add('active-button');
+        const fmt = e.currentTarget.dataset.format;
+        outputFormat = (fmt === 'jpg' || fmt === 'pdf') ? fmt : 'png';
+        updatePdfHeaderOptionVisibility();
+      });
+    });
+
+    // Toggle Marca de tiempo
+    // Controla si la marca de tiempo se dibuja sobre las imágenes.
+    document.getElementById('ts-yes').addEventListener('click', () => {
+      timestampEnabled = true;
+      document.getElementById('ts-yes').classList.add('active-button');
+      document.getElementById('ts-no').classList.remove('active-button');
+      setPosButtonsEnabled(true);
+      setColorButtonsEnabled(true);
+      setBackgroundButtonsEnabled(true);
+      if (baseImg) renderCanvas();
+    });
+    document.getElementById('ts-no').addEventListener('click', () => {
+      timestampEnabled = false;
+      document.getElementById('ts-no').classList.add('active-button');
+      document.getElementById('ts-yes').classList.remove('active-button');
+      setPosButtonsEnabled(false);
+      setColorButtonsEnabled(false);
+      setBackgroundButtonsEnabled(false);
+      if (baseImg) renderCanvas();
+    });
+
+    // NUEVO: Color de la marca de tiempo (Blanco/Negro)
+    // Permite alternar el color del texto de la marca de tiempo según el contraste.
+    document.getElementById('ts-white').addEventListener('click', () => {
+      timestampColor = 'white';
+      document.getElementById('ts-white').classList.add('active-button');
+      document.getElementById('ts-black').classList.remove('active-button');
+      if (baseImg) renderCanvas();
+    });
+    document.getElementById('ts-black').addEventListener('click', () => {
+      timestampColor = 'black';
+      document.getElementById('ts-black').classList.add('active-button');
+      document.getElementById('ts-white').classList.remove('active-button');
+      if (baseImg) renderCanvas();
+    });
+
+    // Habilitar / deshabilitar botones de color
+    // Identificadores de los botones que controlan el color de la marca temporal.
+    const colorButtons = ['ts-white', 'ts-black'];
+    function setColorButtonsEnabled(enabled) {
+      colorButtons.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.disabled = !enabled;
+        el.setAttribute('aria-disabled', String(!enabled));
+      });
+    }
+
+    // Fondo de la marca de tiempo (Sin fondo / Blanco / Negro)
+    const backgroundButtons = ['ts-bg-none', 'ts-bg-white', 'ts-bg-black'];
+    function setBackgroundButtonsEnabled(enabled) {
+      backgroundButtons.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.disabled = !enabled;
+        el.setAttribute('aria-disabled', String(!enabled));
+      });
+    }
+    function setActiveBackground(id) {
+      backgroundButtons.forEach(bid => {
+        const el = document.getElementById(bid);
+        if (!el) return;
+        if (bid === id) {
+          el.classList.add('active-button');
+        } else {
+          el.classList.remove('active-button');
+        }
+      });
+    }
+    const bgNoneBtn = document.getElementById('ts-bg-none');
+    const bgWhiteBtn = document.getElementById('ts-bg-white');
+    const bgBlackBtn = document.getElementById('ts-bg-black');
+    if (bgNoneBtn) {
+      bgNoneBtn.addEventListener('click', () => {
+        timestampBackground = 'none';
+        setActiveBackground('ts-bg-none');
+        if (baseImg) renderCanvas();
+      });
+    }
+    if (bgWhiteBtn) {
+      bgWhiteBtn.addEventListener('click', () => {
+        timestampBackground = 'white';
+        setActiveBackground('ts-bg-white');
+        if (baseImg) renderCanvas();
+      });
+    }
+    if (bgBlackBtn) {
+      bgBlackBtn.addEventListener('click', () => {
+        timestampBackground = 'black';
+        setActiveBackground('ts-bg-black');
+        if (baseImg) renderCanvas();
+      });
+    }
+
+    // Posición de la marca de tiempo (↖︎ ↗︎ ↘︎ ↙︎)
+    // Botones que definen en qué esquina se sitúa la marca de tiempo.
+    const posButtons = ['ts-pos-tl', 'ts-pos-tr', 'ts-pos-br', 'ts-pos-bl'];
+    function setPosButtonsEnabled(enabled) {
+      posButtons.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.disabled = !enabled;
+        el.setAttribute('aria-disabled', String(!enabled));
+      });
+    }
+    function setActivePos(id) {
+      posButtons.forEach(bid => {
+        const el = document.getElementById(bid);
+        if (!el) return;
+        if (bid === id) { el.classList.add('active-button'); el.setAttribute('aria-checked', 'true'); }
+        else { el.classList.remove('active-button'); el.setAttribute('aria-checked', 'false'); }
+      });
+    }
+    document.getElementById('ts-pos-tl').addEventListener('click', () => {
+      timestampPosition = 'tl';
+      setActivePos('ts-pos-tl');
+      if (baseImg) renderCanvas();
+    });
+    document.getElementById('ts-pos-tr').addEventListener('click', () => {
+      timestampPosition = 'tr';
+      setActivePos('ts-pos-tr');
+      if (baseImg) renderCanvas();
+    });
+    document.getElementById('ts-pos-br').addEventListener('click', () => {
+      timestampPosition = 'br';
+      setActivePos('ts-pos-br');
+      if (baseImg) renderCanvas();
+    });
+    document.getElementById('ts-pos-bl').addEventListener('click', () => {
+      timestampPosition = 'bl';
+      setActivePos('ts-pos-bl');
+      if (baseImg) renderCanvas();
+    });
+    // Estado inicial acorde al valor por defecto de timestampEnabled
+    setPosButtonsEnabled(timestampEnabled);
+    setColorButtonsEnabled(timestampEnabled);
+    setBackgroundButtonsEnabled(timestampEnabled);
+
+    // Evita que el navegador abra archivos o cambie de página al soltar imágenes. 
+    function preventDefaults(e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+
+    // Calcula la zona visible del canvas teniendo en cuenta el faldón.
+    function getVisibleArea(canvasW, canvasH) {
+      if (!logoImg) {
+        return { top: 0, height: canvasH };
+      }
+      const logoAspect = logoImg.width ? (logoImg.height / logoImg.width) : 0;
+      const rawLogoHeight = canvasW * logoAspect;
+      const clampedLogoHeight = Math.min(canvasH, Math.max(0, rawLogoHeight));
+      if (currentLogoPos === 'top') {
+        const visibleHeight = Math.max(0, canvasH - clampedLogoHeight);
+        return {
+          top: clampedLogoHeight,
+          height: visibleHeight
+        };
+      }
+      const visibleHeight = Math.max(0, canvasH - clampedLogoHeight);
+      return {
+        top: 0,
+        height: visibleHeight
+      };
+    }
+
+    // Dibujo de fondo y faldón
+    // Dibuja la fotografía de fondo respetando el modo de encaje actual.
+    function drawBackground(img, width, height, context = ctx) {
+      if (preserveOriginalFormat) {
+        context.drawImage(img, 0, 0, img.width, img.height, 0, 0, width, height);
+        return;
+      }
+
+      const { top: visibleTop, height: rawVisibleHeight } = getVisibleArea(width, height);
+      const visibleHeight = (rawVisibleHeight > 0) ? rawVisibleHeight : height;
+
+      if (fitMode === 'stretch') {
+        context.drawImage(img, 0, 0, img.width, img.height, 0, visibleTop, width, visibleHeight);
+        return;
+      }
+
+      const geometry = getSourceWindowForCover(img, width, height);
+      const { sw, sh, maxSX, maxSY } = geometry;
+      const pX = isFinite(panPX) ? Math.min(1, Math.max(0, panPX)) : 0.5;
+      const pY = isFinite(panPY) ? Math.min(1, Math.max(0, panPY)) : 0.5;
+      const sx = maxSX > 0 ? maxSX * pX : 0;
+      const sy = maxSY > 0 ? maxSY * pY : 0;
+      context.drawImage(img, sx, sy, sw, sh, 0, visibleTop, width, visibleHeight);
+    }
+
+    // Función auxiliar para calcular la ventana fuente en modo "cover" con recorte.
+    // Calcula la porción de la imagen original que debe recortarse en modo cover.
+    function getSourceWindowForCover(img, canvasW, canvasH) {
+      const { height: rawVisibleHeight } = getVisibleArea(canvasW, canvasH);
+      const drawHeight = (rawVisibleHeight > 0) ? rawVisibleHeight : canvasH;
+      const imgW = img.width;
+      const imgH = img.height;
+      const imgAspect = imgW / imgH;
+      const drawAspect = canvasW / drawHeight;
+      if (imgAspect > drawAspect) {
+        const sh = imgH;
+        const sw = imgH * drawAspect;
+        return { sw, sh, maxSX: Math.max(0, imgW - sw), maxSY: 0, visibleHeight: drawHeight };
+      } else {
+        const sw = imgW;
+        const sh = imgW / drawAspect;
+        return { sw, sh, maxSX: 0, maxSY: Math.max(0, imgH - sh), visibleHeight: drawHeight };
+      }
+    }
+
+
+    // Superpone el faldón de logos centrado en la posición seleccionada.
+    function drawLogoOnCanvas(canvasWidth, canvasHeight, context = ctx) {
+      const ratio = 1.0; // siempre 100% del ancho
+      const logoWidth = canvasWidth * ratio;
+      const logoHeight = logoWidth * (logoImg.height / logoImg.width);
+      const x = (canvasWidth - logoWidth) / 2;
+      const pos = currentLogoPos;
+      let y = (pos === 'top') ? 0 : (canvasHeight - logoHeight);
+      context.drawImage(logoImg, x, y, logoWidth, logoHeight);
+    }
+
+    // Genera un dataURL del faldón para reutilizarlo como cabecera en PDF.
+    function getLogoHeaderDataUrl() {
+      if (!logoImg) return null;
+      const tempCanvas = document.createElement('canvas');
+      tempCanvas.width = logoImg.width;
+      tempCanvas.height = logoImg.height;
+      const tempCtx = tempCanvas.getContext('2d');
+      tempCtx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
+      tempCtx.drawImage(logoImg, 0, 0);
+      return tempCanvas.toDataURL('image/png');
+    }
+
+    // NUEVO: Dibujo de la marca de tiempo (posiciones 4 esquinas)
+    // Escribe la fecha con sombra en la esquina seleccionada del lienzo.
+    function drawTimestamp(dateStr, canvasWidth, canvasHeight, context = ctx) {
+      if (!dateStr) return;
+      const padding = Math.max(8, Math.round(canvasHeight * 0.015));
+      const fontSize = Math.max(16, Math.round(canvasHeight * 0.025));
+      const bgPaddingX = Math.max(6, Math.round(fontSize * 0.35));
+      const bgPaddingY = Math.max(4, Math.round(fontSize * 0.3));
+      context.save();
+      context.font = `700 ${fontSize}px Inter, Arial, sans-serif`;
+      // Colores según selección: "white" mantiene el estilo actual (texto blanco + sombra negra)
+      let textColor = '#ffffff';
+      let shColor = 'rgba(0,0,0,0.6)';
+      if (timestampColor === 'black') {
+        textColor = '#000000';
+        shColor = 'rgba(255,255,255,0.85)';
+      }
+      const textShadowBlur = Math.max(2, Math.round(fontSize * 0.25));
+      const metrics = context.measureText(dateStr);
+      const textWidth = metrics.width;
+      const textHeight = Math.max(
+        fontSize,
+        (metrics.actualBoundingBoxAscent ?? 0) + (metrics.actualBoundingBoxDescent ?? 0)
+      );
+
+      const hasLogo = Boolean(logoImg);
+      const logoIsTop = hasLogo && currentLogoPos === 'top';
+      const logoIsBottom = hasLogo && currentLogoPos === 'bottom';
+      const logoHeight = hasLogo ? canvasWidth * (logoImg.height / logoImg.width) : 0;
+      const topOffset = logoIsTop ? logoHeight : 0;
+      const bottomOffset = logoIsBottom ? logoHeight : 0;
+      const safeTopY = Math.min(canvasHeight - padding, padding + topOffset);
+      const safeBottomY = Math.max(padding, canvasHeight - padding - bottomOffset);
+
+      // Posicionamiento según esquina elegida
+      let x = padding;
+      let y = canvasHeight - padding;
+      switch (timestampPosition) {
+        case 'tl': // arriba izquierda
+          context.textAlign = 'left';
+          context.textBaseline = 'top';
+          x = padding;
+          y = safeTopY;
+          break;
+        case 'tr': // arriba derecha
+          context.textAlign = 'right';
+          context.textBaseline = 'top';
+          x = canvasWidth - padding;
+          y = safeTopY;
+          break;
+        case 'br': // abajo derecha
+          context.textAlign = 'right';
+          context.textBaseline = 'bottom';
+          x = canvasWidth - padding;
+          y = safeBottomY;
+          break;
+        case 'bl': // abajo izquierda (por defecto)
+        default:
+          context.textAlign = 'left';
+          context.textBaseline = 'bottom';
+          x = padding;
+          y = safeBottomY;
+          break;
+      }
+
+      const currentAlign = context.textAlign;
+      const currentBaseline = context.textBaseline;
+      let rectX = x - bgPaddingX;
+      if (currentAlign === 'right') {
+        rectX = x - textWidth - bgPaddingX;
+      } else if (currentAlign === 'center') {
+        rectX = x - (textWidth / 2) - bgPaddingX;
+      }
+      let rectY = y - bgPaddingY;
+      if (currentBaseline === 'bottom' || currentBaseline === 'alphabetic' || currentBaseline === 'ideographic') {
+        rectY = y - textHeight - bgPaddingY;
+      } else if (currentBaseline === 'middle') {
+        rectY = y - (textHeight / 2) - bgPaddingY;
+      }
+      const rectWidth = textWidth + bgPaddingX * 2;
+      const rectHeight = textHeight + bgPaddingY * 2;
+
+      if (timestampBackground !== 'none') {
+        const bgColor = timestampBackground === 'white' ? '#ffffff' : '#000000';
+        context.shadowColor = 'transparent';
+        context.shadowBlur = 0;
+        context.shadowOffsetX = 0;
+        context.shadowOffsetY = 0;
+        context.fillStyle = bgColor;
+        context.fillRect(rectX, rectY, rectWidth, rectHeight);
+      }
+
+      context.shadowColor = shColor;
+      context.shadowBlur = textShadowBlur;
+      context.shadowOffsetX = 0;
+      context.shadowOffsetY = 0;
+      context.fillStyle = textColor;
+      context.fillText(dateStr, x, y);
+      context.restore();
+    }
+
+    // Render principal
+    // Redibuja el lienzo según las imágenes y preferencias actuales.
+    function renderCanvas() {
+      if (preserveOriginalFormat && baseImg) {
+        syncCanvasAspectRatio(baseImg);
+      }
+      if (baseImg && logoImg) {
+        const { width: canvasWidth, height: canvasHeight } = getCanvasDimensions(baseImg);
+        canvas.width = canvasWidth;
+        canvas.height = canvasHeight;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawBackground(baseImg, canvasWidth, canvasHeight);
+        drawLogoOnCanvas(canvasWidth, canvasHeight);
+        if (timestampEnabled && currentBaseDateStr) {
+          drawTimestamp(currentBaseDateStr, canvasWidth, canvasHeight);
+        }
+      } else if (!baseImg && logoImg) {
+        const { width: canvasWidth, height: canvasHeight } = getCanvasDimensions();
+        canvas.width = canvasWidth;
+        canvas.height = canvasHeight;
+        ctx.fillStyle = "#f0f0f0";
+        ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+        drawLogoOnCanvas(canvasWidth, canvasHeight);
+        // No hay fecha si no hay imagen base
+      } else if (baseImg && !logoImg) {
+        const { width: canvasWidth, height: canvasHeight } = getCanvasDimensions(baseImg);
+        canvas.width = canvasWidth;
+        canvas.height = canvasHeight;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawBackground(baseImg, canvasWidth, canvasHeight);
+        if (timestampEnabled && currentBaseDateStr) {
+          drawTimestamp(currentBaseDateStr, canvasWidth, canvasHeight);
+        }
+      }
+      refreshDownloadAvailability();
+    }
+
+    // DROP y click para baseDrop (imagen única)
+    handleDrop(baseDrop, async (img, file, previewDataUrl, asset) => {
+      baseImg = img;
+      panPX = 0.5; panPY = 0.5;
+      baseFileNameCore = file ? getBaseNameSafe(file.name) : baseFileNameCore;
+      // preparar fecha EXIF
+      if (file) {
+        const dt = await getPhotoDateFromFile(file);
+        currentBaseDateStr = formatDateDDMMYYYY(dt);
+        currentBaseDateFileName = formatDateForFilename(dt);
+      }
+      baseDrop.querySelectorAll('.thumbnail').forEach(el => el.remove());
+      const thumb = document.createElement('img');
+      thumb.src = previewDataUrl || createThumbnailDataUrl(img);
+      thumb.className = 'thumbnail';
+      baseDrop.appendChild(thumb);
+      baseDrop.setAttribute(
+        'aria-label',
+        asset?.kind === 'pdf' ? `PDF cargado como imagen: ${asset.displayName}` : 'Imagen base cargada'
+      );
+      // Ocultar icono, textos y botón del drop cuando haya imagen
+      baseDrop.querySelectorAll('svg, p:not(.error-message), .file-wrapper, button#base-load-btn').forEach(el => {
+        el.style.display = 'none';
+      });
+      baseDrop.classList.add('preview-active');
+      resetBatchUI();
+      renderCanvas();
+    });
+
+    // Botón para cargar imagen de fondo
+    if (dom.baseLoadBtn && dom.baseInput) {
+      dom.baseLoadBtn.addEventListener('click', () => dom.baseInput.click());
+    }
+    if (dom.baseInput) dom.baseInput.addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (file) baseFileNameCore = getBaseNameSafe(file.name);
+      if (!isSupportedBackgroundFile(file)) {
+        showZoneMessage(baseDrop, 'Por favor, selecciona una imagen o un PDF válido.');
+        return;
+      }
+
+      try {
+        setDownloadBusy(true, isPdfFile(file) ? 'Convirtiendo PDF...' : 'Cargando imagen...');
+        const asset = await getFirstBackgroundAsset(file);
+        const img = await loadBackgroundAssetImage(asset);
+        baseImg = img;
+        panPX = 0.5; panPY = 0.5;
+        const dt = await getPhotoDateFromFile(file);
+        currentBaseDateStr = formatDateDDMMYYYY(dt);
+        currentBaseDateFileName = formatDateForFilename(dt);
+        const dz = baseDrop;
+        dz.querySelectorAll('.thumbnail').forEach(el => el.remove());
+        const thumb = document.createElement('img');
+        thumb.src = createThumbnailDataUrl(img);
+        thumb.className = 'thumbnail';
+        dz.appendChild(thumb);
+        dz.querySelectorAll('.error-message').forEach(el => { el.style.display = 'none'; });
+        dz.setAttribute(
+          'aria-label',
+          asset.kind === 'pdf' ? `PDF cargado como imagen: ${asset.displayName}` : 'Imagen base cargada'
+        );
+        dz.querySelectorAll('svg, p:not(.error-message), .file-wrapper, button#base-load-btn').forEach(el => {
+          el.style.display = 'none';
+        });
+        dz.classList.add('preview-active');
+        resetBatchUI();
+        renderCanvas();
+      } catch (error) {
+        console.error('No se pudo cargar el fondo.', error);
+        showZoneMessage(baseDrop, error?.message || 'No se pudo cargar el archivo.');
+      } finally {
+        setDownloadBusy(false);
+      }
+    });
+
+    // DROP y click para logoDrop
+    handleDrop(logoDrop, (img, _file, dataUrl) => {
+      updateLogoPreviewFromImage(img, dataUrl);
+    });
+
+    // Botón para cargar imagen de logo
+    if (dom.logoLoadBtn && dom.logoInput) {
+      dom.logoLoadBtn.addEventListener('click', () => dom.logoInput.click());
+    }
+    if (dom.logoInput) dom.logoInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file && file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const dataUrl = reader.result;
+          if (typeof dataUrl !== 'string') return;
+          const img = new Image();
+          img.onload = () => updateLogoPreviewFromImage(img, dataUrl);
+          img.onerror = () => {
+            clearCachedLogo();
+            const errorElem = logoDrop.querySelector('.error-message');
+            if (errorElem) {
+              errorElem.textContent = 'No se pudo cargar la imagen del faldón.';
+              errorElem.style.display = 'block';
+              setTimeout(() => { errorElem.style.display = 'none'; }, 3000);
+            }
+          };
+          img.src = dataUrl;
+        };
+        reader.readAsDataURL(file);
+      } else {
+        const errorElem = logoDrop.querySelector('.error-message');
+        if (errorElem) {
+          errorElem.textContent = 'Por favor, selecciona una imagen válida.';
+          errorElem.style.display = 'block';
+          setTimeout(() => { errorElem.style.display = 'none'; }, 3000);
+        }
+      }
+    });
+
+    // Procesar lote (solo recolecta y previsualiza la primera)
+    if (dom.batchLoadBtn && dom.batchInput) {
+      dom.batchLoadBtn.addEventListener('click', () => dom.batchInput.click());
+    }
+    // Gestiona la selección de archivos en lote y muestra una vista previa.
+    if (dom.batchInput) dom.batchInput.addEventListener('input', async () => {
+      const files = Array.from(dom.batchInput.files);
+      setDownloadBusy(true, 'Preparando archivos...');
+
+      try {
+        const expanded = await expandBackgroundFiles(files);
+        batchSelectionCount = expanded.totalCount;
+        batchFiles = expanded.assets;
+        updateBatchStatus(batchSelectionCount);
+
+        if (expanded.errors.length > 0) {
+          showZoneMessage(dom.batchInputGroup, expanded.errors[0], 5000);
+        }
+
+        if (batchSelectionCount > 1) {
+          setBaseDropEnabled(false);
+          setBaseControlsEnabled(false);
+        } else {
+          setBaseDropEnabled(true);
+          if (!baseImg || batchSelectionCount <= 1) setBaseControlsEnabled(true);
+        }
+
+        if (!baseImg || batchSelectionCount <= 1) setBatchControlsEnabled(true);
+
+        if (batchFiles.length === 0) {
+          baseImg = null;
+          renderCanvas();
+          return;
+        }
+
+        const firstAsset = batchFiles[0];
+        baseFileNameCore = getBaseNameSafe(firstAsset.file.name);
+        const dtPrev = await getPhotoDateFromFile(firstAsset.file);
+        currentBaseDateStr = formatDateDDMMYYYY(dtPrev);
+        currentBaseDateFileName = formatDateForFilename(dtPrev);
+        const previewImg = await loadBackgroundAssetImage(firstAsset);
+        baseImg = previewImg;
+        if (baseDrop) {
+          baseDrop.querySelectorAll('.thumbnail').forEach(el => el.remove());
+          const thumb = document.createElement('img');
+          thumb.src = createThumbnailDataUrl(previewImg);
+          thumb.className = 'thumbnail';
+          if (batchSelectionCount > 1) {
+            thumb.style.display = 'none';
+          }
+          baseDrop.appendChild(thumb);
+          baseDrop.classList.add('preview-active');
+          baseDrop.setAttribute(
+            'aria-label',
+            firstAsset.kind === 'pdf'
+              ? `PDF cargado como imagen en lote: ${firstAsset.displayName}`
+              : 'Imagen base cargada (lote)'
+          );
+        }
+        renderCanvas();
+      } catch (error) {
+        console.error('No se pudo preparar el lote.', error);
+        batchFiles = [];
+        batchSelectionCount = 0;
+        updateBatchStatus(0);
+        showZoneMessage(dom.batchInputGroup, error?.message || 'No se pudo preparar el lote.', 5000);
+      } finally {
+        setDownloadBusy(false);
+      }
+    });
+
+    // Función handleDrop para zonas (modificada para pasar también el File)
+    function handleDrop(zone, callback) {
+      zone.addEventListener('dragenter', (e) => {
+        preventDefaults(e);
+        zone.classList.add('dragover');
+      });
+      zone.addEventListener('dragover', (e) => {
+        preventDefaults(e);
+      });
+      zone.addEventListener('dragleave', () => {
+        zone.classList.remove('dragover');
+      });
+      zone.addEventListener('drop', async (e) => {
+        preventDefaults(e);
+        zone.classList.remove('dragover');
+        const file = e.dataTransfer.files[0];
+        const acceptsPdf = zone === baseDrop;
+        const isValid = acceptsPdf ? isSupportedBackgroundFile(file) : isImageFile(file);
+        if (!isValid) {
+          showZoneMessage(
+            zone,
+            acceptsPdf
+              ? 'Por favor, arrastra una imagen o un PDF válido.'
+              : 'Por favor, arrastra una imagen válida.'
+          );
+          return;
+        }
+
+        try {
+          if (acceptsPdf) {
+            baseFileNameCore = getBaseNameSafe(file.name);
+            setDownloadBusy(true, isPdfFile(file) ? 'Convirtiendo PDF...' : 'Cargando imagen...');
+            const asset = await getFirstBackgroundAsset(file);
+            const img = await loadBackgroundAssetImage(asset);
+            await callback(img, file, createThumbnailDataUrl(img), asset);
+          } else {
+            const dataUrl = await fileToDataUrl(file);
+            const img = await imageFromUrl(dataUrl);
+            callback(img, file, dataUrl);
+          }
+          zone.querySelectorAll('.error-message').forEach(el => { el.style.display = 'none'; });
+        } catch (error) {
+          console.error('No se pudo cargar el archivo arrastrado.', error);
+          showZoneMessage(zone, error?.message || 'No se pudo cargar el archivo.');
+        } finally {
+          if (acceptsPdf) setDownloadBusy(false);
+        }
+      });
+    }
+
+    // Accesibilidad: activar zona de drop por teclado (Enter/Espacio)
+    if (baseDrop && dom.baseInput) {
+      baseDrop.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          dom.baseInput.click();
+        }
+      });
+    }
+    if (logoDrop && dom.logoInput) {
+      logoDrop.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          dom.logoInput.click();
+        }
+      });
+    }
+
+    // Utilidad: nombre base seguro
+    function getBaseNameSafe(filename) {
+      const noExt = filename.replace(/\.[^.]+$/, '');
+      return noExt.replace(/[\\/:*?"<>|]+/g, '-').trim();
+    }
+
+
+
+
+
+
+
+
+    // === UI crop: activar/desactivar ===
+    const btnCrop = document.getElementById('btn-crop-toggle');
+    const btnCropOk = document.getElementById('btn-crop-ok');
+    if (btnCrop && btnCropOk) {
+      btnCrop.addEventListener('click', () => {
+        if (preserveOriginalFormat) return;
+        // Si estaba en Estirar, cambiamos a Recortar
+        if (fitMode !== 'crop') {
+          const btnCropFit = document.getElementById('fit-crop');
+          const btnStretch = document.getElementById('fit-stretch');
+          if (btnCropFit && btnStretch) {
+            btnStretch.classList.remove('active-button');
+            btnCropFit.classList.add('active-button');
+          }
+          fitMode = 'crop';
+          if (baseImg) renderCanvas();
+        }
+        cropMode = true;
+        canvas.classList.add('crop-mode');
+        btnCropOk.style.display = '';
+        btnCrop.setAttribute('aria-pressed', 'true');
+        if (btnCropOk) btnCropOk.setAttribute('aria-pressed', 'false');
+        // Desactiva el botón de reencuadre mientras el modo recorte está activo.
+        btnCrop.disabled = true;
+        refreshDownloadAvailability();
+      });
+
+      btnCropOk.addEventListener('click', () => {
+        cropMode = false; isDragging = false;
+        canvas.classList.remove('crop-mode');
+        canvas.classList.remove('dragging');
+        btnCropOk.style.display = 'none';
+        renderCanvas();
+        if (btnCropOk) btnCropOk.setAttribute('aria-pressed', 'true');
+        if (btnCrop) btnCrop.setAttribute('aria-pressed', 'false');
+        // Reactiva el botón de reencuadre al finalizar la edición.
+        btnCrop.disabled = false;
+      });
+    }
+
+    // === Arrastre con ratón
+    canvas.addEventListener('mousedown', (e) => {
+      if (!cropMode || !baseImg) return;
+      isDragging = true;
+      canvas.classList.add('dragging');
+      const rect = canvas.getBoundingClientRect();
+      dragStartX = e.clientX - rect.left;
+      dragStartY = e.clientY - rect.top;
+      const { maxSX, maxSY } = getSourceWindowForCover(baseImg, canvas.width, canvas.height);
+      const clampedPX = Math.min(1, Math.max(0, panPX));
+      const clampedPY = Math.min(1, Math.max(0, panPY));
+      startSX = maxSX > 0 ? maxSX * clampedPX : 0;
+      startSY = maxSY > 0 ? maxSY * clampedPY : 0;
+    });
+    window.addEventListener('mousemove', (e) => {
+      if (!isDragging || !cropMode || !baseImg) return;
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const dx = x - dragStartX;
+      const dy = y - dragStartY;
+      const { sw, sh, maxSX, maxSY, visibleHeight } = getSourceWindowForCover(baseImg, canvas.width, canvas.height);
+      let sx = startSX - dx * (sw / canvas.width);
+      const dragHeight = (visibleHeight > 0) ? visibleHeight : canvas.height;
+      let sy = startSY - dy * (sh / dragHeight);
+      sx = Math.min(maxSX, Math.max(0, sx));
+      sy = Math.min(maxSY, Math.max(0, sy));
+      if (maxSX > 0) panPX = sx / maxSX; else panPX = 0.5;
+      if (maxSY > 0) panPY = sy / maxSY; else panPY = 0.5;
+      scheduleRender();
+    });
+    window.addEventListener('mouseup', () => {
+      if (!isDragging) return;
+      isDragging = false;
+      canvas.classList.remove('dragging');
+    });
+
+    // === Arrastre táctil
+    canvas.addEventListener('touchstart', (e) => {
+      if (!cropMode || !baseImg) return;
+      const t = e.touches[0];
+      const rect = canvas.getBoundingClientRect();
+      isDragging = true;
+      dragStartX = t.clientX - rect.left;
+      dragStartY = t.clientY - rect.top;
+      const { maxSX, maxSY } = getSourceWindowForCover(baseImg, canvas.width, canvas.height);
+      const clampedPX = Math.min(1, Math.max(0, panPX));
+      const clampedPY = Math.min(1, Math.max(0, panPY));
+      startSX = maxSX > 0 ? maxSX * clampedPX : 0;
+      startSY = maxSY > 0 ? maxSY * clampedPY : 0;
+    }, { passive: true });
+    canvas.addEventListener('touchmove', (e) => {
+      if (!isDragging || !cropMode || !baseImg) return;
+      const t = e.touches[0];
+      const rect = canvas.getBoundingClientRect();
+      const x = t.clientX - rect.left;
+      const y = t.clientY - rect.top;
+      const dx = x - dragStartX;
+      const dy = y - dragStartY;
+      const { sw, sh, maxSX, maxSY, visibleHeight } = getSourceWindowForCover(baseImg, canvas.width, canvas.height);
+      let sx = startSX - dx * (sw / canvas.width);
+      const dragHeight = (visibleHeight > 0) ? visibleHeight : canvas.height;
+      let sy = startSY - dy * (sh / dragHeight);
+      sx = Math.min(maxSX, Math.max(0, sx));
+      sy = Math.min(maxSY, Math.max(0, sy));
+      if (maxSX > 0) panPX = sx / maxSX; else panPX = 0.5;
+      if (maxSY > 0) panPY = sy / maxSY; else panPY = 0.5;
+      scheduleRender();
+    }, { passive: true });
+
+    window.addEventListener('touchend', () => {
+      if (!isDragging) return;
+      isDragging = false;
+      canvas.classList.remove('dragging');
+    });
+
+    // === Accesibilidad: salir con ESC ===
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && cropMode) {
+        cropMode = false; isDragging = false;
+        canvas.classList.remove('crop-mode', 'dragging');
+        if (btnCropOk) btnCropOk.style.display = 'none';
+        renderCanvas();
+        // Vuelve a activar el botón de reencuadre si existe.
+        if (btnCrop) btnCrop.disabled = false;
+        refreshDownloadAvailability();
+      }
+    });
+
+    // === Doble click para alternar reencuadre ===
+    canvas.addEventListener('dblclick', () => {
+      if (!baseImg || preserveOriginalFormat) return;
+      if (!cropMode) {
+        // entrar en modo crop (forzando Recortar si fuese necesario)
+        if (fitMode !== 'crop') {
+          const btnCropFit = document.getElementById('fit-crop');
+          const btnStretch = document.getElementById('fit-stretch');
+          if (btnCropFit && btnStretch) {
+            btnStretch.classList.remove('active-button');
+            btnCropFit.classList.add('active-button');
+          }
+          fitMode = 'crop';
+        }
+        cropMode = true;
+        canvas.classList.add('crop-mode');
+        if (btnCropOk) btnCropOk.style.display = '';
+        // Desactiva el botón de reencuadre mientras el modo recorte está activo.
+        if (btnCrop) btnCrop.disabled = true;
+        refreshDownloadAvailability();
+      } else {
+        // salir de modo crop
+        cropMode = false; isDragging = false;
+        canvas.classList.remove('crop-mode', 'dragging');
+        if (btnCropOk) btnCropOk.style.display = 'none';
+        renderCanvas();
+        // Vuelve a activar el botón de reencuadre si existe.
+        if (btnCrop) btnCrop.disabled = false;
+      }
+    });
+
+
+
+
+
+
+    // Añadir sombra direccional a un dataURL de imagen (PNG) usando Canvas
+    // Define la dirección de la sombra: 'br' abajo-derecha, 'tr' arriba-derecha.
+    function addShadowToImageDataUrl(srcDataUrl, dir = 'br', opts = {}) {
+      const blur = opts.blur || 40;         // desenfoque de la sombra
+      const alpha = opts.alpha || 0.25;     // opacidad de la sombra
+      const offset = opts.offset || 24;     // desplazamiento de la sombra
+      const pad = opts.pad || blur + Math.abs(offset) + 10; // margen para que no se corte
+
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => {
+          const w = img.width;
+          const h = img.height;
+          const outW = w + pad * 2;
+          const outH = h + pad * 2;
+          const oc = document.createElement('canvas');
+          oc.width = outW; oc.height = outH;
+          const octx = oc.getContext('2d');
+          octx.clearRect(0, 0, outW, outH);
+
+          // Configurar sombra
+          octx.save();
+          octx.shadowColor = `rgba(0,0,0,${alpha})`;
+          octx.shadowBlur = blur;
+          // Direcciones
+          const offX = offset; // derecha siempre positiva
+          const offY = (dir === 'tr') ? -offset : offset; // arriba negativo, abajo positivo
+          octx.shadowOffsetX = offX;
+          octx.shadowOffsetY = offY;
+
+          // Dibuja la imagen centrada con padding
+          octx.drawImage(img, pad, pad);
+          octx.restore();
+
+          // Devolver dataURL y dimensiones resultantes
+          resolve({ url: oc.toDataURL('image/png'), w: outW, h: outH });
+        };
+        img.onerror = reject;
+        img.src = srcDataUrl;
+      });
+    }
+
+    // Listener de descarga: única o lote (ZIP) respetando PNG/JPG/PDF + marca de tiempo
+    downloadBtn.addEventListener('click', async () => {
+      if (downloadBtn.disabled) return;
+      try {
+
+      // Si hay más de un fondo cargado, descargar el lote como ZIP (o PDF ZIP).
+      if (batchFiles.length > 1) {
+        setDownloadBusy(true, 'Procesando lote...');
+        // PDF ZIP
+        if (outputFormat === 'pdf') {
+          const zip = new JSZip();
+          const { jsPDF } = window.jspdf;
+          const margin = 20; // margen superior/lateral en puntos
+          const shadowDir = (currentLogoPos === 'top') ? 'tr' : 'br';
+          const logoHeaderDataUrl = (includePdfHeader && logoImg) ? getLogoHeaderDataUrl() : null;
+          const headerSpacing = 18;
+          const headerMaxHeight = 120;
+          const results = await mapWithConcurrency(batchFiles, 3, async (asset) => {
+            // Cargar fotografía o convertir página PDF en imagen.
+            const img = await loadBackgroundAssetImage(asset);
+            const { width: canvasWidth, height: canvasHeight } = getCanvasDimensions(img);
+            const tempCanvas = document.createElement('canvas');
+            const tempCtx = tempCanvas.getContext('2d');
+            tempCanvas.width = canvasWidth;
+            tempCanvas.height = canvasHeight;
+            drawBackground(img, canvasWidth, canvasHeight, tempCtx);
+            if (logoImg) drawLogoOnCanvas(canvasWidth, canvasHeight, tempCtx);
+            const dt = await getPhotoDateFromFile(asset.file);
+            const dateStr = formatDateDDMMYYYY(dt);
+            const baseName = formatDateForFilename(dt);
+            if (timestampEnabled) {
+              drawTimestamp(dateStr, canvasWidth, canvasHeight, tempCtx);
+            }
+            const dataUrl = tempCanvas.toDataURL('image/png');
+            const shaded = await addShadowToImageDataUrl(dataUrl, shadowDir);
+            const doc = new jsPDF({ orientation: 'p', unit: 'pt', format: 'a4' });
+            const pageW = doc.internal.pageSize.getWidth();
+            const pageH = doc.internal.pageSize.getHeight();
+            let contentTop = margin;
+            if (logoHeaderDataUrl) {
+              const headerMaxWidth = pageW - 2 * margin;
+              const headerAspect = logoImg.width / logoImg.height;
+              let headerW = headerMaxWidth;
+              let headerH = headerW / headerAspect;
+              if (headerH > headerMaxHeight) {
+                headerH = headerMaxHeight;
+                headerW = headerH * headerAspect;
+              }
+              const headerX = (pageW - headerW) / 2;
+              doc.addImage(logoHeaderDataUrl, 'PNG', headerX, contentTop, headerW, headerH);
+              contentTop += headerH + headerSpacing;
+            }
+            const contentBottom = pageH - margin;
+            const availableHeight = contentBottom - contentTop;
+            const maxW = pageW - 2 * margin;
+            const maxH = availableHeight > 0 ? availableHeight : (pageH - 2 * margin);
+            const drawAreaTop = availableHeight > 0 ? contentTop : margin;
+            const aspect = shaded.w / shaded.h;
+            let drawW = maxW;
+            let drawH = drawW / aspect;
+            if (drawH > maxH) { drawH = maxH; drawW = drawH * aspect; }
+            const xOffset = (pageW - drawW) / 2;
+            const yOffset = drawAreaTop + (maxH - drawH) / 2;
+            doc.addImage(shaded.url, 'PNG', xOffset, yOffset, drawW, drawH);
+            const pdfBlob = doc.output('blob');
+            return { baseName, blob: pdfBlob };
+          });
+          const nameUsage = new Map();
+          results.forEach(({ baseName, blob }) => {
+            const index = (nameUsage.get(baseName) || 0) + 1;
+            nameUsage.set(baseName, index);
+            const finalBase = `${baseName}(${index})`;
+            zip.file(`${finalBase}.pdf`, blob);
+          });
+          const content = await zip.generateAsync({ type: 'blob' });
+          const link = document.createElement('a');
+          const zipBaseName = currentBaseDateFileName || formatDateForFilename(new Date());
+          link.href = URL.createObjectURL(content);
+          link.download = `${zipBaseName} (lote de archivos).zip`;
+          link.click();
+          URL.revokeObjectURL(link.href);
+          setDownloadBusy(false);
+          return;
+        }
+        // PNG/JPG ZIP
+        {
+          const isJpg = (outputFormat === 'jpg');
+          const mime = isJpg ? 'image/jpeg' : 'image/png';
+          const quality = isJpg ? 0.92 : 1.0;
+          const ext = isJpg ? 'jpg' : 'png';
+          const zip = new JSZip();
+          const shadowDir = (currentLogoPos === 'top') ? 'tr' : 'br';
+          const results = await mapWithConcurrency(batchFiles, 3, async (asset) => {
+            const img = await loadBackgroundAssetImage(asset);
+            const { width: canvasWidth, height: canvasHeight } = getCanvasDimensions(img);
+            const tempCanvas = document.createElement('canvas');
+            const tempCtx = tempCanvas.getContext('2d');
+            tempCanvas.width = canvasWidth;
+            tempCanvas.height = canvasHeight;
+            drawBackground(img, canvasWidth, canvasHeight, tempCtx);
+            if (logoImg) drawLogoOnCanvas(canvasWidth, canvasHeight, tempCtx);
+            const dt = await getPhotoDateFromFile(asset.file);
+            const dateStr = formatDateDDMMYYYY(dt);
+            const baseName = formatDateForFilename(dt);
+            if (timestampEnabled) {
+              drawTimestamp(dateStr, canvasWidth, canvasHeight, tempCtx);
+            }
+            // toBlob promisificado
+            const blob = await new Promise((resolve) => tempCanvas.toBlob(resolve, mime, quality));
+            return { baseName, blob };
+          });
+          const nameUsage = new Map();
+          results.forEach(({ baseName, blob }) => {
+            const index = (nameUsage.get(baseName) || 0) + 1;
+            nameUsage.set(baseName, index);
+            const finalBase = `${baseName}(${index})`;
+            zip.file(`${finalBase}.${ext}`, blob);
+          });
+          const content = await zip.generateAsync({ type: 'blob' });
+          const link = document.createElement('a');
+          const zipBaseName = currentBaseDateFileName || formatDateForFilename(new Date());
+          link.href = URL.createObjectURL(content);
+          link.download = `${zipBaseName} (lote de archivos).zip`;
+          link.click();
+          URL.revokeObjectURL(link.href);
+          setDownloadBusy(false);
+          return;
+        }
+      }
+
+      // Si no hay lote, descarga imagen única (PDF o PNG/JPG)
+      const isJpg = (outputFormat === 'jpg');
+      const mime = isJpg ? 'image/jpeg' : 'image/png';
+      const quality = isJpg ? 0.92 : 1.0;
+      const ext = isJpg ? 'jpg' : 'png';
+
+      if (outputFormat === 'pdf') {
+        const { jsPDF } = window.jspdf;
+        const margin = 20; // margen superior/lateral en puntos
+        const baseName = currentBaseDateFileName || formatDateForFilename(new Date());
+        const outName = `${baseName}.pdf`;
+        const dataUrl = canvas.toDataURL('image/png');
+        const shadowDir = (currentLogoPos === 'top') ? 'tr' : 'br';
+        const shaded = await addShadowToImageDataUrl(dataUrl, shadowDir);
+        const doc = new jsPDF({ orientation: 'p', unit: 'pt', format: 'a4' });
+        const pageW = doc.internal.pageSize.getWidth();
+        const pageH = doc.internal.pageSize.getHeight();
+        const logoHeaderDataUrl = (includePdfHeader && logoImg) ? getLogoHeaderDataUrl() : null;
+        const headerSpacing = 18;
+        const headerMaxHeight = 120;
+        let contentTop = margin;
+        if (logoHeaderDataUrl) {
+          const headerMaxWidth = pageW - 2 * margin;
+          const headerAspect = logoImg.width / logoImg.height;
+          let headerW = headerMaxWidth;
+          let headerH = headerW / headerAspect;
+          if (headerH > headerMaxHeight) {
+            headerH = headerMaxHeight;
+            headerW = headerH * headerAspect;
+          }
+          const headerX = (pageW - headerW) / 2;
+          doc.addImage(logoHeaderDataUrl, 'PNG', headerX, contentTop, headerW, headerH);
+          contentTop += headerH + headerSpacing;
+        }
+        const contentBottom = pageH - margin;
+        const availableHeight = contentBottom - contentTop;
+        const maxW = pageW - 2 * margin;
+        const maxH = availableHeight > 0 ? availableHeight : (pageH - 2 * margin);
+        const drawAreaTop = availableHeight > 0 ? contentTop : margin;
+        const imgW = shaded.w;
+        const imgH = shaded.h;
+        const aspect = imgW / imgH;
+        let drawW = maxW;
+        let drawH = drawW / aspect;
+        if (drawH > maxH) {
+          drawH = maxH;
+          drawW = drawH * aspect;
+        }
+        const xOffset = (pageW - drawW) / 2;
+        const yOffset = drawAreaTop + (maxH - drawH) / 2; // centrado vertical
+        doc.addImage(shaded.url, 'PNG', xOffset, yOffset, drawW, drawH);
+        doc.save(outName);
+        return;
+      }
+
+      // Descarga de imagen única con nombre basado en el archivo original
+      const baseName = currentBaseDateFileName || formatDateForFilename(new Date());
+      const outName = `${baseName}.${ext}`;
+      canvas.toBlob((blob) => {
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = outName;
+        link.click();
+        URL.revokeObjectURL(link.href);
+      }, mime, quality);
+      } catch (error) {
+        console.error('No se pudo generar la descarga.', error);
+        window.alert(error?.message || 'No se pudo generar la descarga. Inténtalo de nuevo.');
+      } finally {
+        if (downloadBtn.getAttribute('aria-busy') === 'true') {
+          setDownloadBusy(false);
+        }
+      }
+    });
+  </script>
+
+  <!-- Pie de página con datos de la entidad y versión de la herramienta. -->
+  <footer
+    style="text-align: center; padding: 30px 15px; font-size: 0.95rem; color: #555; background-color: #f9f9f9; margin-top: 40px; border-top: 1px solid #ddd;">
+    <p><strong>Asociación para la mediación social EQUA</strong></p>
+    <p>NIF: G11413820</p>
+    <p>Proyecto - Capacitados+: Programa de fomento de la inclusión activa en zona ERACIS+ Cádiz</p>
+    <p>Expediente: (ERACIS)2024-250-CA</p>
+    <p><strong>Herramienta para la inclusión de logotipos ERACIS Plus</strong></p>
+    <p id="version-app-line" aria-label="Versión"></p>
+  </footer>
+</body>
+
+</html>
+
+
+<!-- 
+ ********* LICENCIA DE USO **********
+
+  Autor: Asociación para la mediación social "EQUA" - Javier González Martí
+  Licencia: Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)
+  Más info: https://creativecommons.org/licenses/by-nc/4.0/
+
+Este proyecto está licenciado bajo la licencia Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0).
+
+Puedes copiar, modificar y compartir este código con fines no comerciales, siempre que me acredites como autor: Javier González Martí.
+
+Prohibido el uso comercial sin autorización previa.
+
+Texto completo de la licencia: https://creativecommons.org/licenses/by-nc/4.0/legalcode
+
+Resumen de la licencia: https://creativecommons.org/licenses/by-nc/4.0/
+
+-->
+
+
+<!--
+  Proyecto: Capacitados+
+  Expediente: (ERACIS)2024-250-CA
+
+  Programa de fomento de la inclusión activa en zona ERACIS+ Cádiz
+
+  Este código forma parte del desarrollo de estrategias locales de intervención
+  en zonas desfavorecidas en el marco de la Estrategia Regional Andaluza para 
+  la Cohesión y la Inclusión Social (ERACIS), cofinanciadas por el 
+  Fondo Social Europeo Plus.
+-->
+
+
+<!-- *************************************************** -->
+<!-- *************    ASOCIACIÓN EQUA    *************** -->
+<!-- *************************************************** -->

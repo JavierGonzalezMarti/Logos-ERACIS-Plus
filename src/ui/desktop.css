@@ -1,0 +1,23 @@
+#page-header-img {
+  position: sticky;
+  top: 0;
+  z-index: 1100;
+  background: #fff;
+  margin-bottom: 20px;
+}
+
+.app-error {
+  color: #a91f1f;
+  font-weight: 600;
+}
+
+.app-success {
+  color: #247340;
+  font-weight: 600;
+}
+
+#app-status {
+  min-height: 1.5rem;
+  text-align: center;
+  margin: 0.5rem auto;
+}

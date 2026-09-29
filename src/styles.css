@@ -1,0 +1,981 @@
+
+    @import '@fontsource/inter/latin-400.css';
+@import '@fontsource/inter/latin-600.css';
+@import '@fontsource/inter/latin-700.css';
+
+    /* ===== Variables globales ===== */
+    /* Configura la paleta de colores, sombras y tamaños reutilizados en toda la app. */
+    :root {
+      --color-primario: #4568b9;
+      --color-hover: #7d5fff;
+      --color-fondo: #fafafa;
+      --color-fondo-secundario: #f2f1f7;
+      --color-fondo-drop: #f6f7fb;
+      --color-fondo-drop-hover: #ece8fc;
+      --color-texto-blanco: #ffffff;
+      --color-texto-secundario: #4d5b86;
+      --color-borde-suave: #e7e7ed;
+      --color-boton-disabled: #f3f3f3;
+      --color-boton-disabled-texto: #b0b0b0;
+      --color-accion: #e61313;
+      --color-accion-hover: #b30000;
+
+      --sombra-seccion: 0 2px 18px rgba(51, 54, 101, 0.10);
+      --sombra-boton: 0 1px 5px rgba(69, 104, 185, 0.07);
+      --sombra-boton-fuerte: 0 2px 14px rgba(69, 104, 185, 0.14);
+      --sombra-dropzone: 0 1px 12px rgba(51, 54, 101, 0.07);
+      --sombra-descarga: 0 2px 18px rgba(125, 95, 255, 0.16);
+      --sombra-canvas: 0 3px 20px rgba(125, 95, 255, 0.13);
+
+      --espacio-horizontal-bloques: 1.5rem;
+      --radio-seccion: 20px;
+      --radio-bloque-ajustable: 12px;
+      --radio-control: 10px;
+
+      --tamano-fuente-bloques: 14px;
+      --tamano-fuente-titulo-bloques: 0.8rem;
+      --tamano-fuente-boton: 14px;
+
+      --padding-vertical-bloques: 8px;
+      --padding-horizontal-bloques: 12px;
+      --padding-boton-vertical: 6px;
+      --padding-boton-horizontal: 12px;
+      --padding-boton-descarga-vertical: 12px;
+      --padding-boton-descarga-horizontal: 24px;
+      --margen-boton-descarga-vertical: 16px;
+
+      --altura-icono-dropzone: 24px;
+      --ancho-icono-dropzone: 24px;
+    }
+
+    /* ===== Reset y tipografía ===== */
+    /* Normaliza el modelo de caja para evitar inconsistencias entre navegadores. */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    /* Elimina márgenes por defecto y garantiza que el layout ocupe toda la altura. */
+    html,
+    /* Define la tipografía base y el degradado de fondo principal. */
+    body {
+      min-height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', Arial, sans-serif;
+      background: linear-gradient(135deg, var(--color-fondo) 0%, var(--color-fondo-secundario) 100%);
+      min-height: 100vh;
+      color: var(--color-primario);
+    }
+
+    /* Estiliza el título principal que describe la utilidad de la herramienta. */
+    h1 {
+      text-align: center;
+      margin: 16px 0;
+      font-size: 1.5rem;
+      color: var(--color-primario);
+    }
+
+    /* Ajusta la imagen decorativa superior para que se adapte al ancho disponible. */
+    #page-header-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto 20px;
+      object-fit: contain;
+    }
+
+    /* ===== Cabecera ===== */
+    /* Coloca el título y el botón de reinicio centrados en la cabecera. */
+    .cabecera-app {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      position: relative;
+    }
+
+    /* Diseña el botón flotante que restablece la aplicación. */
+    #boton-reiniciar {
+      background-color: #e0e0e0;
+      border: none;
+      border-radius: 5px;
+      padding: 0.5rem 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      z-index: 1000;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      transition: background-color 0.2s ease;
+      position: absolute;
+      right: 2rem;
+    }
+
+    #boton-reiniciar:hover {
+      background-color: #d5d5d5;
+    }
+
+    /* ===== Layout principal ===== */
+    /* Define el contenedor principal responsivo del flujo de trabajo. */
+    .main-content {
+      max-width: 2000px;
+      width: min(96vw, 2000px);
+      margin: 0 auto;
+      padding: 32px 16px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    /* Distribuye las secciones en una cuadrícula de tres columnas. */
+    .grid-layout {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--espacio-horizontal-bloques) 28px;
+    }
+
+    /* Proporciona apariencia de tarjeta a cada bloque funcional. */
+    section {
+      background: #ffffff;
+      border-radius: var(--radio-seccion);
+      box-shadow: var(--sombra-seccion);
+      padding: 28px 22px 26px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      align-self: stretch;
+    }
+
+    /* Establece el estilo común de los encabezados dentro de las secciones. */
+    .section-title {
+      font-size: 1.22rem;
+      font-weight: 700;
+      color: var(--color-primario);
+      margin-bottom: 6px;
+      letter-spacing: 0.01em;
+    }
+
+    /* Ajusta los íconos que acompañan a los títulos de cada bloque. */
+    .section-icon,
+    .batch-icon {
+      margin-right: 6px;
+      font-size: 1.3rem;
+      vertical-align: middle;
+      color: var(--color-primario);
+    }
+
+    /* ===== Listados y botones de recursos ===== */
+    /* Presenta las recomendaciones de tamaño ocupando todo el ancho disponible. */
+    .recommended-sizes-section {
+      grid-column: 1 / -1;
+      padding: 32px 28px;
+      text-align: center;
+    }
+
+    /* Muestra los diferentes formatos sugeridos utilizando distribución flexible. */
+    .sizes-list {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-evenly;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      margin-top: 12px;
+    }
+
+    /* Diseña cada ficha individual dentro de la lista de tamaños sugeridos. */
+    .size-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      background: #f0f7ff;
+      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.04);
+    }
+
+    .size-icon {
+      font-size: 1.5rem;
+      color: var(--color-primario);
+    }
+
+    .size-label {
+      font-size: 1rem;
+      color: var(--color-primario);
+    }
+
+    /* Agrupa los botones de enlaces externos relacionados con la herramienta. */
+    .resources-buttons {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 14px;
+      margin: 8px auto 0;
+      flex-wrap: nowrap;
+      width: min(90%, 680px);
+    }
+
+    /* Aplica estilo interactivo a cada botón de recursos adicionales. */
+    .resource-button {
+      background: #ffffff;
+      border: 1.5px solid var(--color-primario);
+      color: var(--color-primario);
+      border-radius: var(--radio-control);
+      padding: var(--padding-boton-vertical) var(--padding-boton-horizontal);
+      font-size: var(--tamano-fuente-boton);
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s, color 0.3s, box-shadow 0.2s;
+      min-width: 150px;
+    }
+
+    .resource-button:hover,
+    .resource-button:focus {
+      background: var(--color-primario);
+      color: var(--color-texto-blanco);
+      box-shadow: 0 2px 14px rgba(69, 104, 185, 0.18);
+      outline: none;
+    }
+
+    /* ===== Dropzones ===== */
+    /* Configura el área de arrastre y su aspecto interactivo. */
+    .drop-zone {
+      box-sizing: border-box;
+      width: 100%;
+      border: 2.5px dashed var(--color-primario);
+      padding: 40px 20px;
+      text-align: center;
+      min-height: 200px;
+      color: var(--color-primario);
+      background: var(--color-fondo-drop);
+      border-radius: 16px;
+      transition: background-color 0.3s, border-color 0.3s, box-shadow 0.2s;
+      cursor: pointer;
+      user-select: none;
+      margin: 0;
+      box-shadow: var(--sombra-dropzone);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.7em;
+      font-size: 1.13rem;
+    }
+
+    .drop-zone .remove-logo-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(69, 104, 185, 0.85);
+      color: var(--color-texto-blanco);
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.2s ease;
+      z-index: 5;
+      line-height: 1;
+    }
+
+    .drop-zone.preview-active .remove-logo-btn {
+      display: flex;
+    }
+
+    .drop-zone .remove-logo-btn:hover {
+      background: rgba(69, 104, 185, 1);
+      transform: scale(1.05);
+    }
+
+    .drop-zone .remove-logo-btn:focus-visible {
+      outline: 2px solid var(--color-primario);
+      outline-offset: 2px;
+    }
+
+    /* Resalta la zona de carga cuando el usuario arrastra un archivo encima. */
+    .drop-zone.dragover {
+      background: var(--color-fondo-drop-hover);
+      border-color: var(--color-hover);
+      box-shadow: 0 2px 18px rgba(125, 95, 255, 0.10);
+    }
+
+    /* Ajusta el espaciado del icono ilustrativo dentro de la dropzone. */
+    .drop-zone svg {
+      margin-bottom: 10px;
+    }
+
+    /* Define la tipografía de los mensajes dentro de la dropzone. */
+    .drop-zone p {
+      margin: 0;
+      font-size: 1.02rem;
+      color: var(--color-primario);
+    }
+
+    /* Marca en cursiva el texto intermedio que sugiere alternativas. */
+    .drop-zone p.span-italic {
+      margin: 10px 0;
+      font-style: italic;
+    }
+
+    /* Estiliza los botones internos usados para abrir el selector de archivos. */
+    .drop-zone button,
+    .load-btn {
+      margin-top: 6px;
+      background: #ffffff;
+      border: 1.5px solid var(--color-primario);
+      color: var(--color-primario);
+      font-weight: 600;
+      border-radius: 7px;
+      padding: 8px 20px;
+      font-size: 1.02rem;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+      box-shadow: 0 1px 6px rgba(125, 95, 255, 0.07);
+    }
+
+    /* Oculta el input real de archivos manteniéndolo accesible. */
+    .hidden-input {
+      position: absolute;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      cursor: pointer;
+    }
+
+    /* Posiciona el botón personalizado encima del input de archivos. */
+    .file-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+
+    /* ===== Formularios ===== */
+    /* Alinea los controles de carga y ajustes dentro de las secciones de formulario. */
+    .batch-input-group,
+    .logo-position-group,
+    .logo-size-group {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    /* Uniforma el estilo de las etiquetas que explican cada control. */
+    .batch-input-group label,
+    .logo-position-group label,
+    .logo-size-group label {
+      font-size: 1.01rem;
+      font-weight: 600;
+      color: var(--color-primario);
+      text-align: center;
+      margin-bottom: 2px;
+    }
+
+    /* Mejora la apariencia por defecto del selector de archivos nativo. */
+    input[type="file"] {
+      font-size: 1.01rem;
+      border-radius: 5px;
+      margin: 2px 0 0;
+      background: #f4f5fa;
+      padding: 4px 0;
+      width: 100%;
+    }
+
+    /* Define la apariencia de los desplegables utilizados en la app. */
+    select {
+      padding: 8px 14px;
+      font-size: 1.01rem;
+      border-radius: 7px;
+      border: 1.5px solid var(--color-borde-suave);
+      background: #fbfbfd;
+      color: var(--color-primario);
+      outline: none;
+      margin-top: 2px;
+      font-family: inherit;
+      font-weight: 500;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+
+    /* Cambia el borde al enfocar para mejorar la accesibilidad visual. */
+    select:focus {
+      border-color: var(--color-hover);
+    }
+
+    /* Refuerza el estilo de todas las etiquetas formales del formulario. */
+    label {
+      font-weight: 600;
+      font-size: 1.01rem;
+      color: var(--color-primario);
+    }
+
+    /* Añade una breve explicación centrada sobre el modo de carga masiva. */
+    .batch-info {
+      font-size: 1rem;
+      color: var(--color-primario);
+      line-height: 1.6;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    /* Destaca el contador de imágenes cargadas en lote. */
+    .batch-count-text {
+      display: inline-block;
+      padding: 6px 12px;
+      background: #f0f7ff;
+      border-radius: 8px;
+      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.04);
+      font-size: 1rem;
+      color: var(--color-primario);
+      margin: 0;
+    }
+
+    /* Formatea los mensajes de error mostrados al usuario. */
+    .error-message {
+      font-size: 0.95rem;
+      color: red;
+      display: none;
+      margin-top: 8px;
+    }
+
+    /* Ajusta el texto auxiliar que orienta al usuario en cada paso. */
+    .helper-text {
+      font-size: 0.92rem;
+      color: var(--color-texto-secundario);
+      text-align: center;
+      margin: 6px 0 0;
+    }
+
+    /* Garantiza que las miniaturas cargadas se adapten sin deformarse. */
+    .thumbnail {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      margin: 0;
+      border-radius: 4px;
+    }
+
+    /* ===== Grupos de botones ===== */
+    /* Organiza los grupos de botones que permiten cambiar opciones rápidamente. */
+    .format-buttons-group,
+    .fit-buttons-group,
+    .position-buttons-group,
+    .output-format-buttons-group,
+    .timestamp-buttons-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+
+    /* Estiliza los botones de opciones para mantener consistencia visual. */
+    .format-buttons-group button,
+    .fit-buttons-group button,
+    .position-buttons-group button,
+    .output-format-buttons-group button,
+    .timestamp-buttons-group button {
+      background: #ffffff;
+      color: var(--color-primario);
+      border: 1.5px solid var(--color-primario);
+      border-radius: 8px;
+      font-size: var(--tamano-fuente-boton);
+      font-weight: 600;
+      padding: var(--padding-boton-vertical) var(--padding-boton-horizontal);
+      cursor: pointer;
+      transition: background 0.3s, color 0.3s, box-shadow 0.3s;
+      box-shadow: var(--sombra-boton);
+      min-width: 110px;
+    }
+
+    /* Define un contorno claro al navegar con teclado por los controles principales. */
+    .format-buttons-group button:focus-visible,
+    .fit-buttons-group button:focus-visible,
+    .position-buttons-group button:focus-visible,
+    .output-format-buttons-group button:focus-visible,
+    .timestamp-buttons-group button:focus-visible,
+    .drop-zone button:focus-visible,
+    #download-btn:focus-visible,
+    #boton-reiniciar:focus-visible {
+      outline: 2px solid var(--color-primario);
+      outline-offset: 2px;
+    }
+
+    /* Resalta el botón seleccionado dentro de cada grupo de opciones. */
+    .format-buttons-group button.active-button,
+    .fit-buttons-group button.active-button,
+    .position-buttons-group button.active-button,
+    .output-format-buttons-group button.active-button,
+    .timestamp-buttons-group button.active-button {
+      background: var(--color-primario);
+      color: var(--color-texto-blanco);
+      box-shadow: var(--sombra-boton-fuerte);
+    }
+
+    /* Aplica un efecto hover cuando el botón aún no es el seleccionado. */
+    .format-buttons-group button:not(.active-button):hover,
+    .fit-buttons-group button:not(.active-button):hover,
+    .position-buttons-group button:not(.active-button):hover,
+    .output-format-buttons-group button:not(.active-button):hover,
+    .timestamp-buttons-group button:not(.active-button):hover {
+      background: var(--color-primario);
+      color: var(--color-texto-blanco);
+      border-color: var(--color-primario);
+    }
+
+    /* Indica visualmente los botones de marca de tiempo que no están disponibles. */
+    .timestamp-buttons-group button[disabled] {
+      opacity: 0.5;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    /* Atenúa las opciones de encaje cuando el formato original las hace innecesarias. */
+    .fit-buttons-group button[disabled] {
+      opacity: 0.5;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    /* Evita cambios de estado al pasar el ratón por controles deshabilitados. */
+    .timestamp-buttons-group button[disabled]:hover {
+      background: #ffffff;
+      color: var(--color-primario);
+      border-color: var(--color-primario);
+    }
+
+    /* Mantiene alineados los botones que determinan la esquina de la marca de tiempo. */
+    #timestamp-position-group {
+      display: flex;
+      gap: 8px;
+      flex-wrap: nowrap;
+      justify-content: center;
+    }
+
+    /* Permite que cada botón de posición conserve su tamaño natural. */
+    #timestamp-position-group button {
+      flex: 0 1 auto;
+      max-width: none;
+    }
+
+    /* Contiene todas las preferencias relacionadas con la marca de tiempo. */
+    .timestamp-section {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    /* Centra los títulos internos dentro del bloque de marca de tiempo. */
+    .timestamp-section .section-title {
+      text-align: center;
+      width: 100%;
+      display: block;
+      margin: 0 auto 6px;
+    }
+
+    /* Ajusta la fila de botones para que ocupe el ancho completo. */
+    .timestamp-section .timestamp-buttons-group {
+      justify-content: center;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* Distribuye el espacio de los botones para que sean fáciles de pulsar. */
+    .timestamp-section .timestamp-buttons-group button {
+      flex: 1 1 50%;
+      max-width: 50%;
+    }
+
+    .timestamp-section .timestamp-buttons-group.background-section button {
+      flex: 1 1 33%;
+      max-width: 33%;
+    }
+
+    /* Organiza la configuración de marca de tiempo en columnas flexibles. */
+    .timestamp-row {
+      display: flex;
+      gap: 24px;
+      align-items: flex-start;
+      justify-content: center;
+      width: 100%;
+      flex-wrap: wrap;
+    }
+
+    /* Alinea verticalmente cada columna del bloque de marca de tiempo. */
+    .timestamp-row .ts-col {
+      flex: 1;
+      min-width: 240px;
+      max-width: 520px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    /* ===== Vista previa ===== */
+    /* Centra el lienzo de previsualización dentro de la interfaz. */
+    .preview-section {
+      align-items: center;
+      max-width: calc(500px * (16 / 9));
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* Define la apariencia del lienzo donde se compone el resultado final. */
+    canvas {
+      border: none;
+      border-radius: 16px;
+      box-shadow: var(--sombra-canvas);
+      max-width: 100%;
+      background: #f4f4fa;
+      margin: 8px 0;
+      width: auto;
+      min-height: 120px;
+      aspect-ratio: var(--canvas-ar, 4 / 3);
+      height: auto;
+      max-height: 300px;
+    }
+
+    /* Cambia el cursor cuando el usuario está reposicionando la imagen. */
+    #canvas.crop-mode {
+      cursor: grab;
+    }
+
+    /* Indica que el lienzo se encuentra en un arrastre activo. */
+    #canvas.crop-mode.dragging {
+      cursor: grabbing;
+    }
+
+    /* Coloca los botones relacionados con el reencuadre bajo el lienzo. */
+    .crop-controls {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    /* Estiliza el botón que activa el modo de reencuadre manual. */
+    #btn-crop-toggle {
+      font-size: var(--tamano-fuente-boton);
+      padding: var(--padding-boton-vertical) var(--padding-boton-horizontal);
+    }
+
+    /* Atenúa el botón de reencuadre cuando la acción no está disponible. */
+    #btn-crop-toggle:disabled {
+      background: var(--color-boton-disabled);
+      color: var(--color-boton-disabled-texto);
+      border: 1.5px solid #d0d0d0;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    /* Resalta el botón de confirmación usado al terminar el recorte. */
+    #btn-crop-ok {
+      background: var(--color-accion);
+      color: #ffffff;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s, box-shadow 0.2s, color 0.3s;
+      padding: 10px 24px;
+      font-size: 1rem;
+      font-weight: 700;
+      box-shadow: 0 2px 12px rgba(179, 0, 0, 0.3);
+    }
+
+    /* Ajusta el estado hover del botón de confirmación del recorte. */
+    #btn-crop-ok:hover {
+      background: var(--color-accion-hover);
+      color: #ffffff;
+      border: none;
+    }
+
+    /* Unifica el tamaño de los botones reutilizados en distintas secciones. */
+    #btn-crop-toggle,
+    #batch-load-btn,
+    .background-section .drop-zone button,
+    .batch-section .drop-zone button,
+    .logo-section .drop-zone button {
+      font-size: var(--tamano-fuente-boton);
+      padding: var(--padding-boton-vertical) var(--padding-boton-horizontal);
+    }
+
+    /* ===== Bloques ajustables ===== */
+    /* Permite que los bloques secundarios sean flexibles en layouts responsivos. */
+    .bloque-ajustable {
+      font-size: var(--tamano-fuente-bloques);
+      padding: var(--padding-vertical-bloques) var(--padding-horizontal-bloques);
+      border-radius: var(--radio-bloque-ajustable);
+      flex: 1 1 0;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+
+    /* Reduce el tamaño del título dentro de los bloques compactos. */
+    .bloque-ajustable .section-title {
+      font-size: var(--tamano-fuente-titulo-bloques);
+    }
+
+    /* Adapta las dropzones internas cuando están dentro de tarjetas pequeñas. */
+    .bloque-ajustable .drop-zone {
+      padding: 20px 10px 14px;
+      min-height: 140px;
+      font-size: 0.85rem;
+    }
+
+    /* Ajusta las dimensiones del icono dentro de las dropzones reducidas. */
+    .bloque-ajustable .drop-zone svg {
+      width: var(--ancho-icono-dropzone);
+      height: var(--altura-icono-dropzone);
+    }
+
+    /* Centra el contenido y oculta los desbordes de las áreas de previsualización. */
+    #base-drop,
+    #logo-drop {
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Reduce el relleno una vez que se muestra la miniatura en la dropzone. */
+    #base-drop.preview-active,
+    #logo-drop.preview-active {
+      padding-top: 16px;
+      padding-bottom: 16px;
+      gap: 0;
+    }
+
+    /* Limita el ancho de la miniatura de fondo para evitar solapamientos. */
+    #base-drop .thumbnail,
+    #logo-drop .thumbnail {
+      width: calc(100% - 20px);
+      max-width: calc(100% - 20px);
+    }
+
+    /* Mantiene la relación 4:3 y redondea suavemente la imagen de fondo. */
+    #base-drop .thumbnail {
+      max-height: calc(100% - 20px);
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    /* Presenta el faldón de logos con borde suave y sombra ligera. */
+    #logo-drop .thumbnail {
+      max-height: calc(100% - 20px);
+      object-fit: contain;
+      border-radius: 8px;
+      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
+      background: #ffffff;
+    }
+
+    /* ===== Estado de descarga ===== */
+    /* Establece el aspecto general del botón de descarga principal. */
+    #download-btn {
+      background: #ffffff;
+      border: 1.5px solid var(--color-primario);
+      color: var(--color-primario);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s, box-shadow 0.2s, color 0.3s;
+      font-size: 1.15rem;
+      padding: var(--padding-boton-descarga-vertical) var(--padding-boton-descarga-horizontal);
+      font-weight: 700;
+      margin-top: var(--margen-boton-descarga-vertical);
+      margin-bottom: var(--margen-boton-descarga-vertical);
+      box-shadow: var(--sombra-descarga);
+      letter-spacing: 0.01em;
+      width: 100%;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Cambia el estilo cuando la descarga está disponible. */
+    #download-btn:not([disabled]) {
+      background: var(--color-accion);
+      color: #ffffff;
+      border: none;
+    }
+
+    /* Refuerza la acción cuando el cursor se sitúa sobre el botón activo. */
+    #download-btn:hover:not([disabled]) {
+      background: var(--color-accion-hover);
+      color: #ffffff;
+      border: none;
+    }
+
+    /* Muestra un estado deshabilitado claro para evitar clics innecesarios. */
+    #download-btn:disabled {
+      background: var(--color-boton-disabled);
+      color: var(--color-boton-disabled-texto);
+      border: 1.5px solid #d0d0d0;
+      cursor: not-allowed;
+      box-shadow: none;
+      opacity: 0.5;
+    }
+
+    /* Destaca los avisos cuando se supera el número permitido de imágenes. */
+    .alerta-exceso {
+      background-color: #d32f2f;
+      color: #ffffff;
+      padding: 0.5em 1em;
+      border-radius: 6px;
+      font-weight: 700;
+    }
+
+    /* Reutiliza el estilo de alerta para informar sobre excesos dentro del lote. */
+    .imagenes-cargadas.alerta-exceso {
+      background-color: #e53935;
+      color: #ffffff;
+      padding: 0.5rem 1rem;
+      border-radius: 10px;
+      font-weight: 700;
+      display: inline-block;
+      margin-top: 1rem;
+    }
+
+    /* Controla la opción de añadir el faldón como cabecera en los PDF. */
+    .pdf-header-option {
+      display: none;
+      width: 100%;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    /* Alinea el texto y el checkbox dentro de la opción de cabecera. */
+    .pdf-header-option label {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+      color: var(--color-primario);
+      font-size: 1rem;
+    }
+
+    /* Asegura que el checkbox utilice el color corporativo. */
+    .pdf-header-option input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--color-primario);
+      cursor: pointer;
+    }
+
+    /* Añade un subtítulo centrado para separar grupos relacionados. */
+    .titulo-bloque {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      width: 100%;
+      text-align: center;
+    }
+
+    /* ===== Responsive ===== */
+    /* Ajustes específicos para pantallas medianas y pequeñas. */
+    @media (max-width: 1320px) {
+      .grid-layout {
+        grid-template-columns: 1fr;
+        gap: 28px;
+      }
+
+      .main-content {
+        max-width: 98vw;
+        padding: 8vw 0 6vw;
+        gap: 22px;
+      }
+
+      section {
+        padding: 16px 6vw 18px;
+        border-radius: 13px;
+      }
+
+      .drop-zone {
+        max-width: 97vw;
+        min-height: 140px;
+        padding: 20px 5vw;
+        border-radius: 11px;
+      }
+
+      canvas {
+        border-radius: 11px;
+      }
+
+      .format-buttons-group button,
+      .fit-buttons-group button {
+        padding: 9px 10vw;
+      }
+
+      input[type="file"],
+      select {
+        width: 100%;
+      }
+
+      .sizes-list {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        row-gap: 10px;
+        column-gap: 0;
+      }
+
+      .resources-buttons {
+        flex-direction: column;
+        gap: 12px;
+        width: 100%;
+        margin-top: 3px;
+      }
+
+      .resource-button {
+        width: 100%;
+        max-width: 360px;
+      }
+
+      .size-item {
+        width: auto;
+        margin: 0 auto;
+      }
+
+      .section-title {
+        text-align: center;
+      }
+
+      .download-section .section-title {
+        margin-top: 10px;
+      }
+
+      .timestamp-row .ts-col .section-title {
+        text-align: center;
+        width: 100%;
+      }
+
+      #boton-reiniciar {
+        position: static;
+        margin: 1rem auto 0;
+        display: block;
+      }
+
+      .cabecera-app {
+        flex-direction: column;
+        align-items: center;
+      }
+    }

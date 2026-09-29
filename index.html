@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Logos ERACIS Plus</title>
+</head>
+<body>
+  <!-- Imagen de cabecera que contextualiza la herramienta. -->
+  <img id="page-header-img" src="/src/assets/equa-baner-digital.png"
+    alt="Cabecera ERACIS" />
+  <!-- Cabecera principal con título y botón de reinicio. -->
+  <div class="cabecera-app">
+    <h1>Herramienta para la inclusión de logotipos ERACIS Plus</h1>
+    <button id="boton-reiniciar" type="button" title="Reiniciar todo">🔄 Reiniciar</button>
+  </div>
+
+  <!-- Contenido principal que agrupa todas las secciones funcionales. -->
+  <main class="main-content">
+    <div class="grid-layout">
+
+      <!-- Bloque para cargar la imagen o el PDF de fondo principal. -->
+      <section class="background-section bloque-ajustable">
+        <h2 class="section-title"><span class="section-icon">🖼️</span>Imagen o PDF de Fondo</h2>
+        <div class="drop-zone background-drop-zone" id="base-drop" role="button" tabindex="0"
+          aria-label="Zona de arrastrar y soltar imagen o PDF de fondo">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="var(--color-primario)"
+            viewBox="0 0 24 24" style="margin-bottom: 8px;">
+            <path
+              d="M21 19V5c0-1.1-.9-2-2-2H5C3.9 3 3 3.9 3 5v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zm-2 0H5V5h14v14zm-4-7l-2.5 3.01L11 12l-4 5h14l-4-5z" />
+          </svg>
+          <p>Arrastra aquí una imagen o un PDF de fondo</p>
+          <p class="span-italic">o</p>
+          <div class="file-wrapper">
+            <button id="base-load-btn" type="button" aria-label="Cargar imagen o PDF de fondo">Cargar archivo</button>
+            <input type="file" id="base-input" accept="image/*,application/pdf,.pdf" class="hidden-input"
+              aria-hidden="true">
+          </div>
+          <p class="error-message" aria-live="polite"></p>
+        </div>
+      </section>
+
+      <!-- Bloque orientado a gestionar cargas en lote de imágenes y PDF. -->
+      <section class="batch-section bloque-ajustable">
+        <h2 class="section-title"><span class="batch-icon">📂</span>Procesamiento en Lote</h2>
+        <p class="batch-info">¿Quieres cargar varias imágenes o PDF a la vez?</p>
+        <div class="batch-input-group" id="batch-input-group">
+          <label for="batch-input">Selecciona imágenes o PDF (máximo 50 páginas/elementos)</label>
+          <div class="file-wrapper">
+            <button id="batch-load-btn" class="load-btn" type="button"
+              aria-label="Seleccionar archivos para lote">Seleccionar
+              archivos</button>
+            <input type="file" id="batch-input" accept="image/*,application/pdf,.pdf" multiple class="hidden-input"
+              aria-hidden="true">
+          </div>
+          <span id="imagenes-cargadas" class="imagenes-cargadas"></span>
+          <p id="mensaje-cantidad"></p>
+          <p class="error-message" aria-live="polite"></p>
+        </div>
+      </section>
+
+      <!-- Bloque para subir el faldón de logos que se superpone a las fotos. -->
+      <section class="logo-section bloque-ajustable">
+        <h2 class="section-title"><span class="section-icon">🏷️</span>Faldón de logos</h2>
+        <div class="drop-zone logo-drop-zone" id="logo-drop" role="button" tabindex="0"
+          aria-label="Zona de arrastrar y soltar faldón de logos">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="var(--color-primario)"
+            viewBox="0 0 24 24" style="margin-bottom: 8px;">
+            <path
+              d="M21 19V5c0-1.1-.9-2-2-2H5C3.9 3 3 3.9 3 5v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zm-2 0H5V5h14v14zm-4-7l-2.5 3.01L11 12l-4 5h14l-4-5z" />
+          </svg>
+          <p>Arrastra aquí la imagen del faldón de logos</p>
+          <p class="span-italic">o</p>
+          <div class="file-wrapper">
+            <button id="logo-load-btn" type="button" aria-label="Cargar imagen de faldón">Cargar imagen</button>
+            <input type="file" id="logo-input" accept="image/*" class="hidden-input" aria-hidden="true">
+          </div>
+          <p class="error-message" aria-live="polite"></p>
+        </div>
+      </section>
+
+      <!-- Bloque para ajustar formatos, modo de encaje y posición del faldón. -->
+      <section class="format-section bloque-ajustable">
+        <h2 class="section-title"><span class="section-icon">⚙️</span>Configuración de Formato</h2>
+        <div class="format-buttons-group" style="margin-bottom: 10px;">
+          <button id="format-horizontal" type="button" data-width="1920" data-height="1080"
+            class="format-button btn-hover" aria-label="Formato horizontal">Horizontal</button>
+          <button id="format-square" type="button" data-width="1080" data-height="1080" class="format-button btn-hover"
+            aria-label="Formato cuadrado">Cuadrado</button>
+          <button id="format-vertical" type="button" data-width="1080" data-height="1920"
+            class="format-button btn-hover" aria-label="Formato vertical">Vertical</button>
+          <button id="format-4by3" type="button" data-width="1440" data-height="1080"
+            class="format-button active-button btn-hover" aria-label="Formato 4:3">4:3</button>
+          <button id="format-original" type="button" data-format-mode="original"
+            class="format-button btn-hover" aria-label="Conservar el formato original de la imagen">Formato Original</button>
+        </div>
+        <h3 class="section-title" style="margin-top: 6px;"><span class="section-icon">🧩</span>Encaje de la foto</h3>
+        <div class="fit-buttons-group" style="margin-bottom: 10px;">
+          <button id="fit-stretch" type="button" class="fit-button btn-hover" data-mode="stretch"
+            aria-label="Ajustar estirando">Estirar hasta encajar</button>
+          <button id="fit-crop" type="button" class="fit-button active-button btn-hover" data-mode="crop"
+            aria-label="Ajustar recortando">Recortar</button>
+        </div>
+        <div class="titulo-bloque">📍 Posición del logo</div>
+        <div class="position-buttons-group" style="margin: 0; padding: 0;">
+          <button id="pos-bottom" type="button" class="btn-principal position-button active-button btn-hover"
+            data-pos="bottom" aria-label="Logo en inferior">Inferior</button>
+          <button id="pos-top" type="button" class="btn-principal position-button btn-hover" data-pos="top"
+            aria-label="Logo en superior">Superior</button>
+        </div>
+      </section>
+
+      <!-- Bloque con el lienzo que muestra la previsualización en tiempo real. -->
+      <section class="preview-section bloque-ajustable">
+        <h2 class="section-title"><span class="section-icon">👁️</span>Vista Previa</h2>
+        <canvas id="canvas"></canvas>
+
+        <div class="crop-controls" aria-label="Controles de reencuadre">
+          <button id="btn-crop-toggle" class="load-btn" type="button" aria-pressed="false"
+            aria-controls="canvas">Reencuadrar la imagen</button>
+          <button id="btn-crop-ok" class="load-btn" type="button" style="display:none;" aria-pressed="false"
+            aria-controls="canvas">OK</button>
+        </div>
+      </section>
+
+      <!-- Bloque con opciones de exportación y descarga del resultado. -->
+      <section class="download-section bloque-ajustable">
+        <h3 class="section-title" style="margin-top: 6px;"><span class="section-icon">🧾</span>Formato de salida</h3>
+        <div class="output-format-buttons-group" style="margin-bottom: 10px;">
+          <button id="out-png" type="button" class="output-format-button active-button btn-hover" data-format="png"
+            aria-label="Exportar como PNG">PNG</button>
+          <button id="out-jpg" type="button" class="output-format-button btn-hover" data-format="jpg"
+            aria-label="Exportar como JPG">JPG</button>
+          <button id="out-pdf" type="button" class="output-format-button btn-hover" data-format="pdf"
+            aria-label="Exportar como PDF">PDF</button>
+        </div>
+        <div id="pdf-header-option" class="pdf-header-option" aria-live="polite" aria-hidden="true">
+          <label for="pdf-header-checkbox">
+            <input type="checkbox" id="pdf-header-checkbox" name="pdf-header-checkbox">
+            Incluir el faldón como encabezado en el PDF
+          </label>
+        </div>
+        <div class="timestamp-section bloque-ajustable">
+          <div class="timestamp-row">
+            <div class="ts-col">
+              <h3 class="section-title"><span class="section-icon">🕒</span>Marca de tiempo</h3>
+              <div class="timestamp-buttons-group bloque-ajustable" style="margin-bottom: 10px;">
+                <button id="ts-yes" type="button" class="timestamp-button active-button btn-hover"
+                  data-enabled="true">Sí</button>
+                <button id="ts-no" type="button" class="timestamp-button btn-hover" data-enabled="false">No</button>
+              </div>
+            </div>
+            <div class="ts-col">
+              <h3 class="section-title"><span class="section-icon">🎨</span>Color</h3>
+              <div class="timestamp-buttons-group color-section bloque-ajustable" id="timestamp-color-group"
+                style="margin-bottom: 10px;">
+                <button id="ts-white" type="button" class="timestamp-button active-button btn-hover"
+                  data-color="white">Blanco</button>
+                <button id="ts-black" type="button" class="timestamp-button btn-hover" data-color="black">Negro</button>
+              </div>
+            </div>
+            <div class="ts-col">
+              <h3 class="section-title"><span class="section-icon">🖼️</span>Fondo para la fecha</h3>
+              <div class="timestamp-buttons-group background-section bloque-ajustable" id="timestamp-background-group"
+                style="margin-bottom: 10px;" aria-label="Fondo de la marca de tiempo">
+                <button id="ts-bg-none" type="button" class="timestamp-button active-button btn-hover" data-bg="none"
+                  aria-label="Sin fondo">No</button>
+                <button id="ts-bg-white" type="button" class="timestamp-button btn-hover" data-bg="white"
+                  aria-label="Fondo blanco">Blanco</button>
+                <button id="ts-bg-black" type="button" class="timestamp-button btn-hover" data-bg="black"
+                  aria-label="Fondo negro">Negro</button>
+              </div>
+            </div>
+          </div>
+          <h3 class="section-title"><span class="section-icon">🧭</span>Posición</h3>
+          <div class="timestamp-buttons-group position-section bloque-ajustable" id="timestamp-position-group"
+            role="radiogroup" aria-label="Posición de marca de tiempo">
+            <button id="ts-pos-tl" type="button" class="timestamp-button active-button btn-hover" data-pos="tl"
+              role="radio" aria-checked="true" title="Arriba izquierda" aria-label="Arriba izquierda">↖︎</button>
+            <button id="ts-pos-tr" type="button" class="timestamp-button btn-hover" data-pos="tr" role="radio"
+              aria-checked="false" title="Arriba derecha" aria-label="Arriba derecha">↗︎</button>
+            <button id="ts-pos-bl" type="button" class="timestamp-button btn-hover" data-pos="bl" role="radio"
+              aria-checked="false" title="Abajo izquierda" aria-label="Abajo izquierda">↙︎</button>
+            <button id="ts-pos-br" type="button" class="timestamp-button btn-hover" data-pos="br" role="radio"
+              aria-checked="false" title="Abajo derecha" aria-label="Abajo derecha">↘︎</button>
+          </div>
+        </div>
+        <h2 class="section-title" style="margin-bottom: 0;"><span class="section-icon">⬇️</span>Descargar</h2>
+        <button id="download-btn" type="button" aria-live="polite" aria-busy="false" disabled>Descargar imagen
+          resultante</button>
+      </section>
+
+    </div>
+    <!-- Sección informativa con los tamaños recomendados de salida. -->
+    <section class="recommended-sizes-section section">
+      <h2 class="section-title"><span class="section-icon">📐</span>Tamaños Recomendados</h2>
+      <div class="sizes-list">
+        <div class="size-item"><span class="size-icon">🖥️</span><span class="size-label">Horizontal: <strong>1920 ×
+              1080 px</strong></span></div>
+        <div class="size-item"><span class="size-icon">▢</span><span class="size-label">Cuadrado: <strong>1080 × 1080
+              px</strong></span></div>
+        <div class="size-item"><span class="size-icon">📱</span><span class="size-label">Vertical: <strong>1080 × 1920
+              px</strong></span></div>
+        <div class="size-item"><span class="size-icon">📸</span><span class="size-label">4:3: <strong>1440 × 1080
+              px</strong></span></div>
+        <div class="size-item"><span class="size-icon">🖼️</span><span class="size-label">Formato Original:
+            <strong>dimensiones y proporción de cada foto</strong></span></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Grupo de accesos directos a documentación y contacto. -->
+  <div class="resources-buttons" role="group" aria-label="Recursos relacionados">
+    <button id="btn-como-usar" type="button" class="resource-button">Cómo usar</button>
+    <button id="btn-ultima-version" type="button" class="resource-button">Última versión</button>
+    <button id="btn-codigo-fuente" type="button" class="resource-button">Código fuente</button>
+    <button id="btn-contacto" type="button" class="resource-button">Contacto</button>
+  </div>
+
+  <!-- Dependencias externas necesarias para importar PDF, exportar ZIP/PDF y leer metadatos. -->
+
+
+
+
+
+  <!-- Lógica principal de la herramienta: carga, edición y exportación de imágenes. -->
+
+
+  <!-- Pie de página con datos de la entidad y versión de la herramienta. -->
+  <footer
+    style="text-align: center; padding: 30px 15px; font-size: 0.95rem; color: #555; background-color: #f9f9f9; margin-top: 40px; border-top: 1px solid #ddd;">
+    <p><strong>Asociación para la mediación social EQUA</strong></p>
+    <p>NIF: G11413820</p>
+    <p>Proyecto - Capacitados+: Programa de fomento de la inclusión activa en zona ERACIS+ Cádiz</p>
+    <p>Expediente: (ERACIS)2024-250-CA</p>
+    <p><strong>Herramienta para la inclusión de logotipos ERACIS Plus</strong></p>
+    <p id="version-app-line" aria-label="Versión"></p>
+    <p>Aplicación original de Javier González Martí · <a href="https://creativecommons.org/licenses/by-nc/4.0/" class="external-link">CC BY-NC 4.0</a></p>
+  </footer>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
