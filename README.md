@@ -2,6 +2,8 @@
 
 Aplicación de escritorio basada en el HTML 0.82 de Javier González Martí para colocar el faldón de logos ERACIS Plus en imágenes y páginas PDF. Los datos se procesan localmente. La cabecera institucional superior está incluida en el paquete, es fija y permanece visible al desplazarse. El faldón que aporta el usuario se conserva en los datos locales de la aplicación hasta que lo quite.
 
+Entre los formatos de salida se incluyen Instagram 4:5 (1080 × 1350 px) y Facebook horizontal (1200 × 630 px). Facebook admite imágenes con distintas proporciones; este ajuste ofrece una opción horizontal para publicaciones y enlaces compartidos.
+
 ## Requisitos de desarrollo
 
 - Node.js y npm

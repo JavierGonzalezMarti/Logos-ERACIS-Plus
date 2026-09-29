@@ -9,6 +9,20 @@ const cleanBody = body
   .replace('<div class="batch-input-group">', '<div class="batch-input-group" id="batch-input-group">')
   .replace('<button id="ts-yes" type="button" class="timestamp-button active-button btn-hover"', '<button id="ts-yes" type="button" class="timestamp-button btn-hover"')
   .replace('<button id="ts-no" type="button" class="timestamp-button btn-hover"', '<button id="ts-no" type="button" class="timestamp-button active-button btn-hover"')
+  .replace(
+    '          <button id="format-original" type="button" data-format-mode="original"',
+    '          <button id="format-instagram" type="button" data-width="1080" data-height="1350"\n' +
+    '            class="format-button btn-hover" aria-label="Instagram 4:5, 1080 por 1350 píxeles">Instagram 4:5</button>\n' +
+    '          <button id="format-facebook" type="button" data-width="1200" data-height="630"\n' +
+    '            class="format-button btn-hover" aria-label="Facebook horizontal, 1200 por 630 píxeles">Facebook horizontal</button>\n' +
+    '          <button id="format-original" type="button" data-format-mode="original"',
+  )
+  .replace(
+    '        <div class="size-item"><span class="size-icon">🖼️</span><span class="size-label">Formato Original:',
+    '        <div class="size-item"><span class="size-icon">📱</span><span class="size-label">Instagram 4:5: <strong>1080 × 1350 px</strong></span></div>\n' +
+    '        <div class="size-item"><span class="size-icon">🖥️</span><span class="size-label">Facebook horizontal: <strong>1200 × 630 px</strong></span></div>\n' +
+    '        <div class="size-item"><span class="size-icon">🖼️</span><span class="size-label">Formato Original:',
+  )
   .replace(/<script\s+src="https:[^"]+"\s*><\/script>/gi, '')
   .replace(/<script>([\s\S]*?)<\/script>/i, '')
   .replace(
@@ -24,5 +38,7 @@ writeFileSync(
 );
 writeFileSync(
   new URL('../src/styles.css', import.meta.url),
-  css.replace(/@import url\('https:\/\/fonts\.googleapis\.com[^']+'\);/, "@import '@fontsource/inter/latin-400.css';\n@import '@fontsource/inter/latin-600.css';\n@import '@fontsource/inter/latin-700.css';").trimEnd() + '\n',
+  css.replace(/@import url\('https:\/\/fonts\.googleapis\.com[^']+'\);/, "@import '@fontsource/inter/latin-400.css';\n@import '@fontsource/inter/latin-600.css';\n@import '@fontsource/inter/latin-700.css';")
+    .replace(/(\.sizes-list \{\r?\n[ \t]*display: flex;\r?\n[ \t]*flex-direction: row;)/, '$1\n      flex-wrap: wrap;')
+    .trimEnd() + '\n',
 );

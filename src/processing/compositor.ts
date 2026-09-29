@@ -11,6 +11,8 @@ const FIXED_DIMENSIONS: Record<Exclude<RenderSettings['format'], 'original'>, Di
   square: { width: 1080, height: 1080 },
   vertical: { width: 1080, height: 1920 },
   'four-three': { width: 1440, height: 1080 },
+  instagram: { width: 1080, height: 1350 },
+  facebook: { width: 1200, height: 630 },
 };
 
 export function canvasDimensions(image: HTMLImageElement | null, format: RenderSettings['format']): Dimensions {

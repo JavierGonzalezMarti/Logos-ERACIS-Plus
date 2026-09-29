@@ -1,6 +1,6 @@
 import type { BackgroundAsset } from '../import/media';
 
-export type Format = 'horizontal' | 'square' | 'vertical' | 'four-three' | 'original';
+export type Format = 'horizontal' | 'square' | 'vertical' | 'four-three' | 'instagram' | 'facebook' | 'original';
 export type FitMode = 'stretch' | 'crop';
 export type LogoPosition = 'top' | 'bottom';
 export type OutputFormat = 'png' | 'jpg' | 'pdf';
