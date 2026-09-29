@@ -41,7 +41,7 @@ export const initialState = (): AppState => ({
   logoPosition: 'bottom',
   panX: 0.5,
   panY: 0.5,
-  timestampEnabled: true,
+  timestampEnabled: false,
   timestampColor: 'white',
   timestampBackground: 'none',
   timestampPosition: 'tl',

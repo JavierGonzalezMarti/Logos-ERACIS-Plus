@@ -7,6 +7,8 @@ if (!css || !body) throw new Error('No se encontraron el estilo o el cuerpo del 
 
 const cleanBody = body
   .replace('<div class="batch-input-group">', '<div class="batch-input-group" id="batch-input-group">')
+  .replace('<button id="ts-yes" type="button" class="timestamp-button active-button btn-hover"', '<button id="ts-yes" type="button" class="timestamp-button btn-hover"')
+  .replace('<button id="ts-no" type="button" class="timestamp-button btn-hover"', '<button id="ts-no" type="button" class="timestamp-button active-button btn-hover"')
   .replace(/<script\s+src="https:[^"]+"\s*><\/script>/gi, '')
   .replace(/<script>([\s\S]*?)<\/script>/i, '')
   .replace(

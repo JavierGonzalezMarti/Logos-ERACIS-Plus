@@ -404,7 +404,7 @@ export function createApp(): void {
     void openExternalUrl(link.href).catch((error) => announce(String(error), true));
   }));
   element('boton-reiniciar').addEventListener('click', () => location.reload());
-  element('version-app-line').textContent = 'Versión 0.82';
+  element('version-app-line').textContent = 'Versión 0.82.1';
 
   void restoreLogo().then((saved) => { if (saved) setLogo(saved.image, saved.dataUrl); });
   refreshControls();
