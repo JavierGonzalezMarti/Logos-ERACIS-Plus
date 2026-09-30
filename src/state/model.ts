@@ -8,6 +8,13 @@ export type OutputFormat = 'png' | 'jpg' | 'pdf';
 export type TimestampPosition = 'tl' | 'tr' | 'bl' | 'br';
 export type TimestampBackground = 'none' | 'white' | 'black';
 
+export interface EracisMark {
+  variant: string;
+  centerX: number;
+  centerY: number;
+  widthRatio: number;
+}
+
 export interface RenderSettings {
   format: Format;
   fitMode: FitMode;
@@ -19,6 +26,7 @@ export interface RenderSettings {
   timestampColor: 'white' | 'black';
   timestampBackground: TimestampBackground;
   timestampPosition: TimestampPosition;
+  eracisMark: EracisMark | null;
 }
 
 export interface AppState extends RenderSettings {
@@ -26,6 +34,7 @@ export interface AppState extends RenderSettings {
   baseImage: HTMLImageElement | null;
   logoImage: HTMLImageElement | null;
   logoDataUrl: string | null;
+  eracisMarkImage: HTMLImageElement | null;
   batchAssets: BackgroundAsset[];
   batchCount: number;
   baseDate: Date | null;
@@ -48,10 +57,12 @@ export const initialState = (): AppState => ({
   timestampColor: 'white',
   timestampBackground: 'none',
   timestampPosition: 'tl',
+  eracisMark: null,
   baseAsset: null,
   baseImage: null,
   logoImage: null,
   logoDataUrl: null,
+  eracisMarkImage: null,
   batchAssets: [],
   batchCount: 0,
   baseDate: null,

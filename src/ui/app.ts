@@ -7,6 +7,7 @@ import {
 import { canvasDimensions, compositionLayout, renderComposition, sourceWindow } from '../processing/compositor';
 import { openExternalUrl, saveOutput } from '../platform/desktop';
 import { forgetLogo, rememberLogo, restoreLogo } from '../platform/logoStore';
+import { openMarkEditor } from './markEditor';
 import { initialState, MAX_BATCH_ITEMS, type AppState, type Format, type TimestampPosition } from '../state/model';
 
 function element<T extends HTMLElement>(id: string): T {
@@ -92,7 +93,7 @@ export function createApp(): void {
   const updatePreview = () => {
     const dimensions = canvasDimensions(state.baseImage, state.logoImage, state);
     document.documentElement.style.setProperty('--canvas-ar', `${dimensions.width} / ${dimensions.height}`);
-    renderComposition(canvas, state.baseImage, state.logoImage, state.baseDate, state);
+    renderComposition(canvas, state.baseImage, state.logoImage, state.baseDate, state, state.eracisMarkImage);
     refreshControls();
   };
 
@@ -117,6 +118,12 @@ export function createApp(): void {
       button.setAttribute('aria-disabled', String(original));
     });
     cropButton.disabled = original || state.cropMode || !hasBase;
+    element<HTMLButtonElement>('mark-add').hidden = !!state.eracisMark;
+    element<HTMLButtonElement>('mark-add').disabled = blocked;
+    element<HTMLButtonElement>('mark-edit').hidden = !state.eracisMark;
+    element<HTMLButtonElement>('mark-edit').disabled = blocked;
+    element<HTMLButtonElement>('mark-remove').hidden = !state.eracisMark;
+    element<HTMLButtonElement>('mark-remove').disabled = state.busy;
     document.querySelectorAll<HTMLButtonElement>('#timestamp-color-group button, #timestamp-background-group button, #timestamp-position-group button').forEach((button) => {
       button.disabled = !state.timestampEnabled;
       button.setAttribute('aria-disabled', String(!state.timestampEnabled));
@@ -351,6 +358,24 @@ export function createApp(): void {
   };
   cropButton.addEventListener('click', openCrop);
   cropOkButton.addEventListener('click', closeCrop);
+  const editMark = () => {
+    if (!state.baseImage || state.busy) return;
+    if (state.cropMode) closeCrop();
+    void openMarkEditor(state, (mark, image) => {
+      state.eracisMark = mark;
+      state.eracisMarkImage = image;
+      updatePreview();
+      announce('Marca ERACIS+ añadida.');
+    }).catch((error) => announce(error instanceof Error ? error.message : 'No se pudo abrir la Marca ERACIS+.', true));
+  };
+  element('mark-add').addEventListener('click', editMark);
+  element('mark-edit').addEventListener('click', editMark);
+  element('mark-remove').addEventListener('click', () => {
+    state.eracisMark = null;
+    state.eracisMarkImage = null;
+    updatePreview();
+    announce('Marca ERACIS+ quitada.');
+  });
   canvas.addEventListener('dblclick', () => state.cropMode ? closeCrop() : openCrop());
   window.addEventListener('keydown', (event) => { if (event.key === 'Escape' && state.cropMode) closeCrop(); });
 
@@ -415,7 +440,7 @@ export function createApp(): void {
     void openExternalUrl(link.href).catch((error) => announce(String(error), true));
   }));
   element('boton-reiniciar').addEventListener('click', () => location.reload());
-  element('version-app-line').textContent = 'Versión 0.85.0';
+  element('version-app-line').textContent = 'Versión 0.86.0';
 
   void restoreLogo().then((saved) => { if (saved) setLogo(saved.image, saved.dataUrl); });
   refreshControls();

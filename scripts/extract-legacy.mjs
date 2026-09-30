@@ -19,6 +19,16 @@ const cleanBody = body
     '        </div>',
   )
   .replace(
+    /([ \t]*<\/div>)(\r?\n[ \t]*<\/section>\r?\n\r?\n[ \t]*<!-- Bloque con el lienzo que muestra la previsualización en tiempo real\. -->)/,
+    '$1\n        <div class="eracis-mark-section">\n' +
+    '          <h3 class="section-title">Marca ERACIS+</h3>\n' +
+    '          <div class="eracis-mark-buttons">\n' +
+    '            <button id="mark-add" type="button" class="load-btn">Añadir Marca ERACIS+</button>\n' +
+    '            <button id="mark-edit" type="button" class="load-btn" hidden>Editar</button>\n' +
+    '            <button id="mark-remove" type="button" class="load-btn" hidden>Quitar marca ERACIS+</button>\n' +
+    '          </div>\n        </div>$2',
+  )
+  .replace(
     '          <button id="format-original" type="button" data-format-mode="original"',
     '          <button id="format-instagram" type="button" data-width="1080" data-height="1350"\n' +
     '            class="format-button btn-hover" aria-label="Instagram 4:5, 1080 por 1350 píxeles">Instagram 4:5</button>\n' +

@@ -1,5 +1,6 @@
 import type { RenderSettings } from '../state/model';
 import { formatDate } from '../import/media';
+import { markRectangle } from './markGeometry';
 
 export interface Dimensions { width: number; height: number }
 export interface SourceWindow {
@@ -154,6 +155,7 @@ export function renderComposition(
   logo: HTMLImageElement | null,
   date: Date | null,
   settings: RenderSettings,
+  markImage: HTMLImageElement | null = null,
 ): void {
   const layout = compositionLayout(image, logo, settings);
   const { width, height } = layout;
@@ -168,6 +170,10 @@ export function renderComposition(
   }
   if (logo) drawLogo(context, logo, layout, settings.logoPlacement === 'outside');
   if (image && date && settings.timestampEnabled) drawTimestamp(context, date, layout, settings);
+  if (image && settings.eracisMark && markImage) {
+    const mark = markRectangle(settings.eracisMark, markImage, layout);
+    if (mark.width > 0 && mark.height > 0) context.drawImage(markImage, mark.x, mark.y, mark.width, mark.height);
+  }
 }
 
 export function logoHeaderDataUrl(logo: HTMLImageElement): string {

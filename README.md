@@ -6,6 +6,8 @@ Entre los formatos de salida se incluyen Instagram 4:5 (1080 × 1350 px), Facebo
 
 El faldón puede superponerse dentro de la foto o colocarse fuera, pegado al borde superior o inferior. En los formatos de tamaño fijo, el archivo final mantiene las dimensiones elegidas y el modo exterior reserva espacio para la foto. En «Formato Original», el modo exterior conserva la foto completa y aumenta la altura del archivo para añadir el faldón.
 
+La sección «Marca ERACIS+» ofrece ocho variantes transparentes incluidas en la aplicación. El editor permite situar una variante dentro de la zona de la foto, arrastrarla y escalarla sin cambiar su proporción. Aceptar aplica la marca a la vista previa y a PNG, JPG, PDF y lotes; Cancelar descarta los cambios. La marca permanece durante la sesión actual y se elimina al reiniciar.
+
 ## Requisitos de desarrollo
 
 - Node.js y npm
@@ -41,7 +43,7 @@ La prueba de conversión HEIC usa una muestra pública de forma local; la fecha 
 | Ruta | Contenido |
 | --- | --- |
 | `reference/` | HTML original 0.82 sin modificar |
-| `src/assets/` | Cabecera institucional incluida en el paquete |
+| `src/assets/` | Cabecera institucional y ocho variantes de la Marca ERACIS+ incluidas en el paquete |
 | `src/import/` | Imágenes, HEIC/HEIF, EXIF y PDF de entrada |
 | `src/processing/` | Composición de imagen, faldón y fecha |
 | `src/export/` | PNG, JPG, PDF y ZIP |

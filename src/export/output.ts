@@ -8,7 +8,7 @@ export interface GeneratedOutput { blob: Blob; filename: string }
 
 function imageCanvas(image: HTMLImageElement, state: AppState, date: Date): HTMLCanvasElement {
   const canvas = document.createElement('canvas');
-  renderComposition(canvas, image, state.logoImage, date, state);
+  renderComposition(canvas, image, state.logoImage, date, state, state.eracisMarkImage);
   return canvas;
 }
 

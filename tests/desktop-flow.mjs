@@ -70,6 +70,44 @@ try {
   );
   await page.click('#format-facebook-vertical');
 
+  assert.equal(await page.locator('#mark-add').isEnabled(), true);
+  await page.click('#mark-add');
+  await page.waitForSelector('.mark-dialog[open]');
+  assert.equal(await page.locator('.mark-variant').count(), 8);
+  assert.equal(await page.locator('.mark-accept').isDisabled(), true);
+  await page.locator('.mark-variant[data-variant="horizontal"]').click();
+  const originalBox = await page.locator('.mark-box').boundingBox();
+  assert.ok(originalBox?.width > 0);
+  await page.mouse.move(originalBox.x + originalBox.width / 2, originalBox.y + originalBox.height / 2);
+  await page.mouse.down();
+  await page.mouse.move(originalBox.x + originalBox.width / 2 + 35, originalBox.y + originalBox.height / 2 + 20);
+  await page.mouse.up();
+  const movedBox = await page.locator('.mark-box').boundingBox();
+  assert.ok(movedBox.x > originalBox.x);
+  await page.locator('.mark-variant[data-variant="vertical"]').click();
+  const changedBox = await page.locator('.mark-box').boundingBox();
+  assert.ok(Math.abs(changedBox.width - movedBox.width) < 2);
+  assert.ok(Math.abs(changedBox.x + changedBox.width / 2 - movedBox.x - movedBox.width / 2) < 2);
+  const handle = await page.locator('.mark-handle.se').boundingBox();
+  await page.mouse.move(handle.x + handle.width / 2, handle.y + handle.height / 2);
+  await page.mouse.down();
+  await page.mouse.move(handle.x + handle.width / 2 + 20, handle.y + handle.height / 2 + 30);
+  await page.mouse.up();
+  assert.ok((await page.locator('.mark-box').boundingBox()).width > changedBox.width);
+  await page.screenshot({ path: resolve(outputDir, 'mark-editor.png') });
+  await page.locator('.mark-cancel').click();
+  assert.equal(await page.locator('#mark-add').isVisible(), true);
+  await page.click('#mark-add');
+  await page.locator('.mark-variant[data-variant="horizontal"]').click();
+  const beforeMark = await page.locator('#canvas').evaluate((canvas) => canvas.toDataURL());
+  await page.locator('.mark-accept').click();
+  assert.equal(await page.locator('#mark-edit').isVisible(), true);
+  assert.notEqual(await page.locator('#canvas').evaluate((canvas) => canvas.toDataURL()), beforeMark);
+  await page.click('#mark-edit');
+  await page.locator('.mark-variant[data-variant="vertical-lema"]').click();
+  await page.locator('.mark-cancel').click();
+  assert.equal(await page.locator('#mark-edit').isVisible(), true);
+
   const png = await exportFile('png', 'single.png');
   assert.equal(png.subarray(1, 4).toString(), 'PNG');
   assert.equal(png.readUInt32BE(16), 1080);
@@ -84,6 +122,9 @@ try {
   }, jpg.toString('base64')), [1080, 1350]);
   const pdfBytes = await exportFile('pdf', 'single.pdf');
   assert.equal(pdfBytes.subarray(0, 4).toString(), '%PDF');
+  await page.click('#mark-remove');
+  assert.equal(await page.locator('#mark-add').isVisible(), true);
+  assert.equal(await page.locator('#canvas').evaluate((canvas) => canvas.toDataURL()), beforeMark);
 
   await page.setInputFiles('#logo-input', banner);
   await page.waitForSelector('#logo-remove-btn');
@@ -98,6 +139,9 @@ try {
   await page.setInputFiles('#batch-input', [pdf, banner]);
   await page.waitForFunction(() => document.querySelector('#imagenes-cargadas')?.textContent?.includes('3 elementos'));
   await page.click('#format-facebook-vertical');
+  await page.click('#mark-add');
+  await page.locator('.mark-variant[data-variant="horizontal-denominacion"]').click();
+  await page.locator('.mark-accept').click();
   const zipBytes = await exportFile('png', 'batch.zip');
   const zip = await JSZip.loadAsync(zipBytes);
   const entries = Object.values(zip.files).filter((entry) => !entry.dir);
@@ -147,7 +191,7 @@ try {
 
   assert.deepEqual(errors, []);
   assert.deepEqual(externalRequests, []);
-  console.log(`Flujo verificado: cabecera desplazable, ocho formatos, PNG/JPG/PDF, lote ZIP, límite 50 y PDF${heicAvailable ? ', HEIC' : ''}${privateJpeg ? ', EXIF de iPhone' : ''}.`);
+  console.log(`Flujo verificado: cabecera, ocho formatos, Marca ERACIS+, PNG/JPG/PDF, lote ZIP, límite 50 y PDF${heicAvailable ? ', HEIC' : ''}${privateJpeg ? ', EXIF de iPhone' : ''}.`);
 } finally {
   await browser.close();
 }
