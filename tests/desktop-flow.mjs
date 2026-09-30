@@ -68,6 +68,69 @@ try {
     await page.locator('#canvas').evaluate((canvas) => [canvas.width, canvas.height]),
     [originalPng.readUInt32BE(16), originalPng.readUInt32BE(20)],
   );
+  await page.setInputFiles('#logo-input', banner);
+  await page.waitForSelector('#logo-remove-btn');
+  for (const format of ['square', 'horizontal', 'vertical', 'original']) {
+    await page.click(`#format-${format}`);
+    for (const placement of ['inside', 'outside']) {
+      await page.click(`#logo-${placement}`);
+      const preview = await page.locator('#canvas').evaluate((canvas) => ({
+        width: canvas.width, height: canvas.height, pixels: canvas.toDataURL(),
+      }));
+      await page.click('#mark-add');
+      await page.waitForSelector('.mark-dialog[open]');
+      const editor = await page.evaluate(() => {
+        const canvas = document.querySelector('.mark-background');
+        const stage = document.querySelector('.mark-stage');
+        const container = document.querySelector('.mark-stage-container');
+        const canvasRect = canvas.getBoundingClientRect();
+        const stageRect = stage.getBoundingClientRect();
+        const containerRect = container.getBoundingClientRect();
+        return {
+          width: canvas.width, height: canvas.height, pixels: canvas.toDataURL(),
+          canvasWidth: canvasRect.width, canvasHeight: canvasRect.height,
+          stageWidth: stageRect.width, stageHeight: stageRect.height,
+          withinContainer: stageRect.left >= containerRect.left && stageRect.right <= containerRect.right
+            && stageRect.top >= containerRect.top && stageRect.bottom <= containerRect.bottom,
+        };
+      });
+      assert.deepEqual([editor.width, editor.height], [preview.width, preview.height]);
+      assert.equal(editor.pixels, preview.pixels, `${format}/${placement}: composición distinta`);
+      assert.ok(Math.abs(editor.canvasWidth - editor.stageWidth) < 1, `${format}/${placement}: ancho del lienzo`);
+      assert.ok(Math.abs(editor.canvasHeight - editor.stageHeight) < 1, `${format}/${placement}: alto del lienzo`);
+      assert.ok(Math.abs(editor.canvasWidth / editor.canvasHeight - preview.width / preview.height) < 0.001,
+        `${format}/${placement}: proporción alterada`);
+      assert.equal(editor.withinContainer, true, `${format}/${placement}: lienzo fuera de la ventana`);
+      await page.locator('.mark-cancel').click();
+    }
+  }
+  await page.click('#format-square');
+  await page.click('#logo-outside');
+  await page.click('#pos-top');
+  await page.click('#mark-add');
+  await page.locator('.mark-variant[data-variant="horizontal"]').click();
+  const photoBounds = await page.evaluate(() => {
+    const stage = document.querySelector('.mark-stage').getBoundingClientRect();
+    const canvas = document.querySelector('.mark-background');
+    const logo = document.querySelector('#logo-drop .thumbnail');
+    const logoHeight = Math.min(Math.round(canvas.width * logo.naturalHeight / logo.naturalWidth),
+      Math.floor(canvas.height / 2));
+    return { left: stage.left, right: stage.right,
+      top: stage.top + logoHeight * stage.height / canvas.height, bottom: stage.bottom };
+  });
+  for (const [x, y] of [[-100, -100], [1540, 1000]]) {
+    const box = await page.locator('.mark-box').boundingBox();
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(x, y);
+    await page.mouse.up();
+    const moved = await page.locator('.mark-box').boundingBox();
+    assert.ok(moved.x >= photoBounds.left - 2 && moved.x + moved.width <= photoBounds.right + 2);
+    assert.ok(moved.y >= photoBounds.top - 2 && moved.y + moved.height <= photoBounds.bottom + 2);
+  }
+  await page.locator('.mark-cancel').click();
+  await page.click('#pos-bottom');
+  await page.click('#logo-inside');
   await page.click('#format-facebook-vertical');
 
   assert.equal(await page.locator('#mark-add').isEnabled(), true);

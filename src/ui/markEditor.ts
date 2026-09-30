@@ -79,7 +79,10 @@ export async function openMarkEditor(state: AppState, onAccept: (mark: EracisMar
   const list = dialog.querySelector<HTMLElement>('.mark-variants')!;
 
   const fitStage = () => {
-    const width = Math.max(1, Math.min(container.clientWidth, container.clientHeight * layout.width / layout.height));
+    const style = getComputedStyle(container);
+    const availableWidth = container.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
+    const availableHeight = container.clientHeight - parseFloat(style.paddingTop) - parseFloat(style.paddingBottom);
+    const width = Math.max(1, Math.min(availableWidth, availableHeight * layout.width / layout.height));
     stage.style.width = `${width}px`;
     stage.style.height = `${width * layout.height / layout.width}px`;
   };

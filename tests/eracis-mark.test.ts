@@ -24,15 +24,18 @@ describe('Marca ERACIS+', () => {
     for (const logoPosition of ['top', 'bottom'] as const) {
       const settings = { ...initialState(), logoPlacement: 'outside' as const, logoPosition };
       const layout = compositionLayout(photo, image(100, 20), settings);
-      const mark = moveMark(initialMark('horizontal'), horizontal, layout, 10000, 10000);
-      const rect = markRectangle(mark, horizontal, layout);
-      expect(rect.x + rect.width).toBeLessThanOrEqual(layout.width);
-      expect(rect.y).toBeGreaterThanOrEqual(layout.photoTop);
-      expect(rect.y + rect.height).toBeLessThanOrEqual(layout.photoTop + layout.photoHeight);
-      const resized = resizeMark(mark, horizontal, layout, 'nw', -10000, -10000);
-      const large = markRectangle(resized, horizontal, layout);
-      expect(large.x).toBeGreaterThanOrEqual(0);
-      expect(large.y).toBeGreaterThanOrEqual(layout.photoTop);
+      for (const [dx, dy] of [[10000, 10000], [-10000, -10000], [10000, -10000], [-10000, 10000]]) {
+        const mark = moveMark(initialMark('horizontal'), horizontal, layout, dx, dy);
+        const rect = markRectangle(mark, horizontal, layout);
+        expect(rect.x).toBeGreaterThanOrEqual(0);
+        expect(rect.x + rect.width).toBeLessThanOrEqual(layout.width);
+        expect(rect.y).toBeGreaterThanOrEqual(layout.photoTop);
+        expect(rect.y + rect.height).toBeLessThanOrEqual(layout.photoTop + layout.photoHeight);
+        const resized = resizeMark(mark, horizontal, layout, 'nw', -10000, -10000);
+        const large = markRectangle(resized, horizontal, layout);
+        expect(large.x).toBeGreaterThanOrEqual(0);
+        expect(large.y).toBeGreaterThanOrEqual(layout.photoTop);
+      }
     }
   });
 

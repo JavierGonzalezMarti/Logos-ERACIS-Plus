@@ -8,6 +8,8 @@ El faldón puede superponerse dentro de la foto o colocarse fuera, pegado al bor
 
 La sección «Marca ERACIS+» ofrece ocho variantes transparentes incluidas en la aplicación. El editor permite situar una variante dentro de la zona de la foto, arrastrarla y escalarla sin cambiar su proporción. Aceptar aplica la marca a la vista previa y a PNG, JPG, PDF y lotes; Cancelar descarta los cambios. La marca permanece durante la sesión actual y se elimina al reiniciar.
 
+En la versión 0.86.1, el editor muestra la composición con la misma proporción que la vista previa principal en todos los formatos y mantiene la marca dentro de la foto.
+
 ## Requisitos de desarrollo
 
 - Node.js y npm
