@@ -36,9 +36,9 @@ rustup target add aarch64-apple-darwin x86_64-apple-darwin
 npm run tauri -- build --target universal-apple-darwin
 ```
 
-La compilación y prueba en Mac Intel y Apple Silicon forman parte de la segunda fase. Las compilaciones internas no llevan firma ni notarización.
+En un Mac Apple Silicon con macOS 27.0.1 se ha compilado el paquete universal 0.87.0 para `arm64` y `x86_64`. Se ha copiado la aplicación desde el DMG a una carpeta de pruebas y se ha abierto. También se ha comprobado la carga de una imagen y la exportación de un PNG mediante el diálogo nativo, y han pasado `npm test` (12 pruebas) y `npm run test:e2e` con Chrome. Queda pendiente probar la aplicación en un Mac Intel físico. Las compilaciones internas no llevan firma ni notarización.
 
-El instalador NSIS se ha compilado, instalado y abierto en Windows 10 Pro 22H2. Queda por hacer la misma comprobación en Windows 11 y en ambos tipos de Mac.
+El instalador NSIS se ha compilado, instalado y abierto en Windows 10 Pro 22H2. Queda por hacer la misma comprobación en Windows 11 y en un Mac Intel físico.
 
 La prueba de conversión HEIC usa una muestra pública de forma local; la fecha y la orientación se han verificado además con una foto JPG de iPhone con EXIF. Aún falta repetir ambos controles con un HEIC original de iPhone cuando haya uno disponible.
 
