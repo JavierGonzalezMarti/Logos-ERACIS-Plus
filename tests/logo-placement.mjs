@@ -55,6 +55,19 @@ try {
   assert.deepEqual(await pixel(10, 500), [255, 0, 0]);
   await page.click('#pos-bottom');
 
+  await page.click('#format-facebook-vertical');
+  assert.deepEqual(await dimensions(), [1080, 1350]);
+  await page.click('#fit-stretch');
+  assert.deepEqual(await pixel(10, 500), [255, 0, 0]);
+  await page.click('#fit-crop');
+  assert.deepEqual(await pixel(10, 500), [0, 255, 0]);
+  await page.click('#logo-inside');
+  assert.deepEqual(await dimensions(), [1080, 1350]);
+  await page.click('#logo-outside');
+  await page.click('#pos-top');
+  assert.deepEqual(await pixel(10, 10), [0, 0, 255]);
+  await page.click('#pos-bottom');
+
   await page.click('#btn-crop-toggle');
   const beforeCrop = await page.locator('#canvas').evaluate((canvas) => canvas.toDataURL());
   const bounds = await page.locator('#canvas').boundingBox();
@@ -66,6 +79,12 @@ try {
   const afterCrop = await page.locator('#canvas').evaluate((canvas) => canvas.toDataURL());
   assert.notEqual(afterCrop, beforeCrop);
   await page.click('#btn-crop-ok');
+
+  const beforeDate = await page.locator('#canvas').evaluate((canvas) => canvas.toDataURL());
+  await page.click('#ts-yes');
+  await page.click('#ts-pos-br');
+  assert.notEqual(await page.locator('#canvas').evaluate((canvas) => canvas.toDataURL()), beforeDate);
+  await page.click('#ts-no');
 
   await page.click('#format-original');
   assert.deepEqual(await dimensions(), [200, 120]);

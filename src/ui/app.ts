@@ -270,6 +270,7 @@ export function createApp(): void {
     'format-horizontal': 'horizontal', 'format-square': 'square',
     'format-vertical': 'vertical', 'format-4by3': 'four-three',
     'format-instagram': 'instagram', 'format-facebook': 'facebook',
+    'format-facebook-vertical': 'facebook-vertical',
     'format-original': 'original',
   };
   document.querySelectorAll<HTMLButtonElement>('.format-button').forEach((button) => button.addEventListener('click', () => {
@@ -414,7 +415,7 @@ export function createApp(): void {
     void openExternalUrl(link.href).catch((error) => announce(String(error), true));
   }));
   element('boton-reiniciar').addEventListener('click', () => location.reload());
-  element('version-app-line').textContent = 'Versión 0.84.0';
+  element('version-app-line').textContent = 'Versión 0.85.0';
 
   void restoreLogo().then((saved) => { if (saved) setLogo(saved.image, saved.dataUrl); });
   refreshControls();

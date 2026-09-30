@@ -27,6 +27,7 @@ describe('posición del faldón', () => {
     const formats = [
       ['horizontal', 1920, 1080], ['square', 1080, 1080], ['vertical', 1080, 1920],
       ['four-three', 1440, 1080], ['instagram', 1080, 1350], ['facebook', 1200, 630],
+      ['facebook-vertical', 1080, 1350],
     ] as const;
     for (const [format, width, height] of formats) {
       const inside = { ...initialState(), format };

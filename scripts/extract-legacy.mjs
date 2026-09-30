@@ -24,12 +24,15 @@ const cleanBody = body
     '            class="format-button btn-hover" aria-label="Instagram 4:5, 1080 por 1350 píxeles">Instagram 4:5</button>\n' +
     '          <button id="format-facebook" type="button" data-width="1200" data-height="630"\n' +
     '            class="format-button btn-hover" aria-label="Facebook horizontal, 1200 por 630 píxeles">Facebook horizontal</button>\n' +
+    '          <button id="format-facebook-vertical" type="button" data-width="1080" data-height="1350"\n' +
+    '            class="format-button btn-hover" aria-label="Post de Facebook Vertical, 1080 por 1350 píxeles">Post de Facebook Vertical</button>\n' +
     '          <button id="format-original" type="button" data-format-mode="original"',
   )
   .replace(
     '        <div class="size-item"><span class="size-icon">🖼️</span><span class="size-label">Formato Original:',
     '        <div class="size-item"><span class="size-icon">📱</span><span class="size-label">Instagram 4:5: <strong>1080 × 1350 px</strong></span></div>\n' +
     '        <div class="size-item"><span class="size-icon">🖥️</span><span class="size-label">Facebook horizontal: <strong>1200 × 630 px</strong></span></div>\n' +
+    '        <div class="size-item"><span class="size-icon">📱</span><span class="size-label">Post de Facebook Vertical: <strong>1080 × 1350 px</strong></span></div>\n' +
     '        <div class="size-item"><span class="size-icon">🖼️</span><span class="size-label">Formato Original:',
   )
   .replace(/<script\s+src="https:[^"]+"\s*><\/script>/gi, '')

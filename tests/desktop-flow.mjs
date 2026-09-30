@@ -56,7 +56,7 @@ try {
   const dimensions = [
     ['horizontal', 1920, 1080], ['square', 1080, 1080],
     ['vertical', 1080, 1920], ['4by3', 1440, 1080],
-    ['instagram', 1080, 1350], ['facebook', 1200, 630],
+    ['instagram', 1080, 1350], ['facebook', 1200, 630], ['facebook-vertical', 1080, 1350],
   ];
   for (const [format, width, height] of dimensions) {
     await page.click(`#format-${format}`);
@@ -68,14 +68,20 @@ try {
     await page.locator('#canvas').evaluate((canvas) => [canvas.width, canvas.height]),
     [originalPng.readUInt32BE(16), originalPng.readUInt32BE(20)],
   );
-  await page.click('#format-4by3');
+  await page.click('#format-facebook-vertical');
 
   const png = await exportFile('png', 'single.png');
   assert.equal(png.subarray(1, 4).toString(), 'PNG');
-  assert.equal(png.readUInt32BE(16), 1440);
-  assert.equal(png.readUInt32BE(20), 1080);
+  assert.equal(png.readUInt32BE(16), 1080);
+  assert.equal(png.readUInt32BE(20), 1350);
   const jpg = await exportFile('jpg', 'single.jpg');
   assert.equal(jpg.subarray(0, 2).toString('hex'), 'ffd8');
+  assert.deepEqual(await page.evaluate(async (base64) => {
+    const image = new Image();
+    image.src = `data:image/jpeg;base64,${base64}`;
+    await image.decode();
+    return [image.naturalWidth, image.naturalHeight];
+  }, jpg.toString('base64')), [1080, 1350]);
   const pdfBytes = await exportFile('pdf', 'single.pdf');
   assert.equal(pdfBytes.subarray(0, 4).toString(), '%PDF');
 
@@ -91,13 +97,16 @@ try {
   await page.waitForFunction(() => document.querySelector('#base-drop')?.getAttribute('aria-label')?.includes('página 1 de 2'));
   await page.setInputFiles('#batch-input', [pdf, banner]);
   await page.waitForFunction(() => document.querySelector('#imagenes-cargadas')?.textContent?.includes('3 elementos'));
+  await page.click('#format-facebook-vertical');
   const zipBytes = await exportFile('png', 'batch.zip');
   const zip = await JSZip.loadAsync(zipBytes);
   const entries = Object.values(zip.files).filter((entry) => !entry.dir);
   assert.equal(entries.length, 3);
   for (const entry of entries) {
     assert.ok(entry.name.endsWith('.png'));
-    assert.ok((await entry.async('uint8array')).length > 100);
+    const image = await entry.async('uint8array');
+    assert.ok(image.length > 100);
+    assert.deepEqual([Buffer.from(image).readUInt32BE(16), Buffer.from(image).readUInt32BE(20)], [1080, 1350]);
   }
 
   await page.setInputFiles('#batch-input', Array.from({ length: 51 }, () => banner));
@@ -138,7 +147,7 @@ try {
 
   assert.deepEqual(errors, []);
   assert.deepEqual(externalRequests, []);
-  console.log(`Flujo verificado: cabecera desplazable, siete formatos, PNG/JPG/PDF, lote ZIP, límite 50 y PDF${heicAvailable ? ', HEIC' : ''}${privateJpeg ? ', EXIF de iPhone' : ''}.`);
+  console.log(`Flujo verificado: cabecera desplazable, ocho formatos, PNG/JPG/PDF, lote ZIP, límite 50 y PDF${heicAvailable ? ', HEIC' : ''}${privateJpeg ? ', EXIF de iPhone' : ''}.`);
 } finally {
   await browser.close();
 }

@@ -21,6 +21,7 @@ const FIXED_DIMENSIONS: Record<Exclude<RenderSettings['format'], 'original'>, Di
   'four-three': { width: 1440, height: 1080 },
   instagram: { width: 1080, height: 1350 },
   facebook: { width: 1200, height: 630 },
+  'facebook-vertical': { width: 1080, height: 1350 },
 };
 
 export function compositionLayout(
