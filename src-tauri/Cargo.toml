@@ -1,6 +1,6 @@
 [package]
 name = "logos-eracis-plus"
-version = "0.83.0"
+version = "0.84.0"
 description = "Herramienta para la inclusión de logotipos ERACIS Plus"
 authors = ["Asociación para la mediación social EQUA"]
 edition = "2021"

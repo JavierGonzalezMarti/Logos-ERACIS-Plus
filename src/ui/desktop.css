@@ -1,9 +1,35 @@
 #page-header-img {
-  position: sticky;
-  top: 0;
-  z-index: 1100;
-  background: #fff;
   margin-bottom: 20px;
+}
+
+.logo-placement-buttons-group {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.logo-placement-button {
+  min-width: 145px;
+  padding: 7px 12px;
+  border: 1.5px solid var(--color-primario);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--color-primario);
+  font: 600 var(--tamano-fuente-boton) Inter, Arial, sans-serif;
+  cursor: pointer;
+}
+
+.logo-placement-button.active-button,
+.logo-placement-button:hover {
+  background: var(--color-primario);
+  color: #fff;
+}
+
+.logo-placement-button:focus-visible {
+  outline: 2px solid var(--color-primario);
+  outline-offset: 2px;
 }
 
 .app-error {

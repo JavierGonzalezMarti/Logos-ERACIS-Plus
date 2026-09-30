@@ -3,6 +3,7 @@ import type { BackgroundAsset } from '../import/media';
 export type Format = 'horizontal' | 'square' | 'vertical' | 'four-three' | 'instagram' | 'facebook' | 'original';
 export type FitMode = 'stretch' | 'crop';
 export type LogoPosition = 'top' | 'bottom';
+export type LogoPlacement = 'inside' | 'outside';
 export type OutputFormat = 'png' | 'jpg' | 'pdf';
 export type TimestampPosition = 'tl' | 'tr' | 'bl' | 'br';
 export type TimestampBackground = 'none' | 'white' | 'black';
@@ -11,6 +12,7 @@ export interface RenderSettings {
   format: Format;
   fitMode: FitMode;
   logoPosition: LogoPosition;
+  logoPlacement: LogoPlacement;
   panX: number;
   panY: number;
   timestampEnabled: boolean;
@@ -39,6 +41,7 @@ export const initialState = (): AppState => ({
   format: 'four-three',
   fitMode: 'crop',
   logoPosition: 'bottom',
+  logoPlacement: 'inside',
   panX: 0.5,
   panY: 0.5,
   timestampEnabled: false,

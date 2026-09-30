@@ -4,7 +4,7 @@ import {
   isImageFile, isSupportedBackgroundFile, loadBackgroundImage, photoDate, thumbnailDataUrl,
   type BackgroundAsset,
 } from '../import/media';
-import { canvasDimensions, renderComposition, sourceWindow } from '../processing/compositor';
+import { canvasDimensions, compositionLayout, renderComposition, sourceWindow } from '../processing/compositor';
 import { openExternalUrl, saveOutput } from '../platform/desktop';
 import { forgetLogo, rememberLogo, restoreLogo } from '../platform/logoStore';
 import { initialState, MAX_BATCH_ITEMS, type AppState, type Format, type TimestampPosition } from '../state/model';
@@ -90,7 +90,7 @@ export function createApp(): void {
   };
 
   const updatePreview = () => {
-    const dimensions = canvasDimensions(state.baseImage, state.format);
+    const dimensions = canvasDimensions(state.baseImage, state.logoImage, state);
     document.documentElement.style.setProperty('--canvas-ar', `${dimensions.width} / ${dimensions.height}`);
     renderComposition(canvas, state.baseImage, state.logoImage, state.baseDate, state);
     refreshControls();
@@ -290,6 +290,12 @@ export function createApp(): void {
     selected('.position-button', button.id);
     updatePreview();
   }));
+  for (const placement of ['inside', 'outside'] as const) element<HTMLButtonElement>(`logo-${placement}`).addEventListener('click', () => {
+    state.logoPlacement = placement;
+    state.panX = state.panY = 0.5;
+    selected('.logo-placement-button', `logo-${placement}`);
+    updatePreview();
+  });
   document.querySelectorAll<HTMLButtonElement>('.output-format-button').forEach((button) => button.addEventListener('click', () => {
     state.outputFormat = button.dataset.format === 'jpg' ? 'jpg' : button.dataset.format === 'pdf' ? 'pdf' : 'png';
     selected('.output-format-button', button.id);
@@ -352,7 +358,10 @@ export function createApp(): void {
   canvas.addEventListener('pointerdown', (event) => {
     if (!state.cropMode || !state.baseImage) return;
     const bounds = canvas.getBoundingClientRect();
-    const geometry = sourceWindow(state.baseImage, canvas.width, canvas.height, state.logoImage, state.logoPosition);
+    const layout = compositionLayout(state.baseImage, state.logoImage, state);
+    const canvasY = (event.clientY - bounds.top) * layout.height / bounds.height;
+    if (canvasY < layout.photoTop || canvasY > layout.photoTop + layout.photoHeight) return;
+    const geometry = sourceWindow(state.baseImage, layout);
     drag = {
       x: event.clientX - bounds.left,
       y: event.clientY - bounds.top,
@@ -365,7 +374,7 @@ export function createApp(): void {
   canvas.addEventListener('pointermove', (event) => {
     if (!drag || !state.cropMode || !state.baseImage) return;
     const bounds = canvas.getBoundingClientRect();
-    const geometry = sourceWindow(state.baseImage, canvas.width, canvas.height, state.logoImage, state.logoPosition);
+    const geometry = sourceWindow(state.baseImage, compositionLayout(state.baseImage, state.logoImage, state));
     const dx = event.clientX - bounds.left - drag.x;
     const dy = event.clientY - bounds.top - drag.y;
     const sx = Math.min(geometry.maxSX, Math.max(0, drag.sourceX - dx * geometry.sw / bounds.width));
@@ -405,7 +414,7 @@ export function createApp(): void {
     void openExternalUrl(link.href).catch((error) => announce(String(error), true));
   }));
   element('boton-reiniciar').addEventListener('click', () => location.reload());
-  element('version-app-line').textContent = 'Versión 0.83.0';
+  element('version-app-line').textContent = 'Versión 0.84.0';
 
   void restoreLogo().then((saved) => { if (saved) setLogo(saved.image, saved.dataUrl); });
   refreshControls();

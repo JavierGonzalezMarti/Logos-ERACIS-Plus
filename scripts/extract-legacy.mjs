@@ -10,6 +10,15 @@ const cleanBody = body
   .replace('<button id="ts-yes" type="button" class="timestamp-button active-button btn-hover"', '<button id="ts-yes" type="button" class="timestamp-button btn-hover"')
   .replace('<button id="ts-no" type="button" class="timestamp-button btn-hover"', '<button id="ts-no" type="button" class="timestamp-button active-button btn-hover"')
   .replace(
+    /([ \t]*<button id="pos-top"[^>]*>[\s\S]*?<\/button>\r?\n[ \t]*<\/div>)/,
+    '$1\n        <div class="logo-placement-buttons-group" role="radiogroup" aria-label="Ubicación del faldón respecto a la imagen">\n' +
+    '          <button id="logo-inside" type="button" role="radio" aria-checked="true"\n' +
+    '            class="logo-placement-button active-button btn-hover">Dentro de la imagen</button>\n' +
+    '          <button id="logo-outside" type="button" role="radio" aria-checked="false"\n' +
+    '            class="logo-placement-button btn-hover">Fuera de la imagen</button>\n' +
+    '        </div>',
+  )
+  .replace(
     '          <button id="format-original" type="button" data-format-mode="original"',
     '          <button id="format-instagram" type="button" data-width="1080" data-height="1350"\n' +
     '            class="format-button btn-hover" aria-label="Instagram 4:5, 1080 por 1350 píxeles">Instagram 4:5</button>\n' +

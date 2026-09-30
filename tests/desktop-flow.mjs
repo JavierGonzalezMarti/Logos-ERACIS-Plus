@@ -49,13 +49,14 @@ try {
   await page.goto(appUrl, { waitUntil: 'networkidle' });
   assert.equal(await page.locator('#page-header-img').evaluate((image) => image.naturalWidth > 0), true);
   await page.evaluate(() => window.scrollTo(0, 1000));
-  assert.equal(await page.locator('#page-header-img').evaluate((image) => Math.round(image.getBoundingClientRect().top)), 0);
+  assert.ok(await page.locator('#page-header-img').evaluate((image) => image.getBoundingClientRect().bottom < 0));
   await page.setInputFiles('#base-input', banner);
   await page.waitForFunction(() => !document.querySelector('#download-btn')?.disabled);
 
   const dimensions = [
     ['horizontal', 1920, 1080], ['square', 1080, 1080],
     ['vertical', 1080, 1920], ['4by3', 1440, 1080],
+    ['instagram', 1080, 1350], ['facebook', 1200, 630],
   ];
   for (const [format, width, height] of dimensions) {
     await page.click(`#format-${format}`);
@@ -137,7 +138,7 @@ try {
 
   assert.deepEqual(errors, []);
   assert.deepEqual(externalRequests, []);
-  console.log(`Flujo verificado: cabecera fija, cinco formatos, PNG/JPG/PDF, lote ZIP, límite 50 y PDF${heicAvailable ? ', HEIC' : ''}${privateJpeg ? ', EXIF de iPhone' : ''}.`);
+  console.log(`Flujo verificado: cabecera desplazable, siete formatos, PNG/JPG/PDF, lote ZIP, límite 50 y PDF${heicAvailable ? ', HEIC' : ''}${privateJpeg ? ', EXIF de iPhone' : ''}.`);
 } finally {
   await browser.close();
 }
