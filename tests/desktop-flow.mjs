@@ -109,6 +109,8 @@ try {
   await page.click('#pos-top');
   await page.click('#mark-add');
   await page.locator('.mark-variant[data-variant="horizontal"]').click();
+  await page.locator('.mark-background-options [data-background="circle"]').click();
+  assert.equal(await page.locator('.mark-white-shape').evaluate((node) => getComputedStyle(node).borderRadius), '50%');
   const photoBounds = await page.evaluate(() => {
     const stage = document.querySelector('.mark-stage').getBoundingClientRect();
     const canvas = document.querySelector('.mark-background');
@@ -138,7 +140,16 @@ try {
   await page.waitForSelector('.mark-dialog[open]');
   assert.equal(await page.locator('.mark-variant').count(), 8);
   assert.equal(await page.locator('.mark-accept').isDisabled(), true);
+  assert.equal(await page.locator('.mark-background-options [data-background="rectangle"]').isDisabled(), true);
   await page.locator('.mark-variant[data-variant="horizontal"]').click();
+  assert.equal(await page.locator('.mark-background-options [data-background="none"]').getAttribute('aria-pressed'), 'true');
+  await page.locator('.mark-background-options [data-background="rectangle"]').click();
+  const backgroundSize = await page.evaluate(() => {
+    const logo = document.querySelector('.mark-box').getBoundingClientRect();
+    const white = document.querySelector('.mark-white-shape').getBoundingClientRect();
+    return [white.width / logo.width, white.height / logo.height];
+  });
+  assert.ok(backgroundSize.every((ratio) => Math.abs(ratio - 1.2) < 0.02));
   const originalBox = await page.locator('.mark-box').boundingBox();
   assert.ok(originalBox?.width > 0);
   await page.mouse.move(originalBox.x + originalBox.width / 2, originalBox.y + originalBox.height / 2);
@@ -148,6 +159,7 @@ try {
   const movedBox = await page.locator('.mark-box').boundingBox();
   assert.ok(movedBox.x > originalBox.x);
   await page.locator('.mark-variant[data-variant="vertical"]').click();
+  assert.equal(await page.locator('.mark-background-options [data-background="rectangle"]').getAttribute('aria-pressed'), 'true');
   const changedBox = await page.locator('.mark-box').boundingBox();
   assert.ok(Math.abs(changedBox.width - movedBox.width) < 2);
   assert.ok(Math.abs(changedBox.x + changedBox.width / 2 - movedBox.x - movedBox.width / 2) < 2);
@@ -162,14 +174,19 @@ try {
   assert.equal(await page.locator('#mark-add').isVisible(), true);
   await page.click('#mark-add');
   await page.locator('.mark-variant[data-variant="horizontal"]').click();
+  await page.locator('.mark-background-options [data-background="rectangle"]').click();
   const beforeMark = await page.locator('#canvas').evaluate((canvas) => canvas.toDataURL());
   await page.locator('.mark-accept').click();
   assert.equal(await page.locator('#mark-edit').isVisible(), true);
   assert.notEqual(await page.locator('#canvas').evaluate((canvas) => canvas.toDataURL()), beforeMark);
   await page.click('#mark-edit');
   await page.locator('.mark-variant[data-variant="vertical-lema"]').click();
+  await page.locator('.mark-background-options [data-background="circle"]').click();
   await page.locator('.mark-cancel').click();
   assert.equal(await page.locator('#mark-edit').isVisible(), true);
+  await page.click('#mark-edit');
+  assert.equal(await page.locator('.mark-background-options [data-background="rectangle"]').getAttribute('aria-pressed'), 'true');
+  await page.locator('.mark-cancel').click();
 
   const png = await exportFile('png', 'single.png');
   assert.equal(png.subarray(1, 4).toString(), 'PNG');
@@ -185,6 +202,13 @@ try {
   }, jpg.toString('base64')), [1080, 1350]);
   const pdfBytes = await exportFile('pdf', 'single.pdf');
   assert.equal(pdfBytes.subarray(0, 4).toString(), '%PDF');
+  const rectanglePreview = await page.locator('#canvas').evaluate((canvas) => canvas.toDataURL());
+  await page.click('#mark-edit');
+  await page.locator('.mark-background-options [data-background="circle"]').click();
+  await page.locator('.mark-accept').click();
+  assert.notEqual(await page.locator('#canvas').evaluate((canvas) => canvas.toDataURL()), rectanglePreview);
+  const circlePng = await exportFile('png', 'circle.png');
+  assert.notDeepEqual(circlePng, png);
   await page.click('#mark-remove');
   assert.equal(await page.locator('#mark-add').isVisible(), true);
   assert.equal(await page.locator('#canvas').evaluate((canvas) => canvas.toDataURL()), beforeMark);
@@ -204,6 +228,7 @@ try {
   await page.click('#format-facebook-vertical');
   await page.click('#mark-add');
   await page.locator('.mark-variant[data-variant="horizontal-denominacion"]').click();
+  await page.locator('.mark-background-options [data-background="circle"]').click();
   await page.locator('.mark-accept').click();
   const zipBytes = await exportFile('png', 'batch.zip');
   const zip = await JSZip.loadAsync(zipBytes);

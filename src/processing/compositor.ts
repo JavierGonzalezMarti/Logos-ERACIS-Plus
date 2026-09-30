@@ -1,6 +1,6 @@
 import type { RenderSettings } from '../state/model';
 import { formatDate } from '../import/media';
-import { markRectangle } from './markGeometry';
+import { markBackgroundRectangle, markRectangle } from './markGeometry';
 
 export interface Dimensions { width: number; height: number }
 export interface SourceWindow {
@@ -172,7 +172,25 @@ export function renderComposition(
   if (image && date && settings.timestampEnabled) drawTimestamp(context, date, layout, settings);
   if (image && settings.eracisMark && markImage) {
     const mark = markRectangle(settings.eracisMark, markImage, layout);
-    if (mark.width > 0 && mark.height > 0) context.drawImage(markImage, mark.x, mark.y, mark.width, mark.height);
+    if (mark.width > 0 && mark.height > 0) {
+      if (settings.eracisMark.background !== 'none') {
+        const shape = settings.eracisMark.background;
+        const background = markBackgroundRectangle(mark, shape);
+        context.save();
+        context.beginPath();
+        context.rect(0, layout.photoTop, layout.width, layout.photoHeight);
+        context.clip();
+        context.fillStyle = '#ffffff';
+        if (shape === 'circle') {
+          context.beginPath();
+          context.arc(background.x + background.width / 2, background.y + background.height / 2,
+            background.width / 2, 0, Math.PI * 2);
+          context.fill();
+        } else context.fillRect(background.x, background.y, background.width, background.height);
+        context.restore();
+      }
+      context.drawImage(markImage, mark.x, mark.y, mark.width, mark.height);
+    }
   }
 }
 

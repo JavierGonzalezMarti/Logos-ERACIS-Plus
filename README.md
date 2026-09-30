@@ -10,6 +10,8 @@ La sección «Marca ERACIS+» ofrece ocho variantes transparentes incluidas en l
 
 En la versión 0.86.1, el editor muestra la composición con la misma proporción que la vista previa principal en todos los formatos y mantiene la marca dentro de la foto.
 
+Desde la versión 0.87.0, la Marca ERACIS+ puede llevar un fondo blanco rectangular o circular, además de permanecer sin fondo. El margen blanco es proporcional al logo y se escala con él. Si el fondo llega al borde de la foto, se recorta sin invadir el faldón exterior.
+
 ## Requisitos de desarrollo
 
 - Node.js y npm

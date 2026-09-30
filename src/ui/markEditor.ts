@@ -1,6 +1,6 @@
-import type { AppState, EracisMark } from '../state/model';
+import type { AppState, EracisMark, MarkBackground } from '../state/model';
 import { compositionLayout, renderComposition } from '../processing/compositor';
-import { initialMark, markRectangle, moveMark, resizeMark, type MarkCorner } from '../processing/markGeometry';
+import { initialMark, markBackgroundRectangle, markRectangle, moveMark, resizeMark, type MarkCorner } from '../processing/markGeometry';
 
 const variants = [
   ['horizontal', 'Horizontal', new URL('../assets/eracis/horizontal.png', import.meta.url).href],
@@ -49,11 +49,18 @@ export async function openMarkEditor(state: AppState, onAccept: (mark: EracisMar
       <aside class="mark-sidebar" aria-label="Variantes de Marca ERACIS+">
         <h2>Marca ERACIS+</h2>
         <p>Elige una variante y colócala sobre la foto.</p>
+        <div class="mark-background-options" role="group" aria-label="Fondo blanco de la marca">
+          <h3>Fondo de la marca</h3>
+          <button type="button" data-background="none">Sin fondo</button>
+          <button type="button" data-background="rectangle">Rectángulo blanco</button>
+          <button type="button" data-background="circle">Círculo blanco</button>
+        </div>
         <div class="mark-variants"></div>
       </aside>
       <div class="mark-workspace">
         <div class="mark-stage-container"><div class="mark-stage">
           <canvas class="mark-background" aria-label="Vista previa de la composición"></canvas>
+          <div class="mark-photo-mask" hidden><div class="mark-white-shape"></div></div>
           <div class="mark-box" role="img" aria-label="Marca ERACIS+; arrastra para mover" tabindex="0">
             <img alt="" draggable="false">
             <span class="mark-handle nw" data-corner="nw" role="button" aria-label="Escalar desde arriba a la izquierda"></span>
@@ -74,9 +81,13 @@ export async function openMarkEditor(state: AppState, onAccept: (mark: EracisMar
   const stage = dialog.querySelector<HTMLElement>('.mark-stage')!;
   const container = dialog.querySelector<HTMLElement>('.mark-stage-container')!;
   const box = dialog.querySelector<HTMLElement>('.mark-box')!;
+  const mask = dialog.querySelector<HTMLElement>('.mark-photo-mask')!;
+  const whiteShape = dialog.querySelector<HTMLElement>('.mark-white-shape')!;
   const markImg = box.querySelector<HTMLImageElement>('img')!;
   const accept = dialog.querySelector<HTMLButtonElement>('.mark-accept')!;
   const list = dialog.querySelector<HTMLElement>('.mark-variants')!;
+  mask.style.top = `${layout.photoTop / layout.height * 100}%`;
+  mask.style.height = `${layout.photoHeight / layout.height * 100}%`;
 
   const fitStage = () => {
     const style = getComputedStyle(container);
@@ -90,6 +101,13 @@ export async function openMarkEditor(state: AppState, onAccept: (mark: EracisMar
   const update = () => {
     accept.disabled = !draft;
     box.hidden = !draft;
+    mask.hidden = !draft || draft.background === 'none';
+    dialog.querySelectorAll<HTMLButtonElement>('.mark-background-options button').forEach((button) => {
+      button.disabled = !draft;
+      const selected = draft?.background === button.dataset.background;
+      button.classList.toggle('selected', selected);
+      button.setAttribute('aria-pressed', String(selected));
+    });
     list.querySelectorAll<HTMLButtonElement>('button').forEach((button) => {
       button.classList.toggle('selected', button.dataset.variant === draft?.variant);
       button.setAttribute('aria-pressed', String(button.dataset.variant === draft?.variant));
@@ -103,7 +121,22 @@ export async function openMarkEditor(state: AppState, onAccept: (mark: EracisMar
     box.style.top = `${rect.y / layout.height * 100}%`;
     box.style.width = `${rect.width / layout.width * 100}%`;
     box.style.height = `${rect.height / layout.height * 100}%`;
+    if (draft.background !== 'none') {
+      const background = markBackgroundRectangle(rect, draft.background);
+      whiteShape.classList.toggle('circle', draft.background === 'circle');
+      whiteShape.style.left = `${background.x / layout.width * 100}%`;
+      whiteShape.style.top = `${(background.y - layout.photoTop) / layout.photoHeight * 100}%`;
+      whiteShape.style.width = `${background.width / layout.width * 100}%`;
+      whiteShape.style.height = `${background.height / layout.photoHeight * 100}%`;
+    }
   };
+  dialog.querySelectorAll<HTMLButtonElement>('.mark-background-options button').forEach((button) => {
+    button.addEventListener('click', () => {
+      if (!draft) return;
+      draft = { ...draft, background: button.dataset.background as MarkBackground };
+      update();
+    });
+  });
   for (const [id, label, file] of variants) {
     const button = document.createElement('button');
     button.type = 'button';

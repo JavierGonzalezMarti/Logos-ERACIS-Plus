@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { compositionLayout, renderComposition } from '../src/processing/compositor';
-import { initialMark, markRectangle, moveMark, resizeMark } from '../src/processing/markGeometry';
+import { initialMark, markBackgroundRectangle, markRectangle, moveMark, resizeMark } from '../src/processing/markGeometry';
 import { initialState } from '../src/state/model';
 
 const image = (width: number, height: number) => ({ width, height, naturalWidth: width, naturalHeight: height }) as HTMLImageElement;
@@ -9,6 +9,16 @@ const horizontal = image(1000, 250);
 const vertical = image(250, 1000);
 
 describe('Marca ERACIS+', () => {
+  it('añade un margen proporcional y un círculo que contiene todo el rectángulo', () => {
+    const logo = { x: 100, y: 200, width: 300, height: 100 };
+    expect(markBackgroundRectangle(logo, 'rectangle')).toEqual({ x: 70, y: 190, width: 360, height: 120 });
+    const circle = markBackgroundRectangle(logo, 'circle');
+    expect(circle.width).toBeCloseTo(Math.hypot(360, 120));
+    expect(circle.height).toBe(circle.width);
+    expect(circle.x + circle.width / 2).toBe(250);
+    expect(circle.y + circle.height / 2).toBe(250);
+  });
+
   it('empieza centrada al 10 % del lado mayor y conserva su ancho al cambiar variante', () => {
     const settings = initialState();
     const layout = compositionLayout(photo, null, settings);
@@ -71,5 +81,29 @@ describe('Marca ERACIS+', () => {
     expect(calls.at(-1)).toBe('mark');
     expect(calls).toContain('date');
     expect([canvas.width, canvas.height]).toEqual([1440, 1080]);
+  });
+
+  it('recorta ambos fondos blancos a la foto y los dibuja detrás del logo', () => {
+    for (const background of ['rectangle', 'circle'] as const) {
+      const settings = { ...initialState(), logoPlacement: 'outside' as const, logoPosition: 'top' as const,
+        eracisMark: { ...initialMark('horizontal'), background, centerY: 0.02 } };
+      const calls: Array<{ method: string; args: unknown[] }> = [];
+      const record = (method: string) => (...args: unknown[]) => calls.push({ method, args });
+      const context = {
+        drawImage: record('drawImage'), fillRect: record('fillRect'),
+        beginPath: record('beginPath'), rect: record('rect'), clip: record('clip'),
+        arc: record('arc'), fill: record('fill'), save: record('save'), restore: record('restore'),
+      } as unknown as CanvasRenderingContext2D;
+      const canvas = { width: 0, height: 0, getContext: () => context } as unknown as HTMLCanvasElement;
+      const logo = image(100, 20);
+      const layout = compositionLayout(photo, logo, settings);
+      renderComposition(canvas, photo, logo, null, settings, horizontal);
+      expect(calls.find((call) => call.method === 'rect')?.args)
+        .toEqual([0, layout.photoTop, layout.width, layout.photoHeight]);
+      expect(calls.some((call) => call.method === 'clip')).toBe(true);
+      expect(calls.at(-1)).toEqual({ method: 'drawImage', args: [horizontal,
+        expect.any(Number), expect.any(Number), expect.any(Number), expect.any(Number)] });
+      expect(calls.some((call) => call.method === (background === 'circle' ? 'arc' : 'fillRect'))).toBe(true);
+    }
   });
 });

@@ -7,9 +7,11 @@ export type LogoPlacement = 'inside' | 'outside';
 export type OutputFormat = 'png' | 'jpg' | 'pdf';
 export type TimestampPosition = 'tl' | 'tr' | 'bl' | 'br';
 export type TimestampBackground = 'none' | 'white' | 'black';
+export type MarkBackground = 'none' | 'rectangle' | 'circle';
 
 export interface EracisMark {
   variant: string;
+  background: MarkBackground;
   centerX: number;
   centerY: number;
   widthRatio: number;

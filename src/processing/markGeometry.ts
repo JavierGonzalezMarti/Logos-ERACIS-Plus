@@ -3,6 +3,17 @@ import type { CompositionLayout } from './compositor';
 
 export interface MarkRectangle { x: number; y: number; width: number; height: number }
 
+export function markBackgroundRectangle(mark: MarkRectangle, shape: 'rectangle' | 'circle'): MarkRectangle {
+  const width = shape === 'circle' ? Math.hypot(mark.width * 1.2, mark.height * 1.2) : mark.width * 1.2;
+  const height = shape === 'circle' ? width : mark.height * 1.2;
+  return {
+    x: mark.x + (mark.width - width) / 2,
+    y: mark.y + (mark.height - height) / 2,
+    width,
+    height,
+  };
+}
+
 export function markRectangle(mark: EracisMark, image: HTMLImageElement, layout: CompositionLayout): MarkRectangle {
   const aspect = image.naturalWidth / image.naturalHeight;
   const centerX = Math.min(1, Math.max(0, mark.centerX)) * layout.width;
@@ -18,7 +29,7 @@ export function markRectangle(mark: EracisMark, image: HTMLImageElement, layout:
 }
 
 export function initialMark(variant: string): EracisMark {
-  return { variant, centerX: 0.5, centerY: 0.5, widthRatio: 0.1 };
+  return { variant, background: 'none', centerX: 0.5, centerY: 0.5, widthRatio: 0.1 };
 }
 
 export function moveMark(mark: EracisMark, image: HTMLImageElement, layout: CompositionLayout, dx: number, dy: number): EracisMark {
