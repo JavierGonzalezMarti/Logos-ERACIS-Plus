@@ -22,6 +22,7 @@ ManifestDPIAwareness PerMonitorV2
 !addplugindir "{{signed_plugins_path}}"
 {{/if}}
 
+!define MUI_CUSTOMFUNCTION_GUIINIT FitInstallerToMonitor
 !include MUI2.nsh
 !include nsDialogs.nsh
 !include FileFunc.nsh
@@ -82,7 +83,7 @@ Var WixMode
 Var OldMainBinaryName
 
 Name "${PRODUCTNAME} ${VERSION}"
-BrandingText "${COPYRIGHT}"
+BrandingText " "
 OutFile "${OUTFILE}"
 
 ; We don't actually use this value as default install path,
@@ -168,19 +169,166 @@ VIAddVersionKey "ProductVersion" "${VERSION}"
 Page custom PagePresentacion
 Page custom PageInformacion
 
+Var PosterBitmap
+Var PosterControl
+Var PosterSourceBitmap
+Var PosterSourceDC
+Var PosterTargetDC
+Var PosterScreenDC
+Var PosterOldSource
+Var PosterOldTarget
+Var PosterWidth
+Var PosterHeight
+Var LayoutOldWidth
+Var LayoutOldHeight
+Var LayoutDeltaWidth
+Var LayoutDeltaHeight
+Var LayoutChild
+Var LayoutWorkLeft
+Var LayoutWorkTop
+Var LayoutWorkWidth
+Var LayoutWorkHeight
+
+; Use the current monitor work area (excluding taskbar), in physical pixels.
+Function FitInstallerToMonitor
+  System::Store S
+  System::Call 'user32::MonitorFromWindow(p $HWNDPARENT, i 2) p.r0'
+  System::Alloc 40
+  Pop $1
+  System::Call '*$1(i 40)'
+  System::Call 'user32::GetMonitorInfoW(p r0, p r1) i.r2'
+  ${If} $2 = 0
+    System::Free $1
+    System::Store L
+    Return
+  ${EndIf}
+  System::Call '*$1(i, i, i, i, i, i.r2, i.r3, i.r4, i.r5, i)'
+  System::Free $1
+  StrCpy $LayoutWorkLeft $2
+  StrCpy $LayoutWorkTop $3
+  IntOp $LayoutWorkWidth $4 - $2
+  IntOp $LayoutWorkHeight $5 - $3
+  ; The complete outer window is exactly 70 percent of the usable height.
+  IntOp $6 $LayoutWorkHeight * 70
+  IntOp $6 $6 / 100
+  IntOp $7 $6 * 9
+  IntOp $7 $7 / 10
+  IntOp $8 $LayoutWorkWidth * 90
+  IntOp $8 $8 / 100
+  ${If} $7 > $8
+    StrCpy $7 $8
+  ${EndIf}
+  System::Alloc 16
+  Pop $0
+  System::Call 'user32::GetClientRect(p $HWNDPARENT, p r0)'
+  System::Call '*$0(i, i, i.r1, i.r2)'
+  StrCpy $LayoutOldWidth $1
+  StrCpy $LayoutOldHeight $2
+  System::Free $0
+  IntOp $8 $LayoutWorkWidth - $7
+  IntOp $8 $8 / 2
+  IntOp $8 $8 + $LayoutWorkLeft
+  IntOp $9 $LayoutWorkHeight - $6
+  IntOp $9 $9 / 2
+  IntOp $9 $9 + $LayoutWorkTop
+  System::Call 'user32::SetWindowPos(p $HWNDPARENT, p 0, i r8, i r9, i r7, i r6, i 0x14)'
+  System::Alloc 16
+  Pop $0
+  System::Call 'user32::GetClientRect(p $HWNDPARENT, p r0)'
+  System::Call '*$0(i, i, i.r1, i.r2)'
+  System::Free $0
+  IntOp $LayoutDeltaWidth $1 - $LayoutOldWidth
+  IntOp $LayoutDeltaHeight $2 - $LayoutOldHeight
+  ; Resize the page placeholder and header, anchor navigation to bottom right.
+  System::Call 'user32::GetWindow(p $HWNDPARENT, i 5) p.s'
+  Pop $LayoutChild
+  ${DoWhile} $LayoutChild != 0
+    System::Alloc 16
+    Pop $0
+    System::Call 'user32::GetWindowRect(p $LayoutChild, p r0)'
+    System::Call 'user32::MapWindowPoints(p 0, p $HWNDPARENT, p r0, i 2)'
+    System::Call '*$0(i.r1, i.r2, i.r3, i.r4)'
+    System::Free $0
+    IntOp $3 $3 - $1
+    IntOp $4 $4 - $2
+    IntOp $5 $LayoutOldWidth / 2
+    ${If} $1 > $5
+      IntOp $1 $1 + $LayoutDeltaWidth
+    ${Else}
+      IntOp $3 $3 + $LayoutDeltaWidth
+    ${EndIf}
+    IntOp $5 $LayoutOldHeight - 60
+    ${If} $2 > $5
+      IntOp $2 $2 + $LayoutDeltaHeight
+    ${Else}
+      IntOp $5 $LayoutOldHeight / 2
+      ${If} $4 > $5
+        IntOp $4 $4 + $LayoutDeltaHeight
+      ${EndIf}
+    ${EndIf}
+    System::Call 'user32::MoveWindow(p $LayoutChild, i r1, i r2, i r3, i r4, i 1)'
+    System::Call 'user32::GetWindow(p $LayoutChild, i 2) p.s'
+    Pop $LayoutChild
+  ${Loop}
+  System::Store L
+FunctionEnd
+
 Function PagePresentacion
   ${If} $PassiveMode = 1
     Abort
   ${EndIf}
-  !insertmacro MUI_HEADER_TEXT "${PRODUCTNAME} · Versión ${VERSION}" "Programa CAPACITADOS+ · ERACIS+ Cádiz"
+  !insertmacro MUI_HEADER_TEXT "${PRODUCTNAME} · Versión ${VERSION}" "ERACIS+ Cádiz · Inclusión social"
   nsDialogs::Create 1018
   Pop $0
-  ${NSD_CreateBitmap} 0 0 100% 100% $1
+  ; Fit the entire A4 poster without distortion or cropping.
+  System::Alloc 16
   Pop $1
+  System::Call 'user32::GetClientRect(p r0, p r1)'
+  System::Call '*$1(i, i, i.r3, i.r4)'
+  System::Free $1
+  IntOp $4 $4 - 12
+  IntOp $5 $4 * 1556
+  IntOp $5 $5 / 2200
+  ${If} $5 > $3
+    StrCpy $5 $3
+    IntOp $4 $5 * 2200
+    IntOp $4 $4 / 1556
+  ${EndIf}
+  IntOp $6 $3 - $5
+  IntOp $6 $6 / 2
+  StrCpy $PosterWidth $5
+  StrCpy $PosterHeight $4
+  ${NSD_CreateBitmap} $6 6 $5 $4 ""
+  Pop $PosterControl
   InitPluginsDir
   File /oname=$PLUGINSDIR\presentacion.bmp "${HEADERIMAGE}"
-  ${NSD_SetImage} $1 "$PLUGINSDIR\presentacion.bmp" $2
+  ; HALFTONE downsampling keeps small poster lettering smooth at any DPI.
+  System::Call 'user32::LoadImageW(p 0, w "$PLUGINSDIR\presentacion.bmp", i 0, i 0, i 0, i 0x2010) p.s'
+  Pop $PosterSourceBitmap
+  System::Call 'user32::GetDC(p 0) p.s'
+  Pop $PosterScreenDC
+  System::Call 'gdi32::CreateCompatibleDC(p $PosterScreenDC) p.s'
+  Pop $PosterSourceDC
+  System::Call 'gdi32::CreateCompatibleDC(p $PosterScreenDC) p.s'
+  Pop $PosterTargetDC
+  System::Call 'gdi32::CreateCompatibleBitmap(p $PosterScreenDC, i $PosterWidth, i $PosterHeight) p.s'
+  Pop $PosterBitmap
+  System::Call 'gdi32::SelectObject(p $PosterSourceDC, p $PosterSourceBitmap) p.s'
+  Pop $PosterOldSource
+  System::Call 'gdi32::SelectObject(p $PosterTargetDC, p $PosterBitmap) p.s'
+  Pop $PosterOldTarget
+  System::Call 'gdi32::SetStretchBltMode(p $PosterTargetDC, i 4)'
+  System::Call 'gdi32::SetBrushOrgEx(p $PosterTargetDC, i 0, i 0, p 0)'
+  System::Call 'gdi32::StretchBlt(p $PosterTargetDC, i 0, i 0, i $PosterWidth, i $PosterHeight, p $PosterSourceDC, i 0, i 0, i 1556, i 2200, i 0x00CC0020)'
+  System::Call 'gdi32::SelectObject(p $PosterSourceDC, p $PosterOldSource)'
+  System::Call 'gdi32::SelectObject(p $PosterTargetDC, p $PosterOldTarget)'
+  System::Call 'gdi32::DeleteDC(p $PosterSourceDC)'
+  System::Call 'gdi32::DeleteDC(p $PosterTargetDC)'
+  System::Call 'user32::ReleaseDC(p 0, p $PosterScreenDC)'
+  System::Call 'gdi32::DeleteObject(p $PosterSourceBitmap)'
+  SendMessage $PosterControl ${STM_SETIMAGE} ${IMAGE_BITMAP} $PosterBitmap
   nsDialogs::Show
+  System::Call 'gdi32::DeleteObject(p $PosterBitmap)'
 FunctionEnd
 
 Function PageInformacion
@@ -725,7 +873,7 @@ Section Install
 
   ; Registry information for add/remove programs
   WriteRegStr SHCTX "${UNINSTKEY}" "DisplayName" "${PRODUCTNAME}"
-  WriteRegStr SHCTX "${UNINSTKEY}" "DisplayIcon" "$\"$INSTDIR\${MAINBINARYNAME}.exe$\""
+  WriteRegStr SHCTX "${UNINSTKEY}" "DisplayIcon" "$\"$INSTDIR\app-green-v1.ico$\",0"
   WriteRegStr SHCTX "${UNINSTKEY}" "DisplayVersion" "${VERSION}"
   WriteRegStr SHCTX "${UNINSTKEY}" "Publisher" "${MANUFACTURER}"
   WriteRegStr SHCTX "${UNINSTKEY}" "InstallLocation" "$\"$INSTDIR$\""
@@ -759,6 +907,9 @@ Section Install
   !ifmacrodef NSIS_HOOK_POSTINSTALL
     !insertmacro NSIS_HOOK_POSTINSTALL
   !endif
+
+  ; Tell Explorer to refresh icon associations after updating shortcut resources.
+  System::Call 'shell32::SHChangeNotify(i 0x08000000, i 0, p 0, p 0)'
 
   ; Auto close this page for passive mode
   ${If} $PassiveMode = 1
@@ -938,6 +1089,19 @@ Function un.SkipIfPassive
 FunctionEnd
 
 Function CreateOrUpdateStartMenuShortcut
+  ; Refresh the explicit icon of existing app shortcuts, including update mode.
+  !insertmacro IsShortcutTarget "$SMPROGRAMS\$AppStartMenuFolder\${PRODUCTNAME}.lnk" "$INSTDIR\${MAINBINARYNAME}.exe"
+  Pop $0
+  ${If} $0 = 1
+    CreateShortcut "$SMPROGRAMS\$AppStartMenuFolder\${PRODUCTNAME}.lnk" "$INSTDIR\${MAINBINARYNAME}.exe" "" "$INSTDIR\app-green-v1.ico" 0
+    !insertmacro SetLnkAppUserModelId "$SMPROGRAMS\$AppStartMenuFolder\${PRODUCTNAME}.lnk"
+  ${EndIf}
+  !insertmacro IsShortcutTarget "$SMPROGRAMS\${PRODUCTNAME}.lnk" "$INSTDIR\${MAINBINARYNAME}.exe"
+  Pop $0
+  ${If} $0 = 1
+    CreateShortcut "$SMPROGRAMS\${PRODUCTNAME}.lnk" "$INSTDIR\${MAINBINARYNAME}.exe" "" "$INSTDIR\app-green-v1.ico" 0
+    !insertmacro SetLnkAppUserModelId "$SMPROGRAMS\${PRODUCTNAME}.lnk"
+  ${EndIf}
   ; We used to use product name as MAINBINARYNAME
   ; migrate old shortcuts to target the new MAINBINARYNAME
   StrCpy $R0 0
@@ -971,15 +1135,22 @@ Function CreateOrUpdateStartMenuShortcut
 
   !if "${STARTMENUFOLDER}" != ""
     CreateDirectory "$SMPROGRAMS\$AppStartMenuFolder"
-    CreateShortcut "$SMPROGRAMS\$AppStartMenuFolder\${PRODUCTNAME}.lnk" "$INSTDIR\${MAINBINARYNAME}.exe"
+    CreateShortcut "$SMPROGRAMS\$AppStartMenuFolder\${PRODUCTNAME}.lnk" "$INSTDIR\${MAINBINARYNAME}.exe" "" "$INSTDIR\app-green-v1.ico" 0
     !insertmacro SetLnkAppUserModelId "$SMPROGRAMS\$AppStartMenuFolder\${PRODUCTNAME}.lnk"
   !else
-    CreateShortcut "$SMPROGRAMS\${PRODUCTNAME}.lnk" "$INSTDIR\${MAINBINARYNAME}.exe"
+    CreateShortcut "$SMPROGRAMS\${PRODUCTNAME}.lnk" "$INSTDIR\${MAINBINARYNAME}.exe" "" "$INSTDIR\app-green-v1.ico" 0
     !insertmacro SetLnkAppUserModelId "$SMPROGRAMS\${PRODUCTNAME}.lnk"
   !endif
 FunctionEnd
 
 Function CreateOrUpdateDesktopShortcut
+  ; Refresh the explicit icon of existing app shortcuts, including update mode.
+  !insertmacro IsShortcutTarget "$DESKTOP\${PRODUCTNAME}.lnk" "$INSTDIR\${MAINBINARYNAME}.exe"
+  Pop $0
+  ${If} $0 = 1
+    CreateShortcut "$DESKTOP\${PRODUCTNAME}.lnk" "$INSTDIR\${MAINBINARYNAME}.exe" "" "$INSTDIR\app-green-v1.ico" 0
+    !insertmacro SetLnkAppUserModelId "$DESKTOP\${PRODUCTNAME}.lnk"
+  ${EndIf}
   ; We used to use product name as MAINBINARYNAME
   ; migrate old shortcuts to target the new MAINBINARYNAME
   !insertmacro IsShortcutTarget "$DESKTOP\${PRODUCTNAME}.lnk" "$INSTDIR\$OldMainBinaryName"
@@ -998,6 +1169,6 @@ Function CreateOrUpdateDesktopShortcut
     ${EndIf}
   ${EndIf}
 
-  CreateShortcut "$DESKTOP\${PRODUCTNAME}.lnk" "$INSTDIR\${MAINBINARYNAME}.exe"
+  CreateShortcut "$DESKTOP\${PRODUCTNAME}.lnk" "$INSTDIR\${MAINBINARYNAME}.exe" "" "$INSTDIR\app-green-v1.ico" 0
   !insertmacro SetLnkAppUserModelId "$DESKTOP\${PRODUCTNAME}.lnk"
 FunctionEnd

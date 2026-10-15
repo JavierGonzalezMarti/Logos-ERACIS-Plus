@@ -16,6 +16,8 @@ La versión 0.88.0 incorpora al instalador de Windows una presentación con la i
 
 En Windows, el icono oficial de la aplicación es el marco verde con signo + y faldón sobre fondo crema (propuesta 4). El instalador utiliza una variante con insignia de instalación y flecha hacia abajo. Los recursos y su regeneración se documentan en `src-tauri/icons/sources/README.md`.
 
+La versión 0.88.1 asigna a los accesos directos de Windows un archivo de icono independiente (`app-green-v1.ico`) y actualiza los existentes durante la instalación para evitar que se conserve el icono anterior en caché.
+
 ## Requisitos de desarrollo
 
 - Node.js y npm

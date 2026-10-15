@@ -17,3 +17,5 @@ Copiar icon.ico, 32x32.png, 128x128.png y 128x128@2x.png de tmp/icon-app a src-t
 
 Compilar con npm run tauri -- build --bundles nsis. Windows puede conservar en cachÃ© el icono de accesos directos anteriores; los accesos directos nuevos apuntan al recurso del ejecutable instalado.
 
+
+Los accesos directos de Windows referencian explícitamente app-green-v1.ico, instalado como recurso en la carpeta del programa. El instalador refresca también los accesos directos existentes. Al regenerar el icono oficial, actualizar igualmente icons/windows/app-green-v1.ico.
