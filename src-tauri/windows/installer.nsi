@@ -208,8 +208,8 @@ Function FitInstallerToMonitor
   StrCpy $LayoutWorkTop $3
   IntOp $LayoutWorkWidth $4 - $2
   IntOp $LayoutWorkHeight $5 - $3
-  ; The complete outer window is exactly 70 percent of the usable height.
-  IntOp $6 $LayoutWorkHeight * 70
+  ; The complete outer window is exactly 80 percent of the usable height.
+  IntOp $6 $LayoutWorkHeight * 80
   IntOp $6 $6 / 100
   IntOp $7 $6 * 9
   IntOp $7 $7 / 10
@@ -277,7 +277,7 @@ Function PagePresentacion
   ${If} $PassiveMode = 1
     Abort
   ${EndIf}
-  !insertmacro MUI_HEADER_TEXT "${PRODUCTNAME} · Versión ${VERSION}" "ERACIS+ Cádiz · Inclusión social"
+  !insertmacro MUI_HEADER_TEXT "${PRODUCTNAME} · Versión ${VERSION}" "Asociación para la mediación Social EQUA · ERACIS Plus Cádiz."
   nsDialogs::Create 1018
   Pop $0
   ; Fit the entire A4 poster without distortion or cropping.
