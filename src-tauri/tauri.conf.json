@@ -1,7 +1,7 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
   "productName": "Logos ERACIS Plus",
-  "version": "0.87.0",
+  "version": "0.88.0",
   "identifier": "org.asociacionequa.logoseracisplus",
   "build": {
     "beforeDevCommand": "npm run dev",
@@ -22,6 +22,16 @@
   },
   "bundle": {
     "active": true,
+    "copyright": "CC BY-NC 4.0 · Javier González Martí · Asociación para la mediación social EQUA",
+    "windows": {
+      "nsis": {
+        "template": "windows/installer.nsi",
+        "languages": ["Spanish"],
+        "customLanguageFiles": { "Spanish": "windows/Spanish.nsh" },
+        "displayLanguageSelector": false,
+        "headerImage": "windows/presentacion.bmp"
+      }
+    },
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",

@@ -1,8 +1,22 @@
 {
   "bundle": {
-    "targets": ["nsis"],
+    "targets": [
+      "nsis"
+    ],
     "windows": {
-      "webviewInstallMode": { "type": "embedBootstrapper" }
-    }
+      "webviewInstallMode": {
+        "type": "embedBootstrapper"
+      },
+      "nsis": {
+        "installerIcon": "icons/windows/installer.ico",
+        "uninstallerIcon": "icons/windows/icon.ico"
+      }
+    },
+    "icon": [
+      "icons/windows/32x32.png",
+      "icons/windows/128x128.png",
+      "icons/windows/128x128@2x.png",
+      "icons/windows/icon.ico"
+    ]
   }
 }

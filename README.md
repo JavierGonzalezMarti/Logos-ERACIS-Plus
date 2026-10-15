@@ -12,6 +12,10 @@ En la versión 0.86.1, el editor muestra la composición con la misma proporció
 
 Desde la versión 0.87.0, la Marca ERACIS+ puede llevar un fondo blanco rectangular o circular, además de permanecer sin fondo. El margen blanco es proporcional al logo y se escala con él. Si el fondo llega al borde de la foto, se recorta sin invadir el faldón exterior.
 
+La versión 0.88.0 incorpora al instalador de Windows una presentación con la imagen institucional del proyecto, información de autoría, propósito y licencia. La interfaz del instalador se muestra en español e indica la versión instalada.
+
+En Windows, el icono oficial de la aplicación es el marco verde con signo + y faldón sobre fondo crema (propuesta 4). El instalador utiliza una variante con insignia de instalación y flecha hacia abajo. Los recursos y su regeneración se documentan en `src-tauri/icons/sources/README.md`.
+
 ## Requisitos de desarrollo
 
 - Node.js y npm
@@ -55,6 +59,7 @@ La prueba de conversión HEIC usa una muestra pública de forma local; la fecha 
 | `src/state/` | Modelo de estado y ajustes |
 | `src/ui/` | Controles y retoques de escritorio |
 | `src-tauri/` | Aplicación y permisos Tauri 2 |
+| `src-tauri/windows/` | Plantilla NSIS y recursos locales del instalador en español |
 
 `scripts/extract-legacy.mjs` permite volver a extraer el HTML y CSS desde la copia de referencia. La lógica nueva se mantiene en módulos TypeScript.
 
