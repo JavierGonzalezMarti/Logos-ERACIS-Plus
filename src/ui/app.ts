@@ -58,8 +58,8 @@ function resetZone(zone: HTMLElement, label: string): void {
 
 const RESOURCE_URLS: Record<string, string> = {
   'btn-como-usar': 'https://asociacionequa.org/como-usar-herramienta-logos-eracis/',
-  'btn-ultima-version': 'https://asociacionequa.org/historial-de-versiones-herramiento-logos-eracis/',
-  'btn-codigo-fuente': 'https://asociacionequa.org/codigo-fuente-de-la-herramienta-de-colocacion-de-logos-para-eracis/',
+  'btn-ultima-version': 'https://github.com/JavierGonzalezMarti/Logos-ERACIS-Plus/releases',
+  'btn-codigo-fuente': 'https://github.com/JavierGonzalezMarti/Logos-ERACIS-Plus',
   'btn-contacto': 'https://forms.gle/y6APWJGBTukBFrxK7',
 };
 
@@ -440,7 +440,7 @@ export function createApp(): void {
     void openExternalUrl(link.href).catch((error) => announce(String(error), true));
   }));
   element('boton-reiniciar').addEventListener('click', () => location.reload());
-  element('version-app-line').textContent = 'Versión 0.88.1';
+  element('version-app-line').textContent = 'Versión 0.88.2';
 
   void restoreLogo().then((saved) => { if (saved) setLogo(saved.image, saved.dataUrl); });
   refreshControls();

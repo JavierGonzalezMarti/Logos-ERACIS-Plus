@@ -48,6 +48,17 @@ async function exportFile(format, name) {
 try {
   await page.goto(appUrl, { waitUntil: 'networkidle' });
   assert.equal(await page.locator('#page-header-img').evaluate((image) => image.naturalWidth > 0), true);
+  await page.evaluate(() => {
+    window.__resourceUrls = [];
+    window.open = (url) => { window.__resourceUrls.push(String(url)); return null; };
+  });
+  await page.click('#btn-codigo-fuente');
+  await page.click('#btn-ultima-version');
+  assert.deepEqual(await page.evaluate(() => window.__resourceUrls), [
+    'https://github.com/JavierGonzalezMarti/Logos-ERACIS-Plus',
+    'https://github.com/JavierGonzalezMarti/Logos-ERACIS-Plus/releases',
+  ]);
+
   await page.evaluate(() => window.scrollTo(0, 1000));
   assert.ok(await page.locator('#page-header-img').evaluate((image) => image.getBoundingClientRect().bottom < 0));
   await page.setInputFiles('#base-input', banner);
@@ -56,12 +67,15 @@ try {
   const dimensions = [
     ['horizontal', 1920, 1080], ['square', 1080, 1080],
     ['vertical', 1080, 1920], ['4by3', 1440, 1080],
-    ['instagram', 1080, 1350], ['facebook', 1200, 630], ['facebook-vertical', 1080, 1350],
+    ['instagram', 1080, 1350], ['facebook', 1470, 1080], ['facebook-vertical', 1080, 1350],
   ];
   for (const [format, width, height] of dimensions) {
     await page.click(`#format-${format}`);
     assert.deepEqual(await page.locator('#canvas').evaluate((canvas) => [canvas.width, canvas.height]), [width, height]);
   }
+  await page.click('#format-facebook');
+  const facebookPng = await exportFile('png', 'facebook-horizontal.png');
+  assert.deepEqual([facebookPng.readUInt32BE(16), facebookPng.readUInt32BE(20)], [1470, 1080]);
   await page.click('#format-original');
   const originalPng = await readFile(banner);
   assert.deepEqual(

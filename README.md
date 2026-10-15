@@ -8,7 +8,7 @@ Permite componer y revisar el resultado antes de guardarlo, tanto para un archiv
 
 ## Descargar
 
-**[Descargar el instalador para Windows de 64 bits](https://github.com/JavierGonzalezMarti/Logos-ERACIS-Plus/releases/latest/download/Logos-ERACIS-Plus-0.88.1-Windows-x64.exe)**
+**[Descargar el instalador para Windows de 64 bits](https://github.com/JavierGonzalezMarti/Logos-ERACIS-Plus/releases/latest/download/Logos-ERACIS-Plus-Windows-x64.exe)**
 
 También puedes consultar la [página de descargas](https://github.com/JavierGonzalezMarti/Logos-ERACIS-Plus/releases/latest), que incluye la suma SHA-256 para comprobar la integridad del archivo. Para instalar el programa, descarga el `.exe`; los archivos «Source code» contienen el código fuente.
 
@@ -37,9 +37,11 @@ El faldón cargado se conserva en los datos locales de la aplicación hasta que 
 | Formato | Dimensiones |
 | --- | --- |
 | Instagram vertical, 4:5 | 1080 × 1350 px |
-| Facebook horizontal | 1200 × 630 px |
+| Facebook horizontal | 1470 × 1080 px |
 | Facebook vertical | 1080 × 1350 px |
 | Formato original | Según la imagen de entrada |
+
+El formato Facebook horizontal utiliza 1470 × 1080 px (49:36), la proporción comprobada por la asociación en su muro.
 
 En los formatos de tamaño fijo, colocar el faldón fuera de la fotografía reserva espacio para él sin cambiar las dimensiones finales. En el formato original, esta opción conserva la fotografía completa y amplía la altura para añadir el faldón.
 
