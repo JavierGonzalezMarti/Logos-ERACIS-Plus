@@ -6,6 +6,12 @@ Logos ERACIS Plus es una aplicación de escritorio para preparar fotografías y 
 
 Permite componer y revisar el resultado antes de guardarlo, tanto para un archivo individual como para un lote. Las imágenes y los documentos se procesan en el propio ordenador, sin enviarlos a Internet.
 
+## Descargar
+
+**[Descargar el instalador para Windows de 64 bits](https://github.com/JavierGonzalezMarti/Logos-ERACIS-Plus/releases/latest/download/Logos-ERACIS-Plus-0.88.1-Windows-x64.exe)**
+
+También puedes consultar la [página de descargas](https://github.com/JavierGonzalezMarti/Logos-ERACIS-Plus/releases/latest), que incluye la suma SHA-256 para comprobar la integridad del archivo. Para instalar el programa, descarga el `.exe`; los archivos «Source code» contienen el código fuente.
+
 ## Qué puedes hacer
 
 - **Añadir un faldón de logos:** cargar tu imagen de logotipos y colocarla arriba o abajo, superpuesta a la fotografía o fuera de ella.
